@@ -1,0 +1,42 @@
+from __future__ import annotations
+
+from sqlalchemy import delete
+from sqlalchemy.orm import Session
+
+from app.models.exercise import Exercise
+from app.models.sync import SyncCursor
+from app.models.user import User
+from app.models.workout_log import WorkoutLog
+
+
+class AccountService:
+    @staticmethod
+    def reset_cloud_data(db: Session, user_id: str) -> dict[str, int]:
+        """Wipe app data for a user in Neon. Keeps the auth/user row."""
+        workouts = db.execute(
+            delete(WorkoutLog).where(WorkoutLog.user_id == user_id)
+        ).rowcount
+        customs = db.execute(
+            delete(Exercise).where(
+                Exercise.user_id == user_id,
+                Exercise.is_custom.is_(True),
+            )
+        ).rowcount
+        cursors = db.execute(
+            delete(SyncCursor).where(SyncCursor.user_id == user_id)
+        ).rowcount
+        db.commit()
+        return {
+            "workouts_deleted": int(workouts or 0),
+            "custom_exercises_deleted": int(customs or 0),
+            "sync_cursors_deleted": int(cursors or 0),
+        }
+
+    @staticmethod
+    def delete_account_data(db: Session, user_id: str) -> dict[str, int]:
+        """Permanently remove Neon rows for this user (including the users row)."""
+        counts = AccountService.reset_cloud_data(db, user_id)
+        deleted = db.execute(delete(User).where(User.id == user_id)).rowcount
+        db.commit()
+        counts["user_deleted"] = int(deleted or 0)
+        return counts

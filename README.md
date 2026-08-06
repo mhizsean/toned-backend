@@ -68,16 +68,30 @@ API base: `http://localhost:8000/api/v1`
 
 ## Auth
 
-Routes:
+Auth is proxied through Supabase GoTrue. Guest users need no token for the exercise catalogue.
 
-- `GET /api/v1/exercises` and `GET /api/v1/exercises/{id}` are **public** (catalogue works without signup).
-- Custom exercise create, workout logs, sync, and `/auth/me` still expect a Supabase access token:
+| Method | Path | Auth | Purpose |
+|---|---|---|---|
+| `POST` | `/auth/signup` | public | create account |
+| `POST` | `/auth/signin` | public | email/password login |
+| `POST` | `/auth/refresh` | public | refresh access token via `refresh_token` |
+| `POST` | `/auth/logout` | Bearer | invalidate session |
+| `POST` | `/auth/forgot-password` | public | email reset link |
+| `POST` | `/auth/reset-password` | Bearer (recovery) | set new password |
+| `POST` | `/auth/reset-data` | Bearer | wipe cloud workouts/customs (keeps account) |
+| `DELETE` | `/auth/account` | Bearer | hard-delete Auth + Neon data (email reusable) |
+| `GET` | `/auth/me` | Bearer | current user + upsert Neon row |
+
+Store `access_token` from signup/signin on the device and send:
 
 ```
-Authorization: Bearer <supabase_jwt>
+Authorization: Bearer <access_token>
 ```
 
-`GET /api/v1/auth/me` verifies the token and upserts the user row.
+`GET /api/v1/exercises` remains public. Custom exercises, workouts, and sync still require a token.
+
+Requires `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_JWT_SECRET` in `.env`.
+`DELETE /auth/account` also needs `SUPABASE_SERVICE_ROLE_KEY` (server-only; hard delete so the email can be reused).
 
 ## Scripts
 

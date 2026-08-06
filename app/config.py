@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     supabase_url: str = ""
     supabase_jwt_secret: str = ""
     supabase_anon_key: str = ""
+    # Required for hard account delete (Admin API). Never ship this to the mobile app.
+    supabase_service_role_key: str = ""
 
     cors_origins: list[str] = ["http://localhost:8081", "exp://localhost:8081"]
 
