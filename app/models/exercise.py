@@ -15,8 +15,15 @@ class Exercise(Base):
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False, index=True)
-    category: Mapped[str] = mapped_column(String, nullable=False)
-    equipment: Mapped[str] = mapped_column(String, nullable=False)
+    category: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    body_part: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    equipment: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    target: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
+    media_id: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
+    muscle_group: Mapped[str | None] = mapped_column(String, nullable=True)
+    secondary_muscles: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
+    instructions: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    instruction_steps: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     rep_label: Mapped[str] = mapped_column(String, nullable=False, default="reps")
     exercise_type: Mapped[str | None] = mapped_column(String, nullable=True)
     tags: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
@@ -25,13 +32,14 @@ class Exercise(Base):
     tips: Mapped[list[str]] = mapped_column(JSON, nullable=False)
     mistakes: Mapped[list[str]] = mapped_column(JSON, nullable=False)
     is_custom: Mapped[bool] = mapped_column(Boolean, default=False)
-    source: Mapped[str] = mapped_column(String, default="internal")
+    source: Mapped[str] = mapped_column(String, default="exercises-dataset")
     user_id: Mapped[str | None] = mapped_column(
         String,
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )
+    # image/gif paths + attribution live here until Gym Visual media is licensed
     extra: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

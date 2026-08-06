@@ -39,5 +39,26 @@ def get_current_user(
     return user
 
 
+def get_optional_user(
+    db: Annotated[Session, Depends(get_db)],
+    credentials: Annotated[
+        HTTPAuthorizationCredentials | None,
+        Depends(security),
+    ],
+) -> User | None:
+    """Return the signed-in user when a Bearer token is present; otherwise None."""
+    if credentials is None or credentials.scheme.lower() != "bearer":
+        return None
+    payload = decode_supabase_jwt(credentials.credentials)
+    user = db.get(User, payload.sub)
+    if user is None:
+        user = User(id=payload.sub, email=payload.email)
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    return user
+
+
 DbSession = Annotated[Session, Depends(get_db)]
 CurrentUser = Annotated[User, Depends(get_current_user)]
+OptionalUser = Annotated[User | None, Depends(get_optional_user)]

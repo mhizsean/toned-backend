@@ -21,15 +21,22 @@ class ExerciseService:
         *,
         user_id: str | None = None,
         category: str | None = None,
+        body_part: str | None = None,
         search: str | None = None,
         skip: int = 0,
         limit: int = 100,
     ) -> tuple[list[Exercise], int]:
-        query = select(Exercise).where(
-            or_(Exercise.user_id.is_(None), Exercise.user_id == user_id)
-        )
+        # Catalogue (user_id IS NULL) is always public; customs only for owner.
+        if user_id:
+            query = select(Exercise).where(
+                or_(Exercise.user_id.is_(None), Exercise.user_id == user_id)
+            )
+        else:
+            query = select(Exercise).where(Exercise.user_id.is_(None))
         if category:
             query = query.where(Exercise.category == category)
+        if body_part:
+            query = query.where(Exercise.body_part == body_part)
         if search:
             pattern = f"%{search}%"
             query = query.where(Exercise.name.ilike(pattern))
@@ -67,7 +74,14 @@ class ExerciseService:
             id=exercise_id,
             name=data.name,
             category=data.category,
+            body_part=data.body_part or data.category,
             equipment=data.equipment,
+            target=data.target,
+            media_id=data.media_id,
+            muscle_group=data.muscle_group,
+            secondary_muscles=data.secondary_muscles,
+            instructions=data.instructions,
+            instruction_steps=data.instruction_steps,
             rep_label=data.rep_label,
             exercise_type=data.exercise_type,
             tags=data.tags,
