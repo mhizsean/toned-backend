@@ -1,0 +1,2806 @@
+[
+  {
+    "name": "Hip Thrust (Barbell)",
+    "category": "Glutes & Legs",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Core"
+    ],
+    "steps": [
+      "Sit on the floor with your upper back against a bench.",
+      "Roll a barbell over your hips and place a pad for comfort.",
+      "Plant your feet flat, hip-width apart.",
+      "Drive through your heels and thrust your hips upward.",
+      "Squeeze your glutes hard at the top — body should form a straight line from shoulders to knees.",
+      "Lower slowly back down without letting your hips touch the floor."
+    ],
+    "tips": [
+      "Keep your chin tucked to avoid arching your lower back.",
+      "Push your knees out slightly throughout the movement.",
+      "Hold the squeeze at the top for 1-2 seconds for maximum glute activation."
+    ],
+    "mistakes": [
+      "Hyperextending the lower back at the top.",
+      "Feet too far forward or too close — knees should be at 90° at the top.",
+      "Not squeezing the glutes — just moving the weight."
+    ]
+  },
+  {
+    "name": "Hip Thrust (Smith Machine)",
+    "category": "Glutes & Legs",
+    "equipment": "Smith Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Core"
+    ],
+    "steps": [
+      "Set the Smith Machine bar at hip height.",
+      "Sit on the floor with your upper back against a bench, bar across your hips.",
+      "Plant feet flat, hip-width apart, knees at 90°.",
+      "Unrack the bar and drive hips upward by squeezing glutes.",
+      "Hold at the top for 1 second, then lower with control."
+    ],
+    "tips": [
+      "Use a barbell pad for comfort.",
+      "The fixed path of the Smith Machine makes it easier to load heavy.",
+      "Keep core braced throughout."
+    ],
+    "mistakes": [
+      "Letting the bar roll too far up the stomach.",
+      "Not reaching full hip extension at the top.",
+      "Feet placed too wide — keep hip-width."
+    ]
+  },
+  {
+    "name": "Glute Bridge (Bodyweight)",
+    "category": "Glutes & Legs",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Core"
+    ],
+    "steps": [
+      "Lie flat on your back with knees bent, feet flat on the floor hip-width apart.",
+      "Press your lower back into the floor.",
+      "Drive through your heels, squeeze your glutes, and lift your hips toward the ceiling.",
+      "Hold at the top for 1-2 seconds.",
+      "Lower slowly back to the floor."
+    ],
+    "tips": [
+      "Great as a warm-up or activation exercise before heavier glute work.",
+      "Add a resistance band above the knees for extra glute activation.",
+      "Keep your core tight and avoid overextending the lower back."
+    ],
+    "mistakes": [
+      "Pushing through the toes instead of heels.",
+      "Not fully extending the hips at the top.",
+      "Letting knees cave inward."
+    ]
+  },
+  {
+    "name": "Single Leg Glute Bridge",
+    "category": "Glutes & Legs",
+    "equipment": "Bodyweight",
+    "repLabel": "per leg",
+    "muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Core"
+    ],
+    "steps": [
+      "Lie on your back, one knee bent with foot flat, other leg extended straight.",
+      "Press your lower back into the floor.",
+      "Drive through the heel of the bent leg and lift your hips.",
+      "Keep the extended leg in line with your body.",
+      "Hold at the top, then lower with control.",
+      "Complete all reps on one side before switching."
+    ],
+    "tips": [
+      "Keep your hips level — don't let one side drop.",
+      "Squeeze the working glute hard at the top."
+    ],
+    "mistakes": [
+      "Letting the non-working hip drop.",
+      "Rushing the movement — slow and controlled is key."
+    ]
+  },
+  {
+    "name": "Back Squat (Barbell)",
+    "category": "Glutes & Legs",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Hamstrings",
+      "Core"
+    ],
+    "steps": [
+      "Place the barbell across your upper traps, hands slightly wider than shoulder-width.",
+      "Stand with feet shoulder-width apart, toes pointed slightly out.",
+      "Take a deep breath, brace your core.",
+      "Push your hips back and bend your knees to lower down.",
+      "Aim to get thighs parallel to the floor or below.",
+      "Drive through your heels to stand back up."
+    ],
+    "tips": [
+      "Keep your chest up and spine neutral throughout.",
+      "Push knees out in the direction of your toes.",
+      "Think about spreading the floor apart with your feet."
+    ],
+    "mistakes": [
+      "Knees caving inward (valgus collapse).",
+      "Heels rising off the floor — improve ankle mobility.",
+      "Rounding the lower back at the bottom."
+    ]
+  },
+  {
+    "name": "Front Squat (Barbell)",
+    "category": "Glutes & Legs",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Core"
+    ],
+    "steps": [
+      "Place bar across the front of your shoulders in the clean rack position.",
+      "Keep elbows high, upper arms parallel to floor.",
+      "Feet shoulder-width, toes slightly out.",
+      "Brace core and squat down keeping chest upright.",
+      "Drive up through heels keeping elbows high."
+    ],
+    "tips": [
+      "Front squats demand more core and quad engagement than back squats.",
+      "Keep your torso as upright as possible.",
+      "Wrist flexibility is key — work on it if the rack position is uncomfortable."
+    ],
+    "mistakes": [
+      "Elbows dropping, causing the bar to roll forward.",
+      "Leaning too far forward.",
+      "Not keeping core braced — the bar position demands it."
+    ]
+  },
+  {
+    "name": "Sumo Squat (Dumbbell)",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Glutes",
+      "Inner Thighs",
+      "Quads"
+    ],
+    "steps": [
+      "Stand with feet wider than shoulder-width, toes pointed out at 45°.",
+      "Hold a dumbbell vertically with both hands between your legs.",
+      "Keep chest up and spine neutral.",
+      "Bend knees and lower the dumbbell toward the floor.",
+      "Drive through heels and squeeze glutes to stand back up."
+    ],
+    "tips": [
+      "The wide stance targets inner thighs and glutes more than a regular squat.",
+      "Keep knees tracking over toes throughout."
+    ],
+    "mistakes": [
+      "Knees caving inward — push them out.",
+      "Rounding the lower back at the bottom."
+    ]
+  },
+  {
+    "name": "Goblet Squat",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell or Kettlebell",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Core"
+    ],
+    "steps": [
+      "Hold a dumbbell or kettlebell close to your chest with both hands.",
+      "Stand feet shoulder-width, toes slightly out.",
+      "Brace core and squat down, keeping elbows inside your knees.",
+      "Drive heels into the floor to stand back up."
+    ],
+    "tips": [
+      "Great for learning squat mechanics — the weight naturally keeps you upright.",
+      "Use the elbows to push the knees out at the bottom."
+    ],
+    "mistakes": [
+      "Letting the weight pull you forward.",
+      "Not reaching depth — aim for thighs parallel or below."
+    ]
+  },
+  {
+    "name": "Bulgarian Split Squat",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell or Barbell",
+    "repLabel": "per leg",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Hamstrings",
+      "Balance"
+    ],
+    "steps": [
+      "Stand 2 feet in front of a bench. Rest the top of your rear foot on the bench.",
+      "Hold dumbbells at your sides or barbell across your back.",
+      "Lower your back knee toward the floor by bending your front knee.",
+      "Keep your torso upright and front knee behind your toes.",
+      "Drive through your front heel to return to start.",
+      "Complete all reps then switch legs."
+    ],
+    "tips": [
+      "Front foot distance matters — too close and you'll lean forward.",
+      "Keep the majority of your weight through your front foot.",
+      "This is one of the best single-leg exercises for glute development."
+    ],
+    "mistakes": [
+      "Front knee caving in.",
+      "Leaning too far forward.",
+      "Rear foot too close — causes the front knee to go too far over toes."
+    ]
+  },
+  {
+    "name": "Walking Lunge",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell or Bodyweight",
+    "repLabel": "per leg",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Hamstrings",
+      "Balance"
+    ],
+    "steps": [
+      "Stand upright, dumbbells at your sides if using weight.",
+      "Step forward with one foot, lowering your back knee toward the floor.",
+      "Front thigh should be parallel to the floor.",
+      "Push through your front heel and bring the rear foot forward to meet it.",
+      "Repeat on the other leg and continue walking forward."
+    ],
+    "tips": [
+      "Keep your torso upright throughout.",
+      "Take a long enough step so the front knee doesn't go past your toes."
+    ],
+    "mistakes": [
+      "Short steps causing the front knee to travel too far forward.",
+      "Leaning forward — keep chest up."
+    ]
+  },
+  {
+    "name": "Reverse Lunge",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell or Bodyweight",
+    "repLabel": "per leg",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Hamstrings"
+    ],
+    "steps": [
+      "Stand tall with feet hip-width apart.",
+      "Step one foot backward and lower your back knee toward the floor.",
+      "Front thigh parallel to the floor, front shin vertical.",
+      "Push through your front heel to return to standing.",
+      "Complete all reps on one side or alternate legs."
+    ],
+    "tips": [
+      "Easier on the knees than forward lunges — good if you have knee issues.",
+      "Control the descent — don't drop the knee to the floor."
+    ],
+    "mistakes": [
+      "Leaning too far forward.",
+      "Stepping back too short — creates excessive forward knee travel."
+    ]
+  },
+  {
+    "name": "Lateral Lunge",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell or Bodyweight",
+    "repLabel": "per leg",
+    "muscles": [
+      "Inner Thighs",
+      "Glutes",
+      "Quads"
+    ],
+    "steps": [
+      "Stand with feet together, hands clasped or holding a dumbbell.",
+      "Take a wide step to one side.",
+      "Bend the stepping knee and push hips back, keeping the other leg straight.",
+      "Keep chest up and toes pointing forward.",
+      "Push through the bent leg heel to return to start.",
+      "Repeat on the other side."
+    ],
+    "tips": [
+      "Great for targeting inner thighs and glute medius.",
+      "Keep the stationary leg completely straight."
+    ],
+    "mistakes": [
+      "Letting the stepping knee cave inward.",
+      "Not sitting back enough into the hips."
+    ]
+  },
+  {
+    "name": "Curtsy Lunge",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell or Bodyweight",
+    "repLabel": "per leg",
+    "muscles": [
+      "Glutes",
+      "Inner Thighs",
+      "Quads"
+    ],
+    "steps": [
+      "Stand with feet hip-width apart.",
+      "Step one foot diagonally behind you, crossing behind the standing leg.",
+      "Lower your back knee toward the floor.",
+      "Keep your front knee over your front foot.",
+      "Push through the front heel to return to standing."
+    ],
+    "tips": [
+      "Great for glute medius and outer glute activation.",
+      "Keep your hips square — don't rotate them as you step back."
+    ],
+    "mistakes": [
+      "Rotating the hips — keep them facing forward.",
+      "Front knee caving inward."
+    ]
+  },
+  {
+    "name": "Romanian Deadlift (RDL)",
+    "category": "Glutes & Legs",
+    "equipment": "Barbell or Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Hamstrings",
+      "Glutes",
+      "Lower Back"
+    ],
+    "steps": [
+      "Stand with feet hip-width apart, holding the bar or dumbbells in front of your thighs.",
+      "Keep a slight bend in your knees throughout.",
+      "Hinge at your hips, pushing them back as you lower the weight down your legs.",
+      "Lower until you feel a deep stretch in your hamstrings.",
+      "Drive your hips forward to return to standing, squeezing glutes at the top."
+    ],
+    "tips": [
+      "The bar or dumbbells should stay close to your body throughout.",
+      "Think about pushing the floor away rather than pulling the weight up.",
+      "Keep your back flat — don't round."
+    ],
+    "mistakes": [
+      "Rounding the lower back.",
+      "Bending the knees too much — this becomes a deadlift not an RDL.",
+      "Not hinging at the hips — squatting down instead."
+    ]
+  },
+  {
+    "name": "Single Leg RDL",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell or Kettlebell",
+    "repLabel": "per leg",
+    "muscles": [
+      "Hamstrings",
+      "Glutes",
+      "Balance",
+      "Core"
+    ],
+    "steps": [
+      "Stand on one leg, holding a dumbbell in the opposite hand.",
+      "Hinge at your hip, extending the free leg behind you for balance.",
+      "Lower the dumbbell toward the floor keeping your back flat.",
+      "Feel the stretch in the standing leg's hamstring.",
+      "Drive your hips forward to return to upright.",
+      "Complete all reps then switch sides."
+    ],
+    "tips": [
+      "Focus on a fixed point on the floor to help with balance.",
+      "Keep hips square — don't let them rotate open.",
+      "The free leg acts as a counterbalance."
+    ],
+    "mistakes": [
+      "Hips rotating open on the way down.",
+      "Rounding the back.",
+      "Bending the standing knee excessively."
+    ]
+  },
+  {
+    "name": "Leg Press",
+    "category": "Glutes & Legs",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Hamstrings"
+    ],
+    "steps": [
+      "Sit in the leg press machine with your back flat against the pad.",
+      "Place feet shoulder-width on the platform — higher placement targets glutes more.",
+      "Release the safety handles.",
+      "Lower the platform by bending your knees toward your chest.",
+      "Press through your heels to extend your legs back up.",
+      "Don't lock your knees out at the top."
+    ],
+    "tips": [
+      "Higher foot placement = more glutes and hamstrings.",
+      "Lower foot placement = more quads.",
+      "Wider stance targets inner thighs more."
+    ],
+    "mistakes": [
+      "Locking out the knees at full extension.",
+      "Letting the lower back peel off the pad at the bottom.",
+      "Knees caving inward."
+    ]
+  },
+  {
+    "name": "Hack Squat (Machine)",
+    "category": "Glutes & Legs",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes"
+    ],
+    "steps": [
+      "Place shoulders under the pads and feet on the platform shoulder-width.",
+      "Release the safety handles.",
+      "Lower by bending your knees until thighs are parallel or below.",
+      "Drive through heels to return to start.",
+      "Re-engage the safety handles when finished."
+    ],
+    "tips": [
+      "Lower foot placement = more quad emphasis.",
+      "The machine allows you to go heavy safely without a spotter."
+    ],
+    "mistakes": [
+      "Knees caving inward.",
+      "Not going deep enough.",
+      "Lower back rounding at the bottom."
+    ]
+  },
+  {
+    "name": "Leg Extension (Machine)",
+    "category": "Glutes & Legs",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads"
+    ],
+    "steps": [
+      "Sit in the machine with your back flat against the pad.",
+      "Place the pad just above your ankles.",
+      "Grip the handles and extend your legs until straight.",
+      "Hold briefly at the top, squeezing the quads.",
+      "Lower with control — don't let the weight slam down."
+    ],
+    "tips": [
+      "Great for quad isolation.",
+      "Slow the eccentric (lowering) phase for more time under tension."
+    ],
+    "mistakes": [
+      "Using momentum to swing the weight up.",
+      "Not controlling the lowering phase."
+    ]
+  },
+  {
+    "name": "Seated Hamstring Curl (Machine)",
+    "category": "Glutes & Legs",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Hamstrings"
+    ],
+    "steps": [
+      "Sit in the machine, pad resting just above your ankles.",
+      "Keep your back flat against the pad.",
+      "Curl your legs downward by bending your knees.",
+      "Hold at the bottom briefly.",
+      "Return slowly to start position."
+    ],
+    "tips": [
+      "Slow the eccentric for greater hamstring development.",
+      "Point toes slightly to vary the muscle emphasis."
+    ],
+    "mistakes": [
+      "Hips rising off the seat — keep them pressed down.",
+      "Using too much momentum."
+    ]
+  },
+  {
+    "name": "Lying Hamstring Curl (Machine)",
+    "category": "Glutes & Legs",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Hamstrings",
+      "Calves"
+    ],
+    "steps": [
+      "Lie face down on the machine, pad just above your heels.",
+      "Keep hips pressed into the pad.",
+      "Curl your legs toward your glutes by bending your knees.",
+      "Squeeze at the top.",
+      "Lower slowly back to start."
+    ],
+    "tips": [
+      "Keep hips flat on the pad — don't let them rise.",
+      "Plantar flex your feet (point toes) to increase hamstring activation."
+    ],
+    "mistakes": [
+      "Hips rising off the pad.",
+      "Swinging the weight up instead of curling."
+    ]
+  },
+  {
+    "name": "Nordic Hamstring Curl",
+    "category": "Glutes & Legs",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Hamstrings"
+    ],
+    "steps": [
+      "Kneel on a mat with feet anchored under a bar or bench.",
+      "Cross arms over chest.",
+      "Slowly lower your body forward, resisting with your hamstrings.",
+      "Lower as far as you can control.",
+      "Use your hands to catch yourself and push back up if needed.",
+      "Use hamstrings to curl body back to upright."
+    ],
+    "tips": [
+      "One of the best exercises for hamstring strength and injury prevention.",
+      "Very challenging — start with partial range of motion."
+    ],
+    "mistakes": [
+      "Hips bending — keep your body in a straight line from knees to shoulders.",
+      "Going too fast — this is a slow, controlled movement."
+    ]
+  },
+  {
+    "name": "Hip Abduction (Machine)",
+    "category": "Glutes & Legs",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Glute Medius",
+      "Outer Thighs"
+    ],
+    "steps": [
+      "Sit in the machine with pads on the outside of your knees.",
+      "Keep your back flat, core engaged.",
+      "Push your legs apart against the resistance.",
+      "Hold briefly at the widest point.",
+      "Bring legs back together with control."
+    ],
+    "tips": [
+      "Lean slightly forward to increase glute medius activation.",
+      "Don't use momentum — slow and controlled."
+    ],
+    "mistakes": [
+      "Leaning back and using hip flexors instead of glutes.",
+      "Going too heavy and sacrificing form."
+    ]
+  },
+  {
+    "name": "Hip Adduction (Machine)",
+    "category": "Glutes & Legs",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Inner Thighs",
+      "Adductors"
+    ],
+    "steps": [
+      "Sit in the machine with pads on the inside of your knees.",
+      "Start with legs apart.",
+      "Squeeze your legs together against the resistance.",
+      "Hold briefly at the closed position.",
+      "Return to start with control."
+    ],
+    "tips": [
+      "Great for inner thigh strengthening.",
+      "Slow the eccentric for more muscle activation."
+    ],
+    "mistakes": [
+      "Using too much weight and swinging.",
+      "Not controlling the return phase."
+    ]
+  },
+  {
+    "name": "Cable Kickback",
+    "category": "Glutes & Legs",
+    "equipment": "Cable Machine",
+    "repLabel": "per leg",
+    "muscles": [
+      "Glutes"
+    ],
+    "steps": [
+      "Attach an ankle cuff to the cable and your ankle.",
+      "Face the cable machine and hold for support.",
+      "Keep a slight bend in your standing knee.",
+      "Kick the working leg straight back, squeezing your glute.",
+      "Hold at the top for a second.",
+      "Return to start with control.",
+      "Complete all reps then switch legs."
+    ],
+    "tips": [
+      "Don't swing — use only your glute to move the leg.",
+      "Keep your core tight and avoid rotating your hips.",
+      "Slight forward lean helps isolate the glute."
+    ],
+    "mistakes": [
+      "Swinging the leg using momentum.",
+      "Rotating the hips to get more range.",
+      "Bending the knee excessively on the kick."
+    ]
+  },
+  {
+    "name": "Cable Pull Through",
+    "category": "Glutes & Legs",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Lower Back"
+    ],
+    "steps": [
+      "Set the cable to the lowest position with a rope attachment.",
+      "Stand facing away from the machine, straddling the cable.",
+      "Hinge at your hips, reaching back between your legs for the rope.",
+      "Drive your hips forward to stand up, squeezing glutes.",
+      "Control the return by hinging back."
+    ],
+    "tips": [
+      "Think of this as a cable RDL — hinge, don't squat.",
+      "Great for teaching the hip hinge pattern."
+    ],
+    "mistakes": [
+      "Squatting instead of hinging.",
+      "Letting the cable pull you too far back — control the movement."
+    ]
+  },
+  {
+    "name": "Step Up",
+    "category": "Glutes & Legs",
+    "equipment": "Dumbbell or Bodyweight",
+    "repLabel": "per leg",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Balance"
+    ],
+    "steps": [
+      "Stand in front of a box or bench, dumbbells at your sides.",
+      "Place one foot fully on the box.",
+      "Drive through that heel to step up onto the box.",
+      "Bring the other foot up to meet it.",
+      "Step back down with control.",
+      "Complete all reps on one leg or alternate."
+    ],
+    "tips": [
+      "Higher box = more glute activation.",
+      "Focus on driving through the heel of the leading foot.",
+      "Don't push off the trailing foot — make the leading leg do the work."
+    ],
+    "mistakes": [
+      "Pushing off the back foot to assist.",
+      "Leaning too far forward.",
+      "Box too low — aim for knee height or above."
+    ]
+  },
+  {
+    "name": "Wall Sit",
+    "category": "Glutes & Legs",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Core"
+    ],
+    "steps": [
+      "Stand with your back against a wall.",
+      "Slide down until your thighs are parallel to the floor.",
+      "Knees at 90°, back flat against the wall.",
+      "Hold the position for the required time.",
+      "Drive through your heels to slide back up."
+    ],
+    "tips": [
+      "Don't let knees go past your toes.",
+      "Keep feet flat on the floor.",
+      "Add weight across your thighs to increase difficulty."
+    ],
+    "mistakes": [
+      "Thighs not parallel — not going low enough.",
+      "Pushing knees together — keep them over toes."
+    ]
+  },
+  {
+    "name": "Jump Squat",
+    "category": "Glutes & Legs",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Calves",
+      "Power"
+    ],
+    "steps": [
+      "Stand feet shoulder-width, toes slightly out.",
+      "Lower into a squat position.",
+      "Explode upward jumping as high as possible.",
+      "Land softly with knees bent, immediately going into the next squat."
+    ],
+    "tips": [
+      "Land toe-heel to absorb impact.",
+      "Keep chest up throughout.",
+      "Great for power and calorie burn."
+    ],
+    "mistakes": [
+      "Landing stiff-legged — always land with soft knees.",
+      "Knees caving inward on landing."
+    ]
+  },
+  {
+    "name": "Standing Calf Raise",
+    "category": "Glutes & Legs",
+    "equipment": "Machine or Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Calves",
+      "Gastrocnemius"
+    ],
+    "steps": [
+      "Stand on the edge of a step or calf raise machine.",
+      "Hold something for balance.",
+      "Rise up onto your toes as high as possible.",
+      "Hold briefly at the top.",
+      "Lower your heels below the step for a full stretch."
+    ],
+    "tips": [
+      "Slow the eccentric for more calf development.",
+      "Vary foot position — toes in, out, or forward — to hit different parts of the calf."
+    ],
+    "mistakes": [
+      "Not going through full range of motion.",
+      "Bouncing at the bottom — control the stretch."
+    ]
+  },
+  {
+    "name": "Seated Calf Raise",
+    "category": "Glutes & Legs",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Calves",
+      "Soleus"
+    ],
+    "steps": [
+      "Sit in the seated calf raise machine, pad resting on your thighs just above knees.",
+      "Place the balls of your feet on the platform.",
+      "Release the safety and raise your heels as high as possible.",
+      "Lower heels below the platform for a full stretch."
+    ],
+    "tips": [
+      "Seated calf raises target the soleus more than standing variations.",
+      "Slow controlled reps work better than fast bouncy ones."
+    ],
+    "mistakes": [
+      "Not lowering fully — missing the stretch.",
+      "Going too heavy and losing range of motion."
+    ]
+  },
+  {
+    "name": "Good Morning",
+    "category": "Glutes & Legs",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Hamstrings",
+      "Glutes",
+      "Lower Back"
+    ],
+    "steps": [
+      "Place a light barbell across your upper traps.",
+      "Stand with feet shoulder-width apart.",
+      "Hinge at the hips, sending them back while lowering your torso forward.",
+      "Keep your back flat and knees slightly bent.",
+      "Lower until your torso is roughly parallel to the floor.",
+      "Drive hips forward to return to standing."
+    ],
+    "tips": [
+      "This is a hip hinge movement — don't squat.",
+      "Start very light — it's more technical than it looks.",
+      "Core must stay braced throughout."
+    ],
+    "mistakes": [
+      "Rounding the lower back.",
+      "Going too heavy too soon.",
+      "Squatting instead of hinging."
+    ]
+  },
+  {
+    "name": "Bench Press (Barbell)",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Chest",
+      "Triceps",
+      "Front Deltoids"
+    ],
+    "steps": [
+      "Lie on the bench, eyes under the bar.",
+      "Grip the bar slightly wider than shoulder-width.",
+      "Pull your shoulder blades together and down into the bench.",
+      "Unrack the bar and lower it to your mid-chest.",
+      "Press the bar back up in a slight arc toward the rack.",
+      "Lock out at the top without shrugging."
+    ],
+    "tips": [
+      "Keep your feet flat on the floor.",
+      "Retract your shoulder blades for a stable base.",
+      "Think about pushing yourself into the bench rather than pushing the bar up."
+    ],
+    "mistakes": [
+      "Flaring elbows out to 90° — keep them at about 45-75°.",
+      "Bouncing the bar off the chest.",
+      "Losing the arch and shoulder blade retraction mid-set."
+    ]
+  },
+  {
+    "name": "Incline Bench Press (Barbell)",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Upper Chest",
+      "Front Deltoids",
+      "Triceps"
+    ],
+    "steps": [
+      "Set the bench to 30-45° incline.",
+      "Grip bar slightly wider than shoulder-width.",
+      "Lower bar to your upper chest.",
+      "Press back up explosively."
+    ],
+    "tips": [
+      "Targets the upper chest more than flat bench.",
+      "30° is better than 45° for upper chest — steeper becomes mostly shoulders."
+    ],
+    "mistakes": [
+      "Setting the incline too high — becomes a shoulder press.",
+      "Bar path drifting — keep it over upper chest."
+    ]
+  },
+  {
+    "name": "Dumbbell Bench Press",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Chest",
+      "Triceps",
+      "Front Deltoids"
+    ],
+    "steps": [
+      "Lie on a flat bench holding dumbbells above your chest.",
+      "Lower them to chest level, elbows at 45-75°.",
+      "Press back up and slightly in, bringing the dumbbells close at the top."
+    ],
+    "tips": [
+      "Greater range of motion than barbell bench.",
+      "Each arm works independently — good for fixing imbalances."
+    ],
+    "mistakes": [
+      "Dumbbells drifting too wide.",
+      "Not controlling the lowering phase."
+    ]
+  },
+  {
+    "name": "Chest Fly (Dumbbell)",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Chest",
+      "Front Deltoids"
+    ],
+    "steps": [
+      "Lie flat on bench, dumbbells above chest, palms facing each other.",
+      "With a slight bend in the elbows, lower arms out to the sides in a wide arc.",
+      "Feel the stretch across your chest at the bottom.",
+      "Bring the dumbbells back up the same arc, squeezing the chest at the top."
+    ],
+    "tips": [
+      "Keep the slight elbow bend constant — don't straighten or over-bend.",
+      "Think of hugging a big tree.",
+      "This is a stretch and squeeze exercise — go light and feel it."
+    ],
+    "mistakes": [
+      "Turning it into a press by bending the elbows too much.",
+      "Going too heavy — this is an isolation exercise."
+    ]
+  },
+  {
+    "name": "Cable Chest Fly",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Chest",
+      "Front Deltoids"
+    ],
+    "steps": [
+      "Set cables at shoulder height on both sides.",
+      "Stand in the middle, one foot forward for stability.",
+      "Hold handles with slight elbow bend, arms out to sides.",
+      "Bring handles together in front of your chest in an arc.",
+      "Squeeze chest at the centre.",
+      "Return with control."
+    ],
+    "tips": [
+      "Cables provide constant tension throughout — great for chest shaping.",
+      "Low cables target lower chest, high cables target upper chest."
+    ],
+    "mistakes": [
+      "Using too much elbow bend — becomes a press.",
+      "Leaning too far forward."
+    ]
+  },
+  {
+    "name": "Push-Up",
+    "category": "Upper Body",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Chest",
+      "Triceps",
+      "Front Deltoids",
+      "Core"
+    ],
+    "steps": [
+      "Start in a plank position, hands slightly wider than shoulder-width.",
+      "Keep your body in a straight line from head to heels.",
+      "Lower your chest to the floor by bending your elbows.",
+      "Press back up to the starting position."
+    ],
+    "tips": [
+      "Keep core braced — don't let hips sag or rise.",
+      "Elbows at about 45° from your body — not flared out.",
+      "Full range of motion — chest touches or nearly touches the floor."
+    ],
+    "mistakes": [
+      "Hips sagging — keep the body rigid.",
+      "Head dropping — keep it neutral.",
+      "Partial range of motion."
+    ]
+  },
+  {
+    "name": "Diamond Push-Up",
+    "category": "Upper Body",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Triceps",
+      "Inner Chest"
+    ],
+    "steps": [
+      "Place hands close together forming a diamond shape with thumbs and index fingers.",
+      "Perform a push-up keeping elbows close to your body."
+    ],
+    "tips": [
+      "Heavy tricep emphasis.",
+      "Keep elbows tucked — don't let them flare."
+    ],
+    "mistakes": [
+      "Hips rising — keep body straight.",
+      "Elbows flaring out."
+    ]
+  },
+  {
+    "name": "Chest Dip",
+    "category": "Upper Body",
+    "equipment": "Parallel Bars",
+    "repLabel": "reps",
+    "muscles": [
+      "Lower Chest",
+      "Triceps",
+      "Front Deltoids"
+    ],
+    "steps": [
+      "Grip the parallel bars and lift yourself up.",
+      "Lean forward slightly — this shifts emphasis to chest.",
+      "Lower your body by bending your elbows.",
+      "Go until you feel a stretch in your chest.",
+      "Press back up to the start."
+    ],
+    "tips": [
+      "The more you lean forward, the more chest is involved.",
+      "Upright torso targets triceps more."
+    ],
+    "mistakes": [
+      "Not leaning forward for chest emphasis.",
+      "Going too low and stressing the shoulder joint."
+    ]
+  },
+  {
+    "name": "Overhead Shoulder Press (Barbell)",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Shoulders",
+      "Triceps",
+      "Upper Traps"
+    ],
+    "steps": [
+      "Stand with feet shoulder-width, bar at shoulder height.",
+      "Grip just outside shoulder-width.",
+      "Brace core and press the bar straight up overhead.",
+      "At the top, slightly lean forward as the bar passes your head.",
+      "Lower with control back to shoulders."
+    ],
+    "tips": [
+      "Tuck your chin slightly as the bar passes your face.",
+      "Lock out overhead — arms fully extended.",
+      "Can also be done seated for more stability."
+    ],
+    "mistakes": [
+      "Leaning back excessively — becomes an incline press.",
+      "Not bracing the core — lower back takes the strain."
+    ]
+  },
+  {
+    "name": "Dumbbell Shoulder Press",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Shoulders",
+      "Triceps"
+    ],
+    "steps": [
+      "Sit or stand, dumbbells at shoulder height, palms facing forward.",
+      "Press dumbbells up and slightly together overhead.",
+      "Lower with control back to shoulder height."
+    ],
+    "tips": [
+      "Greater range of motion than barbell.",
+      "Each arm works independently — good for catching imbalances."
+    ],
+    "mistakes": [
+      "Flaring elbows too far forward or back.",
+      "Not controlling the descent."
+    ]
+  },
+  {
+    "name": "Arnold Press",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "All Three Deltoid Heads",
+      "Triceps"
+    ],
+    "steps": [
+      "Sit holding dumbbells at shoulder height, palms facing you.",
+      "Press up while rotating your palms to face forward.",
+      "Full extension overhead.",
+      "Reverse the rotation as you lower back to start."
+    ],
+    "tips": [
+      "The rotation hits all three heads of the deltoid.",
+      "Keep the movement smooth and controlled."
+    ],
+    "mistakes": [
+      "Rushing the rotation.",
+      "Using too much weight — this is a technique exercise."
+    ]
+  },
+  {
+    "name": "Lateral Raise (Dumbbell)",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Side Deltoids"
+    ],
+    "steps": [
+      "Stand with dumbbells at your sides, slight bend in elbows.",
+      "Raise arms out to the sides until parallel to the floor.",
+      "Lead with your elbows, not your hands.",
+      "Lower slowly — take 3 seconds on the way down."
+    ],
+    "tips": [
+      "Go lighter than you think — this is a pure isolation movement.",
+      "Think of pouring a jug of water as you raise — tilt the pinky slightly up.",
+      "The slow lowering phase is where the growth happens."
+    ],
+    "mistakes": [
+      "Shrugging — keep shoulders down and away from ears.",
+      "Using momentum to swing the weights up.",
+      "Going too heavy and turning it into a partial movement."
+    ]
+  },
+  {
+    "name": "Cable Lateral Raise",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "per arm",
+    "muscles": [
+      "Side Deltoids"
+    ],
+    "steps": [
+      "Set cable to lowest position.",
+      "Stand side-on to the cable, holding the handle with the far hand.",
+      "Raise your arm out to the side to shoulder height.",
+      "Lower slowly with control.",
+      "Complete all reps then switch sides."
+    ],
+    "tips": [
+      "Cable provides constant tension unlike dumbbells which get easier at the bottom.",
+      "Cross your free hand in front of your body to stay stable."
+    ],
+    "mistakes": [
+      "Swinging or using momentum.",
+      "Raising arm above shoulder height."
+    ]
+  },
+  {
+    "name": "Front Raise (Dumbbell)",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Front Deltoids",
+      "Upper Chest"
+    ],
+    "steps": [
+      "Stand with dumbbells in front of your thighs, palms facing you.",
+      "Raise one or both arms straight in front to shoulder height.",
+      "Lower with control."
+    ],
+    "tips": [
+      "Can alternate arms or raise both together.",
+      "Keep slight elbow bend throughout."
+    ],
+    "mistakes": [
+      "Swinging the weight up.",
+      "Raising above shoulder height — not necessary."
+    ]
+  },
+  {
+    "name": "Reverse Pec Deck (Machine)",
+    "category": "Upper Body",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Rear Deltoids",
+      "Rhomboids",
+      "Upper Back"
+    ],
+    "steps": [
+      "Sit facing the machine, chest against the pad.",
+      "Hold handles with arms extended forward.",
+      "Pull handles back and wide, squeezing your shoulder blades together.",
+      "Return slowly to the start."
+    ],
+    "tips": [
+      "Great for rear delts without needing dumbbells.",
+      "Keep chest on the pad throughout."
+    ],
+    "mistakes": [
+      "Using too much weight and turning it into a row.",
+      "Not squeezing the shoulder blades at the back."
+    ]
+  },
+  {
+    "name": "Rear Delt Fly (Dumbbell)",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Rear Deltoids",
+      "Rhomboids",
+      "Upper Back"
+    ],
+    "steps": [
+      "Sit on the edge of a bench, lean forward with chest near thighs.",
+      "Hold dumbbells below your chest, palms facing each other.",
+      "Raise arms out to the sides in a wide arc.",
+      "Squeeze shoulder blades together at the top.",
+      "Lower with control."
+    ],
+    "tips": [
+      "Keep a slight bend in the elbows throughout.",
+      "Go light — rear delts are a small muscle.",
+      "Can also be done standing bent over."
+    ],
+    "mistakes": [
+      "Raising arms above shoulder level.",
+      "Using momentum and swinging."
+    ]
+  },
+  {
+    "name": "Face Pull (Cable)",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Rear Deltoids",
+      "Rotator Cuff",
+      "Upper Traps"
+    ],
+    "steps": [
+      "Set cable to upper chest height with a rope attachment.",
+      "Grip the rope with both hands, palms facing down.",
+      "Step back so your arms are extended.",
+      "Pull the rope toward your face, separating the ends as you pull.",
+      "Elbows should finish high and wide, hands at ear level.",
+      "Return slowly."
+    ],
+    "tips": [
+      "Essential for shoulder health and posture.",
+      "Pull to your face — not your neck or chest.",
+      "External rotate your shoulders at the end of the movement."
+    ],
+    "mistakes": [
+      "Pulling too low — becomes a row.",
+      "Not separating the rope at the end.",
+      "Using too much weight."
+    ]
+  },
+  {
+    "name": "Lat Pulldown (Cable)",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Lats",
+      "Biceps",
+      "Rear Deltoids"
+    ],
+    "steps": [
+      "Sit at the machine with thighs under the pad.",
+      "Grip the bar wider than shoulder-width, palms facing away.",
+      "Lean back slightly and pull the bar down to your upper chest.",
+      "Squeeze your lats at the bottom.",
+      "Return slowly — arms fully extended at the top."
+    ],
+    "tips": [
+      "Think about pulling your elbows down to your hips, not pulling the bar.",
+      "Lean back about 10-15° — no more.",
+      "Full stretch at the top is important for lat development."
+    ],
+    "mistakes": [
+      "Pulling behind the neck — damages the cervical spine.",
+      "Leaning back too much — becomes a row.",
+      "Not fully extending at the top."
+    ]
+  },
+  {
+    "name": "Close Grip Lat Pulldown",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Lats",
+      "Biceps"
+    ],
+    "steps": [
+      "Attach a close grip handle to the cable.",
+      "Sit and grip the handle, palms facing each other.",
+      "Pull down to your upper chest, squeezing lats.",
+      "Return with control."
+    ],
+    "tips": [
+      "Palms facing each other allows a greater range of motion.",
+      "Great for lower lat development."
+    ],
+    "mistakes": [
+      "Leaning back too much.",
+      "Using momentum."
+    ]
+  },
+  {
+    "name": "Pull-Up",
+    "category": "Upper Body",
+    "equipment": "Pull-Up Bar",
+    "repLabel": "reps",
+    "muscles": [
+      "Lats",
+      "Biceps",
+      "Rear Deltoids",
+      "Core"
+    ],
+    "steps": [
+      "Hang from the bar with hands just wider than shoulder-width, palms away.",
+      "Engage your core and squeeze your shoulder blades down.",
+      "Pull yourself up until your chin clears the bar.",
+      "Lower slowly to full arm extension."
+    ],
+    "tips": [
+      "Dead hang at the bottom activates lats better than partial reps.",
+      "Think about pulling your elbows toward your hips.",
+      "Use a band for assistance if needed."
+    ],
+    "mistakes": [
+      "Kipping or swinging.",
+      "Not reaching full extension at the bottom.",
+      "Shrugging shoulders up toward ears."
+    ]
+  },
+  {
+    "name": "Chin-Up",
+    "category": "Upper Body",
+    "equipment": "Pull-Up Bar",
+    "repLabel": "reps",
+    "muscles": [
+      "Biceps",
+      "Lats"
+    ],
+    "steps": [
+      "Hang from the bar with palms facing toward you, hands shoulder-width.",
+      "Pull yourself up until chin clears the bar.",
+      "Lower with control."
+    ],
+    "tips": [
+      "Supinated (underhand) grip places more emphasis on biceps.",
+      "Great alternative if you can't do pull-ups yet."
+    ],
+    "mistakes": [
+      "Not fully extending at the bottom.",
+      "Using momentum to swing up."
+    ]
+  },
+  {
+    "name": "Seated Cable Row",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Mid Back",
+      "Lats",
+      "Biceps",
+      "Rear Deltoids"
+    ],
+    "steps": [
+      "Sit at the cable row machine, feet on the platform, knees slightly bent.",
+      "Grip the handle and sit tall.",
+      "Pull the handle to your lower chest/upper abdomen.",
+      "Squeeze your shoulder blades together at the end.",
+      "Return with control — let your shoulder blades protract forward."
+    ],
+    "tips": [
+      "Maintain an upright torso — don't lean back.",
+      "Let your shoulder blades move freely — full protraction to full retraction."
+    ],
+    "mistakes": [
+      "Leaning back to pull more weight.",
+      "Not retracting shoulder blades — just pulling with arms.",
+      "Rushing the return — the eccentric matters."
+    ]
+  },
+  {
+    "name": "Bent Over Row (Barbell)",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Mid Back",
+      "Lats",
+      "Biceps",
+      "Rear Deltoids"
+    ],
+    "steps": [
+      "Stand with feet hip-width, knees slightly bent.",
+      "Hinge at hips until torso is nearly parallel to the floor.",
+      "Grip bar just outside shoulder-width.",
+      "Pull bar to your lower chest/upper abdomen.",
+      "Squeeze shoulder blades together.",
+      "Lower with control."
+    ],
+    "tips": [
+      "Keep your back flat throughout — don't round.",
+      "Think about driving your elbows back and up.",
+      "Brace your core hard to protect your lower back."
+    ],
+    "mistakes": [
+      "Rounding the lower back.",
+      "Using too much momentum — jerking the bar.",
+      "Pulling to the wrong position — aim for your belly button not your chest."
+    ]
+  },
+  {
+    "name": "Single Arm Dumbbell Row",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "per arm",
+    "muscles": [
+      "Lats",
+      "Mid Back",
+      "Biceps"
+    ],
+    "steps": [
+      "Place one knee and hand on a bench for support.",
+      "Hold a dumbbell in the other hand, arm extended toward the floor.",
+      "Pull the dumbbell up toward your hip, keeping elbow close to body.",
+      "Squeeze your lat at the top.",
+      "Lower with control.",
+      "Complete all reps then switch sides."
+    ],
+    "tips": [
+      "Think about putting the dumbbell in your back pocket.",
+      "Keep your back flat and parallel to the floor.",
+      "Don't rotate your torso to get more range."
+    ],
+    "mistakes": [
+      "Rotating the torso.",
+      "Pulling with the bicep instead of initiating with the lat.",
+      "Jerking the weight up."
+    ]
+  },
+  {
+    "name": "T-Bar Row",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Mid Back",
+      "Lats",
+      "Rear Deltoids",
+      "Biceps"
+    ],
+    "steps": [
+      "Load one end of a barbell into a corner or T-bar row machine.",
+      "Straddle the bar, hinge at hips to around 45°.",
+      "Grip the bar with both hands using a V-handle or close grip.",
+      "Pull the bar toward your chest.",
+      "Squeeze at the top and lower with control."
+    ],
+    "tips": [
+      "One of the best thickness builders for the back.",
+      "Keep back neutral throughout."
+    ],
+    "mistakes": [
+      "Rounding the lower back.",
+      "Too much forward lean."
+    ]
+  },
+  {
+    "name": "Upright Row (Barbell)",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Traps",
+      "Side Deltoids"
+    ],
+    "steps": [
+      "Hold bar in front of you with an overhand grip, hands slightly narrower than shoulder-width.",
+      "Pull bar straight up toward your chin, leading with elbows.",
+      "Elbows should finish higher than your hands.",
+      "Lower with control."
+    ],
+    "tips": [
+      "Wide grip reduces shoulder impingement risk.",
+      "Don't pull to the chin — stop at upper chest level."
+    ],
+    "mistakes": [
+      "Narrow grip causing shoulder impingement.",
+      "Swinging the weight up."
+    ]
+  },
+  {
+    "name": "Barbell Shrug",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Upper Traps"
+    ],
+    "steps": [
+      "Hold barbell in front of you with arms straight.",
+      "Shrug your shoulders straight up toward your ears.",
+      "Hold briefly at the top.",
+      "Lower with control."
+    ],
+    "tips": [
+      "Don't roll your shoulders — straight up and down.",
+      "Can also be done with dumbbells or behind the back."
+    ],
+    "mistakes": [
+      "Rolling shoulders forward or backward.",
+      "Using too much weight and losing range of motion."
+    ]
+  },
+  {
+    "name": "Bicep Curl (Barbell)",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Biceps",
+      "Forearms"
+    ],
+    "steps": [
+      "Stand holding a barbell, hands shoulder-width, palms facing up.",
+      "Keep upper arms fixed at your sides.",
+      "Curl the bar up toward your shoulders.",
+      "Squeeze at the top.",
+      "Lower slowly — take 3 seconds."
+    ],
+    "tips": [
+      "The slow lowering is where much of the growth happens.",
+      "Keep elbows pinned at your sides — don't let them drift forward."
+    ],
+    "mistakes": [
+      "Swinging the body to help lift the weight.",
+      "Elbows drifting forward at the top.",
+      "Not fully extending at the bottom."
+    ]
+  },
+  {
+    "name": "Dumbbell Bicep Curl",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "per arm",
+    "muscles": [
+      "Biceps"
+    ],
+    "steps": [
+      "Stand with dumbbells at your sides, palms facing forward.",
+      "Curl one or both dumbbells up toward your shoulders.",
+      "Squeeze at the top.",
+      "Lower slowly."
+    ],
+    "tips": [
+      "Alternate arms or do both together.",
+      "Supinate the wrist as you curl for more bicep activation."
+    ],
+    "mistakes": [
+      "Swinging the body.",
+      "Not controlling the descent."
+    ]
+  },
+  {
+    "name": "Hammer Curl",
+    "category": "Upper Body",
+    "equipment": "Dumbbell",
+    "repLabel": "per arm",
+    "muscles": [
+      "Biceps",
+      "Brachialis",
+      "Forearms"
+    ],
+    "steps": [
+      "Stand with dumbbells at your sides, palms facing each other.",
+      "Keep the hammer grip throughout — don't rotate.",
+      "Curl the weight up to shoulder height.",
+      "Lower slowly."
+    ],
+    "tips": [
+      "Targets the brachialis under the bicep — adds arm thickness.",
+      "Can be done alternating or together."
+    ],
+    "mistakes": [
+      "Rotating the wrist — keep neutral grip.",
+      "Swinging the body."
+    ]
+  },
+  {
+    "name": "Cable Bicep Curl",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Biceps"
+    ],
+    "steps": [
+      "Set cable to lowest position with a bar or rope attachment.",
+      "Stand facing the cable, grip the bar underhand.",
+      "Curl up toward your shoulders.",
+      "Lower with control — cable keeps tension at the bottom unlike dumbbells."
+    ],
+    "tips": [
+      "Cable provides constant tension throughout the range — great for pump.",
+      "Try the rope for a neutral grip variation."
+    ],
+    "mistakes": [
+      "Elbows drifting forward.",
+      "Using momentum."
+    ]
+  },
+  {
+    "name": "Preacher Curl",
+    "category": "Upper Body",
+    "equipment": "Barbell or Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Biceps",
+      "Brachialis"
+    ],
+    "steps": [
+      "Sit at the preacher bench, upper arms resting on the angled pad.",
+      "Hold the bar or dumbbell with palms facing up.",
+      "Curl the weight up toward your shoulders.",
+      "Lower slowly — full extension at the bottom."
+    ],
+    "tips": [
+      "The bench prevents cheating — pure bicep isolation.",
+      "Slow eccentric is crucial here."
+    ],
+    "mistakes": [
+      "Not going to full extension at the bottom.",
+      "Lifting your arms off the pad."
+    ]
+  },
+  {
+    "name": "Tricep Pushdown (Cable)",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Triceps"
+    ],
+    "steps": [
+      "Set cable to high position with a bar or rope attachment.",
+      "Grip the attachment, elbows pinned at your sides.",
+      "Push down until arms are fully extended.",
+      "Squeeze triceps at the bottom.",
+      "Return slowly, not letting elbows drift forward."
+    ],
+    "tips": [
+      "Keep elbows fixed at your sides throughout.",
+      "Use the rope for more range of motion and tricep activation."
+    ],
+    "mistakes": [
+      "Elbows drifting away from the body.",
+      "Leaning forward and using body weight."
+    ]
+  },
+  {
+    "name": "Overhead Tricep Extension (Cable)",
+    "category": "Upper Body",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Triceps Long Head"
+    ],
+    "steps": [
+      "Set cable to lowest position with a rope attachment.",
+      "Face away from the cable, grip rope overhead.",
+      "Extend arms overhead, straightening the elbows.",
+      "Lower with control — feel the stretch."
+    ],
+    "tips": [
+      "Targets the long head of the tricep — the biggest part.",
+      "Keep elbows pointing forward — don't let them flare."
+    ],
+    "mistakes": [
+      "Elbows flaring out to the sides.",
+      "Not fully extending overhead."
+    ]
+  },
+  {
+    "name": "Skull Crusher (EZ Bar)",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Triceps"
+    ],
+    "steps": [
+      "Lie on a bench holding an EZ bar above your chest with arms extended.",
+      "Keeping upper arms fixed, lower the bar toward your forehead by bending elbows.",
+      "Extend back up to the start."
+    ],
+    "tips": [
+      "Upper arms should stay completely vertical throughout.",
+      "Can also be done with dumbbells."
+    ],
+    "mistakes": [
+      "Elbows drifting out.",
+      "Using too much weight and losing control near the face."
+    ]
+  },
+  {
+    "name": "Close Grip Bench Press",
+    "category": "Upper Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Triceps",
+      "Inner Chest"
+    ],
+    "steps": [
+      "Lie on bench, grip bar at shoulder-width (narrower than regular bench).",
+      "Lower bar to your lower chest.",
+      "Press back up."
+    ],
+    "tips": [
+      "Keep elbows close to your body throughout.",
+      "Don't grip too close — causes wrist strain."
+    ],
+    "mistakes": [
+      "Gripping too narrow.",
+      "Elbows flaring out."
+    ]
+  },
+  {
+    "name": "Tricep Dip (Bench)",
+    "category": "Upper Body",
+    "equipment": "Bench or Chair",
+    "repLabel": "reps",
+    "muscles": [
+      "Triceps",
+      "Front Deltoids"
+    ],
+    "steps": [
+      "Sit on edge of bench, hands gripping the edge beside your hips.",
+      "Slide your hips off the bench.",
+      "Lower your body by bending your elbows.",
+      "Press back up to start."
+    ],
+    "tips": [
+      "Keep hips close to the bench.",
+      "Extend legs further for more difficulty.",
+      "Add weight on your lap to increase resistance."
+    ],
+    "mistakes": [
+      "Hips drifting too far from the bench.",
+      "Shrugging shoulders up."
+    ]
+  },
+  {
+    "name": "Plank",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Core",
+      "Glutes",
+      "Shoulders"
+    ],
+    "steps": [
+      "Start in a push-up position on your forearms.",
+      "Body in a straight line from head to heels.",
+      "Brace your core like you're about to be punched in the stomach.",
+      "Squeeze your glutes.",
+      "Hold for the required time."
+    ],
+    "tips": [
+      "Don't hold your breath — breathe steadily.",
+      "Focus on quality not duration — a solid 30s beats a sagging 60s."
+    ],
+    "mistakes": [
+      "Hips sagging down.",
+      "Hips too high — piking up.",
+      "Head dropping toward the floor."
+    ]
+  },
+  {
+    "name": "Side Plank",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "per side",
+    "muscles": [
+      "Obliques",
+      "Core",
+      "Glutes"
+    ],
+    "steps": [
+      "Lie on your side, propped on one forearm.",
+      "Stack your feet or stagger them for more stability.",
+      "Lift your hips to form a straight line from head to feet.",
+      "Hold without letting hips drop."
+    ],
+    "tips": [
+      "Keep hips stacked — don't let the top hip roll back.",
+      "Add a hip dip for extra oblique work."
+    ],
+    "mistakes": [
+      "Hips dropping toward the floor.",
+      "Top hip rolling backward."
+    ]
+  },
+  {
+    "name": "Dead Bug",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "per side",
+    "muscles": [
+      "Deep Core",
+      "Transverse Abdominis"
+    ],
+    "steps": [
+      "Lie on your back, arms extended toward the ceiling, knees at 90° above hips.",
+      "Press your lower back firmly into the floor.",
+      "Slowly lower one arm and the opposite leg toward the floor.",
+      "Return to start and repeat on the other side."
+    ],
+    "tips": [
+      "The lower back must stay flat on the floor the entire time.",
+      "Move slowly and with complete control.",
+      "Breathe out as you lower the limbs."
+    ],
+    "mistakes": [
+      "Lower back arching off the floor.",
+      "Moving too fast and losing core control."
+    ]
+  },
+  {
+    "name": "Bird Dog",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "per side",
+    "muscles": [
+      "Core",
+      "Lower Back",
+      "Glutes"
+    ],
+    "steps": [
+      "Start on all fours, hands under shoulders, knees under hips.",
+      "Brace your core.",
+      "Extend one arm forward and the opposite leg back simultaneously.",
+      "Hold briefly then return to start.",
+      "Keep your hips level throughout."
+    ],
+    "tips": [
+      "Imagine balancing a cup of water on your lower back.",
+      "Squeeze the glute of the extended leg."
+    ],
+    "mistakes": [
+      "Hips rotating — keep them square.",
+      "Arching the lower back."
+    ]
+  },
+  {
+    "name": "Vacuum Hold",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Transverse Abdominis",
+      "Deep Core"
+    ],
+    "steps": [
+      "Stand, kneel, or lie on all fours.",
+      "Exhale all the air from your lungs completely.",
+      "Pull your belly button in toward your spine as far as possible.",
+      "Hold for 20-30 seconds.",
+      "Breathe in to release."
+    ],
+    "tips": [
+      "Best done on an empty stomach first thing in the morning.",
+      "This targets the deepest abdominal layer — great for waist reduction.",
+      "Consistent practice daily gives the best results."
+    ],
+    "mistakes": [
+      "Holding your breath with a full belly — exhale first.",
+      "Not pulling the belly button back far enough."
+    ]
+  },
+  {
+    "name": "Crunch",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Upper Abs"
+    ],
+    "steps": [
+      "Lie on your back, knees bent, feet flat.",
+      "Place hands behind your head — don't pull your neck.",
+      "Curl your shoulders off the floor by contracting your abs.",
+      "Hold briefly at the top.",
+      "Lower slowly."
+    ],
+    "tips": [
+      "Short range of motion — just lift shoulders off the floor.",
+      "Think about bringing your ribs toward your hips."
+    ],
+    "mistakes": [
+      "Pulling on the neck.",
+      "Using momentum to sit all the way up."
+    ]
+  },
+  {
+    "name": "Bicycle Crunch",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "per side",
+    "muscles": [
+      "Obliques",
+      "Upper Abs"
+    ],
+    "steps": [
+      "Lie on your back, hands behind head, legs off the floor.",
+      "Bring one knee toward your chest while rotating the opposite elbow toward it.",
+      "Extend the other leg.",
+      "Alternate sides in a pedaling motion."
+    ],
+    "tips": [
+      "Slow controlled reps beat fast sloppy ones.",
+      "Focus on rotating the torso — not just the elbow."
+    ],
+    "mistakes": [
+      "Pulling on the neck.",
+      "Moving too fast and losing control."
+    ]
+  },
+  {
+    "name": "Leg Raise (Lying)",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Lower Abs",
+      "Hip Flexors"
+    ],
+    "steps": [
+      "Lie flat on your back, legs straight, hands under your glutes.",
+      "Keep lower back pressed into the floor.",
+      "Raise legs to 90°.",
+      "Lower slowly without letting your feet touch the floor."
+    ],
+    "tips": [
+      "Hands under glutes helps keep lower back down.",
+      "Keep legs straight or slightly bent."
+    ],
+    "mistakes": [
+      "Lower back arching off the floor.",
+      "Dropping legs too fast."
+    ]
+  },
+  {
+    "name": "Hanging Leg Raise",
+    "category": "Core & Posture",
+    "equipment": "Pull-Up Bar",
+    "repLabel": "reps",
+    "muscles": [
+      "Lower Abs",
+      "Hip Flexors",
+      "Core"
+    ],
+    "steps": [
+      "Hang from a pull-up bar with both hands.",
+      "Brace your core.",
+      "Raise your legs to 90° or higher.",
+      "Lower with control — don't swing."
+    ],
+    "tips": [
+      "Harder than lying leg raises — great for advanced core work.",
+      "Keep the swing to a minimum."
+    ],
+    "mistakes": [
+      "Swinging the body.",
+      "Using momentum instead of abs."
+    ]
+  },
+  {
+    "name": "Russian Twist",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight or Dumbbell",
+    "repLabel": "per side",
+    "muscles": [
+      "Obliques",
+      "Core"
+    ],
+    "steps": [
+      "Sit on the floor with knees bent, feet off the floor.",
+      "Lean back slightly, keeping your back straight.",
+      "Hold hands together or hold a dumbbell.",
+      "Rotate your torso to one side, then the other."
+    ],
+    "tips": [
+      "Keep feet off the floor for more difficulty.",
+      "The rotation should come from your torso, not your arms."
+    ],
+    "mistakes": [
+      "Rounding the back.",
+      "Just moving the arms without rotating the torso."
+    ]
+  },
+  {
+    "name": "Ab Wheel Rollout",
+    "category": "Core & Posture",
+    "equipment": "Ab Wheel",
+    "repLabel": "reps",
+    "muscles": [
+      "Core",
+      "Lats",
+      "Shoulders"
+    ],
+    "steps": [
+      "Kneel on the floor holding the ab wheel.",
+      "Brace your core tight.",
+      "Roll the wheel forward, extending your body toward the floor.",
+      "Go as far as you can control.",
+      "Pull back using your abs and lats."
+    ],
+    "tips": [
+      "One of the hardest core exercises — start with partial rollouts.",
+      "Keep hips from sagging."
+    ],
+    "mistakes": [
+      "Hips dropping — losing core tension.",
+      "Going too far before you have the strength."
+    ]
+  },
+  {
+    "name": "Superman Hold",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Lower Back",
+      "Glutes",
+      "Upper Back"
+    ],
+    "steps": [
+      "Lie face down with arms extended overhead.",
+      "Simultaneously lift arms, chest, and legs off the floor.",
+      "Hold the position briefly.",
+      "Lower with control."
+    ],
+    "tips": [
+      "Great for lower back and posterior chain activation.",
+      "Squeeze glutes as you lift."
+    ],
+    "mistakes": [
+      "Jerking the movement instead of smooth controlled lift.",
+      "Not lifting high enough."
+    ]
+  },
+  {
+    "name": "Pallof Press (Cable)",
+    "category": "Core & Posture",
+    "equipment": "Cable Machine",
+    "repLabel": "per side",
+    "muscles": [
+      "Core",
+      "Obliques",
+      "Anti-Rotation"
+    ],
+    "steps": [
+      "Set cable at chest height.",
+      "Stand side-on to the cable machine.",
+      "Hold the handle with both hands at your chest.",
+      "Step away to create tension.",
+      "Press the handle straight out in front of you.",
+      "Hold briefly then pull back to chest.",
+      "Complete all reps then switch sides."
+    ],
+    "tips": [
+      "This is an anti-rotation exercise — resist the pull of the cable.",
+      "Keep hips square throughout."
+    ],
+    "mistakes": [
+      "Rotating toward the cable.",
+      "Standing too close — not enough tension."
+    ]
+  },
+  {
+    "name": "Mountain Climber",
+    "category": "Full Body",
+    "equipment": "Bodyweight",
+    "repLabel": "per side",
+    "tags": [
+      "cardio"
+    ],
+    "exerciseType": "cardio",
+    "muscles": [
+      "Core",
+      "Hip Flexors",
+      "Shoulders",
+      "Cardio"
+    ],
+    "steps": [
+      "Start in a high plank position.",
+      "Keep core tight and hips level.",
+      "Drive one knee toward your chest.",
+      "Return and immediately drive the other knee.",
+      "Alternate rapidly."
+    ],
+    "tips": [
+      "Keep hips level — don't let them rise.",
+      "The faster you go, the more cardio benefit."
+    ],
+    "mistakes": [
+      "Hips rising up.",
+      "Losing core tension."
+    ]
+  },
+  {
+    "name": "Hollow Body Hold",
+    "category": "Core & Posture",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Deep Core",
+      "Hip Flexors",
+      "Abs"
+    ],
+    "steps": [
+      "Lie on your back, arms extended overhead.",
+      "Press your lower back into the floor.",
+      "Lift shoulders and legs off the floor.",
+      "Hold a banana-like curved position."
+    ],
+    "tips": [
+      "The lower back must stay pressed to the floor.",
+      "Raise legs higher if this is too difficult."
+    ],
+    "mistakes": [
+      "Lower back arching off the floor.",
+      "Holding breath — breathe steadily."
+    ]
+  },
+  {
+    "name": "Cable Crunch",
+    "category": "Core & Posture",
+    "equipment": "Cable Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Abs",
+      "Core"
+    ],
+    "steps": [
+      "Attach a rope to a high cable.",
+      "Kneel below the cable and hold the rope beside your head.",
+      "Crunch down, bringing your elbows toward your knees.",
+      "Squeeze abs at the bottom.",
+      "Return to upright."
+    ],
+    "tips": [
+      "The movement comes from the abs — not the hips.",
+      "Keep your hips still."
+    ],
+    "mistakes": [
+      "Pulling with the arms.",
+      "Hips moving — this should be pure ab flexion."
+    ]
+  },
+  {
+    "name": "Woodchop (Cable)",
+    "category": "Core & Posture",
+    "equipment": "Cable Machine",
+    "repLabel": "per side",
+    "muscles": [
+      "Obliques",
+      "Core",
+      "Shoulders"
+    ],
+    "steps": [
+      "Set cable to high position.",
+      "Stand side-on and hold the handle with both hands.",
+      "Pull the cable diagonally downward across your body.",
+      "Rotate through your core.",
+      "Return to start with control.",
+      "Complete all reps then switch sides."
+    ],
+    "tips": [
+      "The rotation comes from the core — not the arms.",
+      "Keep feet planted."
+    ],
+    "mistakes": [
+      "Using arms instead of rotating the torso.",
+      "Moving feet during the rotation."
+    ]
+  },
+  {
+    "name": "Deadlift (Barbell)",
+    "category": "Full Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Hamstrings",
+      "Glutes",
+      "Lower Back",
+      "Traps",
+      "Core"
+    ],
+    "steps": [
+      "Stand with bar over mid-foot, feet hip-width.",
+      "Hinge down and grip bar just outside your legs.",
+      "Lower your hips, chest up, arms straight.",
+      "Take a big breath and brace your core.",
+      "Drive through the floor, keeping the bar close to your body.",
+      "Stand tall at the top — hips and knees lock out together.",
+      "Hinge back down with control."
+    ],
+    "tips": [
+      "The bar should drag up your shins.",
+      "Think about pushing the floor away, not pulling the bar up.",
+      "Brace before you pull — treat it like a max effort even on warm-up sets."
+    ],
+    "mistakes": [
+      "Rounding the lower back.",
+      "Bar drifting away from the body.",
+      "Hips shooting up first — hips and shoulders should rise together."
+    ]
+  },
+  {
+    "name": "Sumo Deadlift",
+    "category": "Full Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Glutes",
+      "Inner Thighs",
+      "Hamstrings",
+      "Lower Back"
+    ],
+    "steps": [
+      "Stand with feet very wide, toes pointing outward.",
+      "Grip the bar between your legs, hands inside your legs.",
+      "Push your knees out over your toes.",
+      "Chest up, brace core and pull.",
+      "Stand tall at the top."
+    ],
+    "tips": [
+      "More hip and glute emphasis than conventional.",
+      "Great for those with shorter torsos."
+    ],
+    "mistakes": [
+      "Knees caving inward.",
+      "Not pushing knees out over toes."
+    ]
+  },
+  {
+    "name": "Power Clean",
+    "category": "Full Body",
+    "equipment": "Barbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Full Body",
+      "Power",
+      "Traps",
+      "Glutes",
+      "Shoulders"
+    ],
+    "steps": [
+      "Set up as for a deadlift.",
+      "Pull the bar explosively, extending through hips, knees and ankles.",
+      "As the bar reaches chest height, drop under it quickly.",
+      "Catch the bar on your front deltoids in a quarter squat.",
+      "Stand to finish the rep."
+    ],
+    "tips": [
+      "This is a power exercise — speed is the goal.",
+      "Learn the technique before adding weight."
+    ],
+    "mistakes": [
+      "Pulling with arms instead of driving with legs.",
+      "Not getting under the bar fast enough."
+    ]
+  },
+  {
+    "name": "Dumbbell Thruster",
+    "category": "Full Body",
+    "equipment": "Dumbbell",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Shoulders",
+      "Triceps",
+      "Core"
+    ],
+    "steps": [
+      "Hold dumbbells at shoulder height.",
+      "Squat down to parallel.",
+      "Drive up explosively from the squat.",
+      "Use the momentum to press the dumbbells overhead.",
+      "Lower dumbbells back to shoulders as you descend into the next squat."
+    ],
+    "tips": [
+      "The power from the squat drives the press — combine them fluidly.",
+      "Great conditioning exercise."
+    ],
+    "mistakes": [
+      "Treating squat and press as separate movements.",
+      "Not using leg drive for the press."
+    ]
+  },
+  {
+    "name": "Kettlebell Swing",
+    "category": "Full Body",
+    "equipment": "Kettlebell",
+    "repLabel": "reps",
+    "muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Core",
+      "Shoulders"
+    ],
+    "steps": [
+      "Stand with feet shoulder-width, kettlebell between your feet.",
+      "Hinge at hips to grip the bell with both hands.",
+      "Hike the bell back between your legs.",
+      "Drive your hips forward explosively, swinging the bell to chest height.",
+      "Let it swing back down and hinge again immediately."
+    ],
+    "tips": [
+      "This is a hip hinge — not a squat.",
+      "The power comes from the hip drive, not the arms.",
+      "Keep the core braced throughout."
+    ],
+    "mistakes": [
+      "Squatting instead of hinging.",
+      "Using arms to swing — the hips power it.",
+      "Rounding the back on the hinge."
+    ]
+  },
+  {
+    "name": "Turkish Get-Up",
+    "category": "Full Body",
+    "equipment": "Kettlebell or Dumbbell",
+    "repLabel": "per arm",
+    "muscles": [
+      "Full Body",
+      "Shoulders",
+      "Core",
+      "Balance"
+    ],
+    "steps": [
+      "Lie on your back, hold weight above you with one arm.",
+      "Bend the knee on the same side as the weight.",
+      "Roll up onto your opposite elbow, then hand.",
+      "Bridge your hips up.",
+      "Sweep the free leg back into a kneeling position.",
+      "Stand up tall.",
+      "Reverse all steps back to lying down."
+    ],
+    "tips": [
+      "Keep your eyes on the weight the entire time.",
+      "Go slowly and master each position before adding weight."
+    ],
+    "mistakes": [
+      "Losing control of the weight overhead.",
+      "Rushing through the positions."
+    ]
+  },
+  {
+    "name": "Burpee",
+    "category": "Full Body",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Full Body",
+      "Cardio"
+    ],
+    "steps": [
+      "Stand with feet shoulder-width.",
+      "Drop hands to the floor and jump feet back to a plank.",
+      "Perform a push-up.",
+      "Jump feet back toward your hands.",
+      "Explosively jump up with arms overhead."
+    ],
+    "tips": [
+      "Keep a consistent pace rather than going all out then dying.",
+      "Modify by stepping feet instead of jumping if needed."
+    ],
+    "mistakes": [
+      "Sagging hips in the plank.",
+      "Landing stiff-legged on the jump."
+    ]
+  },
+  {
+    "name": "Box Jump",
+    "category": "Full Body",
+    "equipment": "Plyo Box",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Calves",
+      "Power"
+    ],
+    "steps": [
+      "Stand in front of the box, feet shoulder-width.",
+      "Dip into a quarter squat, swinging arms back.",
+      "Explode upward, swinging arms forward.",
+      "Land softly on the box with knees bent.",
+      "Stand fully upright on the box.",
+      "Step down carefully."
+    ],
+    "tips": [
+      "Land as quietly as possible.",
+      "Step down, don't jump down, to protect your joints."
+    ],
+    "mistakes": [
+      "Landing with straight knees.",
+      "Jumping down instead of stepping."
+    ]
+  },
+  {
+    "name": "Farmer's Walk",
+    "category": "Full Body",
+    "equipment": "Dumbbell or Kettlebell",
+    "repLabel": "reps",
+    "muscles": [
+      "Grip",
+      "Traps",
+      "Core",
+      "Legs"
+    ],
+    "steps": [
+      "Pick up heavy dumbbells or kettlebells at your sides.",
+      "Stand tall, shoulders back, core braced.",
+      "Walk a set distance maintaining posture.",
+      "Set the weights down carefully."
+    ],
+    "tips": [
+      "One of the best exercises for overall strength and grip.",
+      "Keep shoulders from hunching."
+    ],
+    "mistakes": [
+      "Leaning to one side.",
+      "Letting shoulders round forward."
+    ]
+  },
+  {
+    "name": "Sled Push",
+    "category": "Full Body",
+    "equipment": "Sled",
+    "repLabel": "reps",
+    "muscles": [
+      "Quads",
+      "Glutes",
+      "Core",
+      "Cardio"
+    ],
+    "steps": [
+      "Grip the sled handles at hip height.",
+      "Lean into the sled at about 45°.",
+      "Drive through the floor with powerful leg strides.",
+      "Maintain a strong core and flat back."
+    ],
+    "tips": [
+      "Great for conditioning without joint stress.",
+      "Heavier load = strength. Lighter load = conditioning."
+    ],
+    "mistakes": [
+      "Standing too upright — lean into it.",
+      "Short choppy steps — drive with full leg extension."
+    ]
+  },
+  {
+    "name": "Bear Crawl",
+    "category": "Full Body",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Core",
+      "Shoulders",
+      "Quads",
+      "Coordination"
+    ],
+    "steps": [
+      "Start on all fours, knees hovering just above the floor.",
+      "Move one hand and the opposite foot forward simultaneously.",
+      "Alternate sides.",
+      "Keep your back flat and hips low."
+    ],
+    "tips": [
+      "Keep knees close to the floor.",
+      "Slow and controlled beats rushing."
+    ],
+    "mistakes": [
+      "Hips rising too high.",
+      "Moving same arm and same leg together."
+    ]
+  },
+  {
+    "name": "Cat-Cow Stretch",
+    "category": "Active Recovery",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Spine",
+      "Core",
+      "Back"
+    ],
+    "steps": [
+      "Start on all fours, wrists under shoulders, knees under hips.",
+      "Inhale and drop your belly, lifting your chest and tailbone (Cow).",
+      "Exhale and round your spine toward the ceiling, tucking chin and pelvis (Cat).",
+      "Flow between the two positions with your breath."
+    ],
+    "tips": [
+      "Move slowly and breathe deeply.",
+      "Great for morning mobility or between heavy sets."
+    ],
+    "mistakes": [
+      "Rushing the movement.",
+      "Not coordinating with breath."
+    ]
+  },
+  {
+    "name": "Hip Flexor Stretch",
+    "category": "Active Recovery",
+    "equipment": "Bodyweight",
+    "repLabel": "per side",
+    "muscles": [
+      "Hip Flexors",
+      "Quads"
+    ],
+    "steps": [
+      "Kneel on one knee, other foot in front.",
+      "Keep torso upright.",
+      "Shift your weight forward until you feel a stretch in the hip of the kneeling leg.",
+      "Hold for 30-60 seconds.",
+      "Switch sides."
+    ],
+    "tips": [
+      "Squeeze the glute of the kneeling leg to deepen the stretch.",
+      "Essential for anyone who sits for long periods."
+    ],
+    "mistakes": [
+      "Leaning forward instead of staying upright.",
+      "Not feeling the stretch — push the hip forward more."
+    ]
+  },
+  {
+    "name": "Pigeon Stretch",
+    "category": "Active Recovery",
+    "equipment": "Bodyweight",
+    "repLabel": "per side",
+    "muscles": [
+      "Glutes",
+      "Hip Rotators",
+      "Piriformis"
+    ],
+    "steps": [
+      "From a plank, bring one knee forward toward your wrist.",
+      "Extend the other leg back straight.",
+      "Lower your hips toward the floor.",
+      "Stay upright or lower your chest to the floor.",
+      "Hold and breathe into the stretch."
+    ],
+    "tips": [
+      "One of the best glute and hip stretches.",
+      "Use a folded blanket under the hip if needed."
+    ],
+    "mistakes": [
+      "Hips not square — try to keep both level.",
+      "Forcing the stretch instead of breathing into it."
+    ]
+  },
+  {
+    "name": "Foam Roll (Quads)",
+    "category": "Active Recovery",
+    "equipment": "Foam Roller",
+    "repLabel": "per side",
+    "muscles": [
+      "Quads",
+      "Fascia"
+    ],
+    "steps": [
+      "Lie face down with foam roller under one thigh.",
+      "Support yourself on your forearms.",
+      "Slowly roll from hip to just above the knee.",
+      "Pause on tender spots for 20-30 seconds."
+    ],
+    "tips": [
+      "Don't roll directly on a joint.",
+      "Breathe and relax into the tender spots."
+    ],
+    "mistakes": [
+      "Rolling too fast.",
+      "Tensing the muscle being rolled."
+    ]
+  },
+  {
+    "name": "Foam Roll (IT Band)",
+    "category": "Active Recovery",
+    "equipment": "Foam Roller",
+    "repLabel": "per side",
+    "muscles": [
+      "IT Band",
+      "Outer Thigh"
+    ],
+    "steps": [
+      "Lie on your side, roller under your outer thigh.",
+      "Support with your forearm and top foot.",
+      "Roll slowly from hip to just above the knee.",
+      "Pause on tight spots."
+    ],
+    "tips": [
+      "This can be intense — breathe through it.",
+      "Helpful for runner's knee prevention."
+    ],
+    "mistakes": [
+      "Rolling too fast over tight spots.",
+      "Rolling directly on the knee."
+    ]
+  },
+  {
+    "name": "Child's Pose",
+    "category": "Active Recovery",
+    "equipment": "Bodyweight",
+    "repLabel": "reps",
+    "muscles": [
+      "Lower Back",
+      "Hips",
+      "Shoulders"
+    ],
+    "steps": [
+      "Kneel and sit back onto your heels.",
+      "Extend arms forward along the floor.",
+      "Rest forehead on the mat.",
+      "Breathe deeply and hold."
+    ],
+    "tips": [
+      "Widen knees for a deeper hip stretch.",
+      "Great between sets or as a cool-down."
+    ],
+    "mistakes": [
+      "Holding breath.",
+      "Not relaxing fully into the position."
+    ]
+  },
+  {
+    "name": "World's Greatest Stretch",
+    "category": "Active Recovery",
+    "equipment": "Bodyweight",
+    "repLabel": "per side",
+    "muscles": [
+      "Hip Flexors",
+      "Thoracic Spine",
+      "Hamstrings",
+      "Glutes"
+    ],
+    "steps": [
+      "Start in a lunge position with right foot forward.",
+      "Place right hand on the floor inside your right foot.",
+      "Rotate your left arm upward, opening your chest toward the ceiling.",
+      "Hold then bring the arm back down.",
+      "Straighten your front leg to stretch the hamstring.",
+      "Return to lunge and repeat.",
+      "Switch sides."
+    ],
+    "tips": [
+      "This one movement hits almost every area.",
+      "Great as a warm-up or between sessions."
+    ],
+    "mistakes": [
+      "Rushing — spend time in each position."
+    ]
+  },
+  {
+    "name": "Chest Press (Machine)",
+    "category": "Upper Body",
+    "equipment": "Machine",
+    "repLabel": "reps",
+    "muscles": [
+      "Chest",
+      "Triceps",
+      "Front Deltoids"
+    ],
+    "steps": [
+      "Adjust the seat so handles are at mid-chest height.",
+      "Sit with your back flat against the pad, feet flat on the floor.",
+      "Grip the handles with a neutral or overhand grip.",
+      "Press forward until arms are extended without locking elbows.",
+      "Return with control to the start position."
+    ],
+    "tips": [
+      "Keep your shoulder blades pinched back into the pad.",
+      "Don't let your lower back arch away from the seat.",
+      "A good alternative when the bench press stations are taken."
+    ],
+    "mistakes": [
+      "Pressing with shoulders instead of chest.",
+      "Bouncing out of the bottom position.",
+      "Seat set too low — turns into a shoulder press."
+    ]
+  },
+  {
+    "name": "Jump Rope",
+    "category": "Full Body",
+    "equipment": "Bodyweight",
+    "repLabel": "seconds",
+    "tags": [
+      "cardio",
+      "home-friendly"
+    ],
+    "exerciseType": "cardio",
+    "muscles": [
+      "Calves",
+      "Shoulders",
+      "Core",
+      "Cardio"
+    ],
+    "steps": [
+      "Hold rope handles at hip height, elbows close to your sides.",
+      "Jump on the balls of your feet with a slight bend in the knees.",
+      "Rotate the rope with your wrists, not your whole arms.",
+      "Land softly and keep a steady rhythm."
+    ],
+    "tips": [
+      "Start with 30-second intervals if you're new to jumping rope.",
+      "Great as a warm-up or cardio finisher."
+    ],
+    "mistakes": [
+      "Jumping too high — small hops are more efficient.",
+      "Swinging arms too wide.",
+      "Landing flat-footed and heavy."
+    ]
+  },
+  {
+    "name": "Resistance Band Clamshell",
+    "category": "Glutes & Legs",
+    "equipment": "Resistance Band",
+    "repLabel": "per side",
+    "tags": [
+      "home-friendly"
+    ],
+    "muscles": [
+      "Glute Medius",
+      "Hip Abductors"
+    ],
+    "steps": [
+      "Loop a resistance band above your knees.",
+      "Lie on your side with hips stacked and knees bent at 45°.",
+      "Keep your feet together and lift the top knee toward the ceiling.",
+      "Squeeze at the top, then lower with control.",
+      "Complete all reps on one side before switching."
+    ],
+    "tips": [
+      "Excellent glute activation before leg day.",
+      "Keep your hips stacked — don't roll backward."
+    ],
+    "mistakes": [
+      "Rotating the hips back to get more range.",
+      "Moving too fast without a squeeze at the top."
+    ]
+  },
+  {
+    "name": "Incline Walk",
+    "category": "Full Body",
+    "equipment": "Treadmill",
+    "repLabel": "seconds",
+    "tags": [
+      "cardio"
+    ],
+    "exerciseType": "cardio",
+    "muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Calves",
+      "Cardio"
+    ],
+    "steps": [
+      "Set treadmill incline to 10–15%.",
+      "Walk at a brisk pace — you should feel your glutes working.",
+      "Stand tall, don't hold the handrails unless needed for balance.",
+      "Maintain a steady pace for your target duration."
+    ],
+    "tips": [
+      "12–15% incline at 3–4 mph is a solid glute-focused cardio option.",
+      "Perfect for rest-day active recovery."
+    ],
+    "mistakes": [
+      "Holding the rails and leaning back.",
+      "Incline too low — becomes regular walking.",
+      "Overstriding."
+    ]
+  }
+]
