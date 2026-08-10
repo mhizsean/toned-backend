@@ -1,0 +1,159 @@
+[
+  {
+    "id": "glutes-legs-full-warmup",
+    "title": "Glutes & Legs – Full Warmup",
+    "emoji": "🍑",
+    "description": "Wakes up the glutes and legs before heavy lower-body work.",
+    "focus": "Glutes & Legs",
+    "category": "pre-workout",
+    "duration_min": 10,
+    "sort_order": 10,
+    "exercises": [
+      { "id": "3013", "name": "low glute bridge on floor", "sets": 2, "reps": 12 },
+      { "id": "3561", "name": "glute bridge march", "sets": 2, "reps": 10 },
+      { "id": "1460", "name": "walking lunge", "sets": 2, "reps": 10 },
+      { "id": "0710", "name": "side hip abduction", "sets": 2, "reps": 12 },
+      { "id": "3470", "name": "forward lunge (male)", "sets": 2, "reps": 10 }
+    ]
+  },
+  {
+    "id": "full-body-activation",
+    "title": "Full Body Activation",
+    "emoji": "🤸",
+    "description": "Prime the whole body so your first working set feels ready.",
+    "focus": "Full Body",
+    "category": "pre-workout",
+    "duration_min": 10,
+    "sort_order": 20,
+    "exercises": [
+      { "id": "1604", "name": "world greatest stretch", "sets": 2, "reps": 6 },
+      { "id": "1471", "name": "inchworm", "sets": 2, "reps": 6 },
+      { "id": "3021", "name": "scapula push-up", "sets": 2, "reps": 10 },
+      { "id": "3013", "name": "low glute bridge on floor", "sets": 2, "reps": 12 },
+      { "id": "0276", "name": "dead bug", "sets": 2, "reps": 8 }
+    ]
+  },
+  {
+    "id": "upper-body-mobility",
+    "title": "Upper Body Mobility",
+    "emoji": "🙆",
+    "description": "Loosen shoulders and upper back before pressing or pulling.",
+    "focus": "Upper Body",
+    "category": "pre-workout",
+    "duration_min": 6,
+    "sort_order": 30,
+    "exercises": [
+      { "id": "3021", "name": "scapula push-up", "sets": 2, "reps": 10 },
+      { "id": "0688", "name": "scapular pull-up", "sets": 2, "reps": 8 },
+      { "id": "1405", "name": "back pec stretch", "sets": 2, "reps": 30 },
+      { "id": "1259", "name": "behind head chest stretch", "sets": 2, "reps": 30 }
+    ]
+  },
+  {
+    "id": "leg-day-prep",
+    "title": "Leg Day Prep",
+    "emoji": "💪",
+    "description": "Open the hips and fire up the posterior chain before squats.",
+    "focus": "Glutes & Legs",
+    "category": "pre-workout",
+    "duration_min": 8,
+    "sort_order": 40,
+    "exercises": [
+      { "id": "3013", "name": "low glute bridge on floor", "sets": 2, "reps": 12 },
+      { "id": "1564", "name": "intermediate hip flexor and quad stretch", "sets": 2, "reps": 30 },
+      { "id": "1511", "name": "hamstring stretch", "sets": 2, "reps": 30 },
+      { "id": "0809", "name": "suspended split squat", "sets": 2, "reps": 8 }
+    ]
+  },
+  {
+    "id": "core-activation",
+    "title": "Core Activation",
+    "emoji": "🧘",
+    "description": "Light core priming before training — not a burnout finisher.",
+    "focus": "Core & Posture",
+    "category": "pre-workout",
+    "duration_min": 6,
+    "sort_order": 50,
+    "exercises": [
+      { "id": "0276", "name": "dead bug", "sets": 2, "reps": 8 },
+      { "id": "0464", "name": "front plank with twist", "sets": 2, "reps": 20 },
+      { "id": "1471", "name": "inchworm", "sets": 2, "reps": 6 }
+    ]
+  },
+  {
+    "id": "steady-state-treadmill",
+    "title": "20-min Incline Walk",
+    "emoji": "🏃",
+    "description": "Easy aerobic work to build base fitness without frying recovery.",
+    "focus": "Full Body",
+    "category": "cardio",
+    "duration_min": 20,
+    "sort_order": 60,
+    "exercises": [
+      { "id": "3666", "name": "walking on incline treadmill", "sets": 1, "reps": 20 }
+    ]
+  },
+  {
+    "id": "easy-bike",
+    "title": "15-min Easy Bike",
+    "emoji": "🚴",
+    "description": "Low-impact cardio when your joints need a break from running.",
+    "focus": "Full Body",
+    "category": "cardio",
+    "duration_min": 15,
+    "sort_order": 70,
+    "exercises": [
+      { "id": "2138", "name": "stationary bike run v. 3", "sets": 1, "reps": 15 }
+    ]
+  },
+  {
+    "id": "hiit-bodyweight",
+    "title": "10-min Bodyweight HIIT",
+    "emoji": "⚡",
+    "description": "Short, sharp intervals with no equipment.",
+    "focus": "Full Body",
+    "category": "cardio",
+    "duration_min": 10,
+    "sort_order": 80,
+    "exercises": [
+      { "id": "3224", "name": "jack jump (male)", "sets": 3, "reps": 20 },
+      { "id": "0630", "name": "mountain climber", "sets": 3, "reps": 20 },
+      { "id": "1160", "name": "burpee", "sets": 3, "reps": 8 },
+      { "id": "3655", "name": "walking high knees lunge", "sets": 3, "reps": 16 }
+    ]
+  },
+  {
+    "id": "lower-body-cooldown",
+    "title": "Lower Body Cooldown",
+    "emoji": "🧘",
+    "description": "Downshift the legs and restore range after lower-body work.",
+    "focus": "Glutes & Legs",
+    "category": "post-workout",
+    "duration_min": 7,
+    "sort_order": 90,
+    "exercises": [
+      { "id": "1511", "name": "hamstring stretch", "sets": 2, "reps": 30 },
+      { "id": "0613", "name": "lying (side) quads stretch", "sets": 2, "reps": 30 },
+      { "id": "1564", "name": "intermediate hip flexor and quad stretch", "sets": 2, "reps": 30 },
+      { "id": "1377", "name": "calf stretch with hands against wall", "sets": 2, "reps": 30 }
+    ]
+  },
+  {
+    "id": "full-body-recovery",
+    "title": "Full Body Recovery",
+    "emoji": "🌬️",
+    "description": "Gentle stretch and mobility to close out a hard session.",
+    "focus": "Active Recovery",
+    "category": "post-workout",
+    "duration_min": 12,
+    "sort_order": 100,
+    "exercises": [
+      { "id": "1604", "name": "world greatest stretch", "sets": 2, "reps": 6 },
+      { "id": "1405", "name": "back pec stretch", "sets": 2, "reps": 30 },
+      { "id": "1511", "name": "hamstring stretch", "sets": 2, "reps": 30 },
+      { "id": "0613", "name": "lying (side) quads stretch", "sets": 2, "reps": 30 },
+      { "id": "1377", "name": "calf stretch with hands against wall", "sets": 2, "reps": 30 },
+      { "id": "1259", "name": "behind head chest stretch", "sets": 2, "reps": 30 }
+    ]
+  }
+]

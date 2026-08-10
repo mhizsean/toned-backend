@@ -123,6 +123,41 @@ Each planned exercise stores catalogue `id` (nullable for customs) plus `name`:
 
 Home / start workout reads `schedule[today]` for exercise names (and ids when present).
 
+## Session templates
+
+Curated system blocks for the Sessions screen (pre-workout / cardio / post-workout).
+Exercises reference catalogue `id` + `name`.
+
+| Method | Path | Auth | Purpose |
+|---|---|---|---|
+| `GET` | `/templates` | public | list system (+ your saved if signed in) |
+| `GET` | `/templates/{id}` | public* | one template |
+| `POST` | `/templates` | JWT | **save as session template** (from day edit) |
+| `POST` | `/templates/{id}/save` | JWT | bookmark system template → Saved |
+| `POST` | `/templates/{id}/add-to-plan` | JWT | **add template to a day plan** |
+| `PATCH` | `/templates/{id}` | JWT | edit your saved template |
+| `DELETE` | `/templates/{id}` | JWT | remove your saved template |
+
+\*User-owned templates require the owning user's token.
+
+**Day-edit save sheet**
+
+- Save as session template → `POST /templates`
+- Add / update day plan → `PUT /schedule/{day}` (already exists)
+
+**From Sessions screen**
+
+- Bookmark → `POST /templates/{id}/save`
+- Add to day → `POST /templates/{id}/add-to-plan` with `{ "day": "Mon", "mode": "merge" | "replace", "day_type": "gym" }`
+
+Seed:
+
+```bash
+python -m app.scripts.seed_session_templates
+```
+
+Source JSON: `data/session_templates_seed.json` (10 templates).
+
 ## Scripts
 
 ```bash
@@ -131,6 +166,9 @@ python -m app.scripts.download_exercises_dataset
 
 # Seed catalogue from data/exercises_dataset.json
 python -m app.scripts.seed_internal_exercises
+
+# Seed system session templates
+python -m app.scripts.seed_session_templates
 ```
 
 ## Migrations

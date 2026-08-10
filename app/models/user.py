@@ -9,6 +9,7 @@ from app.db.base import Base
 if TYPE_CHECKING:
     from app.models.exercise import Exercise
     from app.models.schedule import UserSchedule
+    from app.models.session_template import SessionTemplate
     from app.models.workout_log import WorkoutLog
 
 
@@ -34,4 +35,8 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
         uselist=False,
+    )
+    session_templates: Mapped[list["SessionTemplate"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
