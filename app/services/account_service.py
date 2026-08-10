@@ -4,6 +4,7 @@ from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
 from app.models.exercise import Exercise
+from app.models.schedule import UserSchedule
 from app.models.sync import SyncCursor
 from app.models.user import User
 from app.models.workout_log import WorkoutLog
@@ -25,11 +26,15 @@ class AccountService:
         cursors = db.execute(
             delete(SyncCursor).where(SyncCursor.user_id == user_id)
         ).rowcount
+        schedules = db.execute(
+            delete(UserSchedule).where(UserSchedule.user_id == user_id)
+        ).rowcount
         db.commit()
         return {
             "workouts_deleted": int(workouts or 0),
             "custom_exercises_deleted": int(customs or 0),
             "sync_cursors_deleted": int(cursors or 0),
+            "schedules_deleted": int(schedules or 0),
         }
 
     @staticmethod

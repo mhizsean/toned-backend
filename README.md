@@ -93,6 +93,36 @@ Authorization: Bearer <access_token>
 Requires `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_JWT_SECRET` in `.env`.
 `DELETE /auth/account` also needs `SUPABASE_SERVICE_ROLE_KEY` (server-only; hard delete so the email can be reused).
 
+## Schedule
+
+Weekly plan for signed-in users (`Authorization: Bearer <access_token>`).
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/schedule` | full week |
+| `PUT` | `/schedule` | replace week |
+| `PUT` | `/schedule/{day}` | upsert one day (`Mon`…`Sun`) |
+| `DELETE` | `/schedule/{day}` | clear one day |
+
+Each planned exercise stores catalogue `id` (nullable for customs) plus `name`:
+
+```json
+{
+  "schedule": {
+    "Mon": {
+      "type": "gym",
+      "focuses": ["Glutes & Legs"],
+      "exercises": [
+        { "id": "0001", "name": "3/4 sit-up" },
+        { "id": null, "name": "My Custom Curl" }
+      ]
+    }
+  }
+}
+```
+
+Home / start workout reads `schedule[today]` for exercise names (and ids when present).
+
 ## Scripts
 
 ```bash
