@@ -4,7 +4,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.routers import auth, exercises, library, schedule, sync, templates, workouts
+from app.routers import (
+    auth,
+    exercises,
+    library,
+    preferences,
+    schedule,
+    sync,
+    templates,
+    workouts,
+)
 
 
 @asynccontextmanager
@@ -28,6 +37,7 @@ def create_app() -> FastAPI:
     app.include_router(auth.router, prefix=prefix)
     app.include_router(exercises.router, prefix=prefix)
     app.include_router(library.router, prefix=prefix)
+    app.include_router(preferences.router, prefix=prefix)
     app.include_router(schedule.router, prefix=prefix)
     app.include_router(templates.router, prefix=prefix)
     app.include_router(workouts.router, prefix=prefix)

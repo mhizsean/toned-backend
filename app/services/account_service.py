@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.models.exercise import Exercise
 from app.models.library import UserLibrary
+from app.models.preferences import UserPreferences
 from app.models.schedule import UserSchedule
 from app.models.session_template import SessionTemplate
 from app.models.sync import SyncCursor
@@ -34,6 +35,9 @@ class AccountService:
         libraries = db.execute(
             delete(UserLibrary).where(UserLibrary.user_id == user_id)
         ).rowcount
+        prefs = db.execute(
+            delete(UserPreferences).where(UserPreferences.user_id == user_id)
+        ).rowcount
         user_templates = db.execute(
             delete(SessionTemplate).where(
                 SessionTemplate.user_id == user_id,
@@ -47,6 +51,7 @@ class AccountService:
             "sync_cursors_deleted": int(cursors or 0),
             "schedules_deleted": int(schedules or 0),
             "libraries_deleted": int(libraries or 0),
+            "preferences_deleted": int(prefs or 0),
             "user_templates_deleted": int(user_templates or 0),
         }
 

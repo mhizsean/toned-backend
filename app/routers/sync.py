@@ -1,27 +1,12 @@
-from datetime import datetime, timezone
+from datetime import datetime
 
-from fastapi import APIRouter
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, Query
 
 from app.core.deps import CurrentUser, DbSession
-from app.schemas.workout_log import WorkoutLogCreate, WorkoutLogRead
+from app.schemas.sync import SyncPullResponse, SyncPushRequest, SyncPushResponse
 from app.services.sync_service import SyncService
 
 router = APIRouter(prefix="/sync", tags=["sync"])
-
-
-class SyncPushRequest(BaseModel):
-    workouts: list[WorkoutLogCreate] = Field(default_factory=list)
-
-
-class SyncPullResponse(BaseModel):
-    workouts: list[WorkoutLogRead]
-    server_time: datetime
-
-
-class SyncPushResponse(BaseModel):
-    workouts: list[WorkoutLogRead]
-    server_time: datetime
 
 
 @router.post("/push", response_model=SyncPushResponse)
@@ -30,21 +15,32 @@ def push_changes(
     db: DbSession,
     user: CurrentUser,
 ) -> SyncPushResponse:
-    saved = SyncService.push_workouts(db, user.id, payload.workouts)
-    return SyncPushResponse(
-        workouts=[WorkoutLogRead.model_validate(row) for row in saved],
-        server_time=datetime.now(timezone.utc),
-    )
+    """
+    Upload local changes. Sections omitted are left untouched.
+    schedule / library are replaced entirely when sent (last-write-wins).
+    """
+    return SyncService.push_all(db, user.id, payload)
 
 
 @router.get("/pull", response_model=SyncPullResponse)
 def pull_changes(
     db: DbSession,
     user: CurrentUser,
-    since: datetime | None = None,
+    since: datetime | None = Query(
+        default=None,
+        description="Only return workouts/customs/templates updated after this time",
+    ),
 ) -> SyncPullResponse:
-    workouts = SyncService.pull_workouts(db, user.id, since=since)
-    return SyncPullResponse(
-        workouts=[WorkoutLogRead.model_validate(row) for row in workouts],
-        server_time=datetime.now(timezone.utc),
-    )
+    """Download cloud state. Schedule + library always returned in full."""
+    return SyncService.pull_all(db, user.id, since=since)
+
+
+@router.post("/full", response_model=SyncPullResponse)
+def sync_full(
+    payload: SyncPushRequest,
+    db: DbSession,
+    user: CurrentUser,
+) -> SyncPullResponse:
+    """Push then pull — convenient after login / app open."""
+    SyncService.push_all(db, user.id, payload)
+    return SyncService.pull_all(db, user.id, since=None)

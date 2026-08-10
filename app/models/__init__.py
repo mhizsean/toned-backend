@@ -2,6 +2,7 @@
 
 from app.models.exercise import Exercise
 from app.models.library import UserLibrary
+from app.models.preferences import UserPreferences
 from app.models.schedule import UserSchedule
 from app.models.session_template import SessionTemplate
 from app.models.sync import SyncCursor
@@ -11,6 +12,7 @@ from app.models.workout_log import WorkoutLog
 __all__ = [
     "Exercise",
     "UserLibrary",
+    "UserPreferences",
     "UserSchedule",
     "SessionTemplate",
     "SyncCursor",

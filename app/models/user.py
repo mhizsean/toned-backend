@@ -9,6 +9,7 @@ from app.db.base import Base
 if TYPE_CHECKING:
     from app.models.exercise import Exercise
     from app.models.library import UserLibrary
+    from app.models.preferences import UserPreferences
     from app.models.schedule import UserSchedule
     from app.models.session_template import SessionTemplate
     from app.models.workout_log import WorkoutLog
@@ -38,6 +39,11 @@ class User(Base):
         uselist=False,
     )
     library: Mapped["UserLibrary | None"] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
+    preferences: Mapped["UserPreferences | None"] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
         uselist=False,

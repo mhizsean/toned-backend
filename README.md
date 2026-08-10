@@ -188,6 +188,52 @@ Saved exercises for Plan / pickers (`Authorization: Bearer` required).
 
 Local app today stores names only (`toned_library`); when wiring sync, map to `{ id, name }` (id null until resolved from catalogue).
 
+## Sync
+
+JWT required. Workouts-only payloads still work; other sections are optional.
+
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/sync/push` | upload local changes |
+| `GET` | `/sync/pull?since=` | download cloud state |
+| `POST` | `/sync/full` | push then pull (after login / app open) |
+
+Push body (omit a section to leave it unchanged on the server):
+
+```json
+{
+  "workouts": [{ "date": "2026-08-10", "client_id": "…", "exercises": [] }],
+  "schedule": { "Mon": { "type": "gym", "focuses": ["Glutes & Legs"], "exercises": [] } },
+  "library": [{ "id": "0662", "name": "push-up" }],
+  "custom_exercises": [{ "name": "My Move", "category": "chest", "equipment": "body weight", "muscles": [], "steps": [] }],
+  "templates": [{ "title": "My Block", "focus": "Upper Body", "category": "pre-workout", "duration_min": 10, "exercises": [] }]
+}
+```
+
+- `schedule` / `library`: full replace when sent (last-write-wins)
+- `preferences`: full replace when sent (weight unit + signup nudge timestamps; **no theme**)
+- `workouts` / `custom_exercises` / `templates`: upsert
+- Pull always returns full `schedule` + `library` + `preferences`; `since` filters workouts/customs/templates only
+
+## Preferences
+
+JWT required. Theme stays on-device — not stored here.
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/preferences` | current prefs (defaults if unset) |
+| `PATCH` | `/preferences` | update fields |
+
+```json
+{
+  "weight_unit": "kg",
+  "signup_nudge_last_shown_at": "2026-08-10T12:00:00Z",
+  "signup_nudge_dismissed_at": null
+}
+```
+
+Use nudge timestamps for the monthly “sign up so your data isn’t lost” prompt.
+
 ## Scripts
 
 ```bash
