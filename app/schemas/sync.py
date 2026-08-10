@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -10,6 +11,8 @@ from app.schemas.preferences import PreferencesReplaceRequest, PreferencesRespon
 from app.schemas.schedule import DaySchedule, ScheduleResponse
 from app.schemas.session_template import SessionTemplateCreate, SessionTemplateRead
 from app.schemas.workout_log import WorkoutLogCreate, WorkoutLogRead
+
+MergeStrategy = Literal["prefer_local", "prefer_cloud", "union"]
 
 
 class SyncPushRequest(BaseModel):
@@ -44,3 +47,18 @@ class SyncPullResponse(BaseModel):
     custom_exercises: list[ExerciseRead] = Field(default_factory=list)
     templates: list[SessionTemplateRead] = Field(default_factory=list)
     server_time: datetime
+
+
+class SyncMergeRequest(BaseModel):
+    """
+    First-login / reinstall merge: combine guest local snapshot with existing cloud data.
+    Default strategy prefer_local fits “signed up after using the app as a guest”.
+    """
+
+    local: SyncPushRequest
+    strategy: MergeStrategy = "prefer_local"
+
+
+class SyncMergeResponse(SyncPullResponse):
+    strategy: MergeStrategy
+    notes: list[str] = Field(default_factory=list)

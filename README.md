@@ -197,6 +197,33 @@ JWT required. Workouts-only payloads still work; other sections are optional.
 | `POST` | `/sync/push` | upload local changes |
 | `GET` | `/sync/pull?since=` | download cloud state |
 | `POST` | `/sync/full` | push then pull (after login / app open) |
+| `POST` | `/sync/merge` | first-login merge of guest local + cloud |
+
+### First-login merge
+
+After guest → signup/login, send the on-device snapshot once:
+
+```json
+{
+  "strategy": "prefer_local",
+  "local": {
+    "workouts": [],
+    "schedule": {},
+    "library": [],
+    "preferences": { "weight_unit": "lb" },
+    "custom_exercises": [],
+    "templates": []
+  }
+}
+```
+
+| Strategy | When to use |
+|---|---|
+| `prefer_local` (default) | Guest had data on device; device wins conflicts |
+| `prefer_cloud` | Reinstall / trust server; cloud wins conflicts |
+| `union` | Combine schedule day exercises/focuses; prefs take local `weight_unit` + later nudge timestamps |
+
+Lists (library, workouts, customs, templates) are always unioned by id/`client_id`/name; conflicts use the strategy. Omitted `schedule` / `library` / `preferences` keep cloud as-is for that section. Response is a full pull plus `notes` listing conflict resolutions.
 
 Push body (omit a section to leave it unchanged on the server):
 
