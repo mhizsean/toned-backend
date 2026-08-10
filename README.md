@@ -88,7 +88,15 @@ Store `access_token` from signup/signin on the device and send:
 Authorization: Bearer <access_token>
 ```
 
-`GET /api/v1/exercises` remains public. Custom exercises, workouts, and sync still require a token.
+`GET /api/v1/exercises` remains public. Custom exercises require a token:
+
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/exercises` | create custom |
+| `PATCH` | `/exercises/{id}` | update own custom |
+| `DELETE` | `/exercises/{id}` | delete own custom |
+
+Catalogue rows cannot be patched/deleted.
 
 Requires `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_JWT_SECRET` in `.env`.
 `DELETE /auth/account` also needs `SUPABASE_SERVICE_ROLE_KEY` (server-only; hard delete so the email can be reused).

@@ -34,6 +34,28 @@ class ExerciseCreate(ExerciseBase):
     id: str | None = None
 
 
+class ExerciseUpdate(BaseModel):
+    """Partial update for the owner's custom exercises only."""
+
+    name: str | None = None
+    category: str | None = None
+    body_part: str | None = None
+    equipment: str | None = None
+    target: str | None = None
+    media_id: str | None = None
+    muscle_group: str | None = None
+    secondary_muscles: list[str] | None = None
+    instructions: dict | None = None
+    instruction_steps: dict | None = None
+    rep_label: str | None = None
+    exercise_type: str | None = None
+    tags: list[str] | None = None
+    muscles: list[str] | None = None
+    steps: list[str] | None = None
+    tips: list[str] | None = None
+    mistakes: list[str] | None = None
+
+
 class ExerciseRead(ExerciseBase):
     model_config = ConfigDict(from_attributes=True)
 

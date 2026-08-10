@@ -1,7 +1,12 @@
 from fastapi import APIRouter, HTTPException, Query, status
 
 from app.core.deps import CurrentUser, DbSession, OptionalUser
-from app.schemas.exercise import ExerciseCreate, ExerciseListResponse, ExerciseRead
+from app.schemas.exercise import (
+    ExerciseCreate,
+    ExerciseListResponse,
+    ExerciseRead,
+    ExerciseUpdate,
+)
 from app.services.exercise_service import ExerciseService
 
 router = APIRouter(prefix="/exercises", tags=["exercises"])
@@ -59,3 +64,39 @@ def create_custom_exercise(
     """Creating custom exercises still requires auth."""
     exercise = ExerciseService.create_custom_exercise(db, user.id, data)
     return ExerciseRead.model_validate(exercise)
+
+
+@router.patch("/{exercise_id}", response_model=ExerciseRead)
+def update_custom_exercise(
+    exercise_id: str,
+    data: ExerciseUpdate,
+    db: DbSession,
+    user: CurrentUser,
+) -> ExerciseRead:
+    """Update own custom exercise only (catalogue rows are immutable)."""
+    try:
+        exercise = ExerciseService.update_custom_exercise(
+            db, user.id, exercise_id, data
+        )
+    except LookupError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+    return ExerciseRead.model_validate(exercise)
+
+
+@router.delete("/{exercise_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_custom_exercise(
+    exercise_id: str,
+    db: DbSession,
+    user: CurrentUser,
+) -> None:
+    """Delete own custom exercise only."""
+    try:
+        ExerciseService.delete_custom_exercise(db, user.id, exercise_id)
+    except LookupError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc

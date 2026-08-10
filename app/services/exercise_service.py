@@ -5,7 +5,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.models.exercise import Exercise
-from app.schemas.exercise import ExerciseCreate
+from app.schemas.exercise import ExerciseCreate, ExerciseUpdate
 
 
 def slugify(name: str) -> str:
@@ -64,12 +64,30 @@ class ExerciseService:
         )
 
     @staticmethod
+    def _owned_custom(
+        db: Session,
+        exercise_id: str,
+        user_id: str,
+    ) -> Exercise | None:
+        return db.scalar(
+            select(Exercise).where(
+                Exercise.id == exercise_id,
+                Exercise.user_id == user_id,
+                Exercise.is_custom.is_(True),
+            )
+        )
+
+    @staticmethod
     def create_custom_exercise(
         db: Session,
         user_id: str,
         data: ExerciseCreate,
     ) -> Exercise:
-        exercise_id = data.id or slugify(data.name)
+        base_id = data.id or slugify(data.name)
+        exercise_id = base_id
+        if db.get(Exercise, exercise_id) is not None:
+            exercise_id = f"{base_id}-{uuid.uuid4().hex[:8]}"
+
         exercise = Exercise(
             id=exercise_id,
             name=data.name,
@@ -97,3 +115,37 @@ class ExerciseService:
         db.commit()
         db.refresh(exercise)
         return exercise
+
+    @staticmethod
+    def update_custom_exercise(
+        db: Session,
+        user_id: str,
+        exercise_id: str,
+        data: ExerciseUpdate,
+    ) -> Exercise:
+        exercise = ExerciseService._owned_custom(db, exercise_id, user_id)
+        if exercise is None:
+            raise LookupError("Custom exercise not found")
+
+        updates = data.model_dump(exclude_unset=True)
+        if "category" in updates and "body_part" not in updates:
+            if exercise.body_part == exercise.category:
+                updates["body_part"] = updates["category"]
+        for key, value in updates.items():
+            setattr(exercise, key, value)
+
+        db.commit()
+        db.refresh(exercise)
+        return exercise
+
+    @staticmethod
+    def delete_custom_exercise(
+        db: Session,
+        user_id: str,
+        exercise_id: str,
+    ) -> None:
+        exercise = ExerciseService._owned_custom(db, exercise_id, user_id)
+        if exercise is None:
+            raise LookupError("Custom exercise not found")
+        db.delete(exercise)
+        db.commit()
