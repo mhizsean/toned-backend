@@ -9,6 +9,7 @@ from app.config import get_settings
 from app.db.base import Base
 from app.models import (  # noqa: F401
     exercise,
+    library,
     schedule,
     session_template,
     sync,

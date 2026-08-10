@@ -11,7 +11,7 @@ from sqlalchemy.pool import StaticPool
 from app.core.deps import get_current_user, get_db
 from app.db.base import Base
 from app.main import create_app
-from app.models import exercise, schedule, session_template, sync, user, workout_log  # noqa: F401
+from app.models import exercise, library, schedule, session_template, sync, user, workout_log  # noqa: F401
 from app.models.user import User
 
 os.environ.setdefault("SUPABASE_JWT_SECRET", "test-secret-for-pytest")

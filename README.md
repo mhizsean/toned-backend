@@ -158,6 +158,28 @@ python -m app.scripts.seed_session_templates
 
 Source JSON: `data/session_templates_seed.json` (10 templates).
 
+## Library
+
+Saved exercises for Plan / pickers (`Authorization: Bearer` required).
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/library` | full saved list |
+| `PUT` | `/library` | replace list (sync after login) |
+| `POST` | `/library/items` | add one `{ id?, name }` |
+| `DELETE` | `/library/items?id=` or `?name=` | remove one |
+
+```json
+{
+  "items": [
+    { "id": "0662", "name": "push-up" },
+    { "id": null, "name": "My Custom Curl" }
+  ]
+}
+```
+
+Local app today stores names only (`toned_library`); when wiring sync, map to `{ id, name }` (id null until resolved from catalogue).
+
 ## Scripts
 
 ```bash

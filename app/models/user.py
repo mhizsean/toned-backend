@@ -8,6 +8,7 @@ from app.db.base import Base
 
 if TYPE_CHECKING:
     from app.models.exercise import Exercise
+    from app.models.library import UserLibrary
     from app.models.schedule import UserSchedule
     from app.models.session_template import SessionTemplate
     from app.models.workout_log import WorkoutLog
@@ -32,6 +33,11 @@ class User(Base):
         cascade="all, delete-orphan",
     )
     schedule: Mapped["UserSchedule | None"] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
+    library: Mapped["UserLibrary | None"] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
         uselist=False,
