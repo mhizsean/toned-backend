@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query, status
 
+from app.constants.focus import APP_FOCUSES, FOCUS_RULES, parse_focus_params
 from app.core.deps import CurrentUser, DbSession, OptionalUser
 from app.schemas.exercise import (
     ExerciseCreate,
@@ -12,22 +13,55 @@ from app.services.exercise_service import ExerciseService
 router = APIRouter(prefix="/exercises", tags=["exercises"])
 
 
+@router.get("/focuses")
+def list_focus_mappings() -> dict:
+    """Public: app focus labels → dataset body_part mapping."""
+    return {
+        "focuses": list(APP_FOCUSES),
+        "mapping": {
+            focus: {
+                "body_parts": (
+                    list(rule.body_parts) if rule.body_parts is not None else None
+                ),
+                "match_stretch_names": rule.match_stretch_names,
+            }
+            for focus, rule in FOCUS_RULES.items()
+        },
+    }
+
+
 @router.get("", response_model=ExerciseListResponse)
 def list_exercises(
     db: DbSession,
     user: OptionalUser,
     category: str | None = None,
     body_part: str | None = None,
+    focus: list[str] | None = Query(
+        default=None,
+        description=(
+            "App focus label(s), e.g. Upper Body. Repeat or comma-separate. "
+            f"One of: {', '.join(APP_FOCUSES)}"
+        ),
+    ),
     search: str | None = None,
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
 ) -> ExerciseListResponse:
     """Public catalogue. Signed-in users also see their own custom exercises."""
+    try:
+        focuses = parse_focus_params(focus)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        ) from exc
+
     items, total = ExerciseService.list_exercises(
         db,
         user_id=user.id if user else None,
         category=category,
         body_part=body_part,
+        focuses=focuses,
         search=search,
         skip=skip,
         limit=limit,

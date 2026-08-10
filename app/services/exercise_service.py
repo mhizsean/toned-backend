@@ -1,9 +1,10 @@
 import re
 import uuid
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import ColumnElement, func, or_, select
 from sqlalchemy.orm import Session
 
+from app.constants.focus import FOCUS_RULES
 from app.models.exercise import Exercise
 from app.schemas.exercise import ExerciseCreate, ExerciseUpdate
 
@@ -16,12 +17,39 @@ def slugify(name: str) -> str:
 
 class ExerciseService:
     @staticmethod
+    def _focus_clause(focuses: list[str]) -> ColumnElement[bool] | None:
+        """OR together focus rules. None = no extra filter (e.g. Full Body alone)."""
+        if not focuses:
+            return None
+
+        # Full Body alone (or among others) means no anatomy restriction overall
+        if "Full Body" in focuses:
+            return None
+
+        clauses: list[ColumnElement[bool]] = []
+        for focus in focuses:
+            rule = FOCUS_RULES[focus]
+            parts: list[ColumnElement[bool]] = []
+            # Customs saved with app focus as category/body_part
+            parts.append(Exercise.category == focus)
+            parts.append(Exercise.body_part == focus)
+            if rule.body_parts is not None:
+                parts.append(Exercise.body_part.in_(rule.body_parts))
+                parts.append(Exercise.category.in_(rule.body_parts))
+            if rule.match_stretch_names:
+                parts.append(Exercise.name.ilike("%stretch%"))
+            clauses.append(or_(*parts))
+
+        return or_(*clauses) if clauses else None
+
+    @staticmethod
     def list_exercises(
         db: Session,
         *,
         user_id: str | None = None,
         category: str | None = None,
         body_part: str | None = None,
+        focuses: list[str] | None = None,
         search: str | None = None,
         skip: int = 0,
         limit: int = 100,
@@ -37,6 +65,9 @@ class ExerciseService:
             query = query.where(Exercise.category == category)
         if body_part:
             query = query.where(Exercise.body_part == body_part)
+        focus_clause = ExerciseService._focus_clause(focuses or [])
+        if focus_clause is not None:
+            query = query.where(focus_clause)
         if search:
             pattern = f"%{search}%"
             query = query.where(Exercise.name.ilike(pattern))

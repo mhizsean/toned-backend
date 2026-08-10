@@ -92,9 +92,32 @@ Authorization: Bearer <access_token>
 
 | Method | Path | Purpose |
 |---|---|---|
+| `GET` | `/exercises` | list catalogue (+ own customs when signed in) |
+| `GET` | `/exercises/focuses` | app focus → `body_part` mapping |
+| `GET` | `/exercises/{id}` | one exercise |
 | `POST` | `/exercises` | create custom |
 | `PATCH` | `/exercises/{id}` | update own custom |
 | `DELETE` | `/exercises/{id}` | delete own custom |
+
+### Focus filter
+
+App day focuses (`Glutes & Legs`, `Upper Body`, …) don’t match dataset `body_part` values (`chest`, `upper legs`, …). Use:
+
+```
+GET /api/v1/exercises?focus=Upper Body
+GET /api/v1/exercises?focus=Glutes & Legs&focus=Core & Posture
+GET /api/v1/exercises?focus=💪 Upper Body,Active Recovery
+```
+
+| App focus | Maps to `body_part` |
+|---|---|
+| Glutes & Legs | `upper legs`, `lower legs` |
+| Upper Body | `chest`, `back`, `shoulders`, `upper arms`, `lower arms` |
+| Core & Posture | `waist`, `neck` |
+| Full Body | all (no anatomy filter) |
+| Active Recovery | `cardio` + names containing `stretch` |
+
+Customs whose `category` is an app focus label are included under that focus. Raw `?body_part=` / `?category=` still work for dataset vocab. Unknown focus → `422`.
 
 Catalogue rows cannot be patched/deleted.
 
