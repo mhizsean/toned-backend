@@ -29,6 +29,28 @@ class RefreshTokenRequest(BaseModel):
     refresh_token: str = Field(min_length=1)
 
 
+class VerifyOtpRequest(BaseModel):
+    email: EmailStr
+    token: str = Field(
+        min_length=6,
+        max_length=10,
+        pattern=r"^\d+$",
+        description="6–10 digit OTP from the confirmation email",
+    )
+    type: str = Field(
+        default="signup",
+        description="GoTrue verify type: signup | recovery | invite | magiclink | email_change",
+    )
+
+
+class ResendOtpRequest(BaseModel):
+    email: EmailStr
+    type: str = Field(
+        default="signup",
+        description="GoTrue resend type: signup | email_change",
+    )
+
+
 class AuthUser(BaseModel):
     id: str
     email: str | None = None

@@ -144,6 +144,29 @@ class SupabaseAuthService:
             body["redirect_to"] = redirect_to
         self._request("POST", "/recover", json=body)
 
+    def verify_otp(
+        self,
+        email: str,
+        token: str,
+        *,
+        otp_type: str = "signup",
+    ) -> dict[str, Any]:
+        """Confirm email with the 6-digit code from the signup (or other) email."""
+        data = self._request(
+            "POST",
+            "/verify",
+            json={"email": email, "token": token, "type": otp_type},
+        )
+        return data or {}
+
+    def resend_otp(self, email: str, *, otp_type: str = "signup") -> dict[str, Any] | None:
+        """Resend signup / email_change OTP. Response is intentionally opaque."""
+        return self._request(
+            "POST",
+            "/resend",
+            json={"email": email, "type": otp_type},
+        )
+
     def reset_password(self, access_token: str, new_password: str) -> dict[str, Any]:
         data = self._request(
             "PUT",

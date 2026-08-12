@@ -14,9 +14,11 @@ from app.schemas.auth import (
     ForgotPasswordRequest,
     MessageResponse,
     RefreshTokenRequest,
+    ResendOtpRequest,
     ResetPasswordRequest,
     SignInRequest,
     SignUpRequest,
+    VerifyOtpRequest,
 )
 from app.schemas.user import AuthMeResponse, UserRead
 from app.services.account_service import AccountService
@@ -82,6 +84,30 @@ def sign_up(body: SignUpRequest, db: DbSession) -> AuthSessionResponse:
     except SupabaseAuthError as exc:
         raise_as_http(exc)
     return _session_from_supabase(db, payload)
+
+
+@router.post("/verify", response_model=AuthSessionResponse)
+def verify_otp(body: VerifyOtpRequest, db: DbSession) -> AuthSessionResponse:
+    """Confirm signup (or other email OTP) with the 6-digit code from email."""
+    auth = SupabaseAuthService()
+    try:
+        payload = auth.verify_otp(str(body.email), body.token, otp_type=body.type)
+    except SupabaseAuthError as exc:
+        raise_as_http(exc)
+    return _session_from_supabase(db, payload)
+
+
+@router.post("/resend", response_model=MessageResponse)
+def resend_otp(body: ResendOtpRequest) -> MessageResponse:
+    """Resend the email confirmation OTP. Message is always generic."""
+    auth = SupabaseAuthService()
+    try:
+        auth.resend_otp(str(body.email), otp_type=body.type)
+    except SupabaseAuthError as exc:
+        raise_as_http(exc)
+    return MessageResponse(
+        message="If an account needs verification, a new code has been sent."
+    )
 
 
 @router.post("/signin", response_model=AuthSessionResponse)

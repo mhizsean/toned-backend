@@ -91,6 +91,68 @@ def test_forgot_password_generic_message(auth_client):
     assert "reset link" in response.json()["message"].lower()
 
 
+def test_verify_otp_returns_session(auth_client, db_session):
+    fake = {
+        "access_token": "access-verify",
+        "refresh_token": "refresh-verify",
+        "expires_in": 3600,
+        "token_type": "bearer",
+        "user": {"id": "uid-verify", "email": "v@toned.app"},
+    }
+    with patch("app.routers.auth.SupabaseAuthService") as cls:
+        cls.return_value.verify_otp.return_value = fake
+        response = auth_client.post(
+            "/api/v1/auth/verify",
+            json={"email": "v@toned.app", "token": "123456"},
+        )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["access_token"] == "access-verify"
+    assert body["user"]["id"] == "uid-verify"
+    assert db_session.get(User, "uid-verify") is not None
+    cls.return_value.verify_otp.assert_called_once_with(
+        "v@toned.app",
+        "123456",
+        otp_type="signup",
+    )
+
+
+def test_verify_otp_invalid_code(auth_client):
+    with patch("app.routers.auth.SupabaseAuthService") as cls:
+        cls.return_value.verify_otp.side_effect = SupabaseAuthError(
+            "Token has expired or is invalid",
+            status_code=403,
+        )
+        response = auth_client.post(
+            "/api/v1/auth/verify",
+            json={"email": "v@toned.app", "token": "000000"},
+        )
+    assert response.status_code == 403
+    assert "invalid" in response.json()["detail"].lower() or "expired" in response.json()[
+        "detail"
+    ].lower()
+
+
+def test_verify_otp_rejects_non_digit_token(auth_client):
+    response = auth_client.post(
+        "/api/v1/auth/verify",
+        json={"email": "v@toned.app", "token": "12ab56"},
+    )
+    assert response.status_code == 422
+
+
+def test_resend_otp_generic_message(auth_client):
+    with patch("app.routers.auth.SupabaseAuthService") as cls:
+        cls.return_value.resend_otp.return_value = None
+        response = auth_client.post(
+            "/api/v1/auth/resend",
+            json={"email": "v@toned.app"},
+        )
+    assert response.status_code == 200
+    assert "code has been sent" in response.json()["message"].lower()
+    cls.return_value.resend_otp.assert_called_once_with("v@toned.app", otp_type="signup")
+
+
 def test_reset_password_requires_token(auth_client):
     response = auth_client.post(
         "/api/v1/auth/reset-password",

@@ -73,6 +73,8 @@ Auth is proxied through Supabase GoTrue. Guest users need no token for the exerc
 | Method | Path | Auth | Purpose |
 |---|---|---|---|
 | `POST` | `/auth/signup` | public | create account |
+| `POST` | `/auth/verify` | public | confirm email with 6-digit OTP |
+| `POST` | `/auth/resend` | public | resend signup confirmation OTP |
 | `POST` | `/auth/signin` | public | email/password login |
 | `POST` | `/auth/refresh` | public | refresh access token via `refresh_token` |
 | `POST` | `/auth/logout` | Bearer | invalidate session |
@@ -82,7 +84,21 @@ Auth is proxied through Supabase GoTrue. Guest users need no token for the exerc
 | `DELETE` | `/auth/account` | Bearer | hard-delete Auth + Neon data (email reusable) |
 | `GET` | `/auth/me` | Bearer | current user + upsert Neon row |
 
-Store `access_token` from signup/signin on the device and send:
+When email confirmation is enabled, `POST /auth/signup` may return `user` without tokens and a message to check email. The app then collects the OTP and calls:
+
+```json
+POST /api/v1/auth/verify
+{ "email": "you@example.com", "token": "123456" }
+```
+
+Successful verify returns the same session shape as signin (`access_token`, `refresh_token`, `user`). Resend:
+
+```json
+POST /api/v1/auth/resend
+{ "email": "you@example.com" }
+```
+
+Store `access_token` from signup/signin/verify on the device and send:
 
 ```
 Authorization: Bearer <access_token>
