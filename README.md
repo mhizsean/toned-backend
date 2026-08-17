@@ -104,6 +104,23 @@ Store `access_token` from signup/signin/verify on the device and send:
 Authorization: Bearer <access_token>
 ```
 
+### Email confirmation (dev vs production)
+
+**Current setup (dev):** Confirm email is **off** in Supabase so signup returns tokens immediately and the app skips the OTP screen.
+
+1. Supabase → **Authentication** → **Providers** → **Email**
+2. Turn **Confirm email** **OFF**
+3. Turn **Custom SMTP** **OFF** (use Supabase default sender until your domain is ready)
+
+**When your domain + SMTP are ready (production):**
+
+1. Configure custom SMTP (e.g. Resend) in Supabase → **Authentication** → **Emails** → **SMTP Settings**
+2. Edit **Confirm signup** template to include the OTP: `{{ .Token }}`
+3. Turn **Confirm email** **ON**
+4. Signup will return `user` without tokens; the app routes to verify and calls `POST /auth/verify` with the 6-digit code
+
+No app code changes are required — signup already handles both flows (tokens → onboarding, no tokens → verify screen).
+
 `GET /api/v1/exercises` remains public. Custom exercises require a token:
 
 | Method | Path | Purpose |
@@ -319,6 +336,26 @@ python -m app.scripts.seed_session_templates
 alembic revision --autogenerate -m "describe change"
 alembic upgrade head
 ```
+
+## Dev hosting (Railway)
+
+Railpack auto-detect sometimes fails on FastAPI repos. This project includes a `Dockerfile` + `railway.toml` so Railway builds reliably.
+
+1. Push this repo to GitHub and connect it in [Railway](https://railway.app).
+2. **Variables** — add the same values as local `.env`:
+   - `DATABASE_URL` (Neon, `postgresql+psycopg://…`)
+   - `SUPABASE_URL`, `SUPABASE_JWT_SECRET`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
+3. **Networking** → Generate domain (e.g. `https://toned-backend-dev.up.railway.app`).
+4. Health check: `GET https://YOUR-DOMAIN/health` → `{"status":"ok"}`.
+5. In the Expo app `.env`:
+
+   ```env
+   EXPO_PUBLIC_API_URL=https://YOUR-DOMAIN/api/v1
+   ```
+
+   Restart Expo: `npx expo start -c`.
+
+Exercise data lives in Neon — no re-seed on Railway unless you use a fresh database. Run `alembic upgrade head` against Neon once if migrations are pending.
 
 ## Tests
 

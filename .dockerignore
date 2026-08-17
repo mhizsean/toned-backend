@@ -1,0 +1,14 @@
+.venv
+venv
+env
+.env
+.env.*
+.git
+.pytest_cache
+.mypy_cache
+.ruff_cache
+__pycache__
+*.pyc
+tests
+data/exercises_dataset.json
+README.md
