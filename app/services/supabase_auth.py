@@ -69,7 +69,7 @@ class SupabaseAuthService:
         use_service_role: bool = False,
     ) -> dict[str, Any] | None:
         try:
-            with httpx.Client(timeout=20.0) as client:
+            with httpx.Client(timeout=20.0, trust_env=False) as client:
                 response = client.request(
                     method,
                     self._url(path),
@@ -143,6 +143,28 @@ class SupabaseAuthService:
         if redirect_to:
             body["redirect_to"] = redirect_to
         self._request("POST", "/recover", json=body)
+
+    def generate_link(
+        self,
+        email: str,
+        *,
+        link_type: str,
+        redirect_to: str | None = None,
+        password: str | None = None,
+    ) -> dict[str, Any]:
+        """Admin: create OTP/link without sending email (used for AUTH_DEV_OTP)."""
+        body: dict[str, Any] = {"email": email, "type": link_type}
+        if redirect_to:
+            body["redirect_to"] = redirect_to
+        if password:
+            body["password"] = password
+        data = self._request(
+            "POST",
+            "/admin/generate_link",
+            json=body,
+            use_service_role=True,
+        )
+        return data or {}
 
     def verify_otp(
         self,

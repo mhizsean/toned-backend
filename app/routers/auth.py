@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
+from app.config import get_settings
 from app.core.deps import CurrentUser, DbSession, security
 from app.models.user import User
 from app.schemas.auth import (
@@ -29,6 +30,61 @@ from app.services.supabase_auth import (
 )
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+# Map app verify `type` → admin generate_link `type` (no email sent).
+_DEV_LINK_TYPE: dict[str, str] = {
+    "recovery": "recovery",
+    "signup": "magiclink",
+    "email": "magiclink",
+    "magiclink": "magiclink",
+    "invite": "invite",
+}
+
+# Map app verify `type` → GoTrue verify type when redeeming generate_link OTP.
+_DEV_VERIFY_TYPE: dict[str, str] = {
+    "recovery": "recovery",
+    "signup": "email",
+    "email": "email",
+    "magiclink": "magiclink",
+    "invite": "invite",
+}
+
+
+def _dev_otp_configured() -> str | None:
+    code = get_settings().auth_dev_otp.strip()
+    return code or None
+
+
+def _matches_dev_otp(token: str) -> bool:
+    code = _dev_otp_configured()
+    return code is not None and token == code
+
+
+def _verify_with_dev_otp(
+    auth: SupabaseAuthService,
+    email: str,
+    otp_type: str,
+) -> dict[str, Any]:
+    """Redeem AUTH_DEV_OTP by minting a real Supabase OTP via Admin generate_link."""
+    link_type = _DEV_LINK_TYPE.get(otp_type)
+    verify_type = _DEV_VERIFY_TYPE.get(otp_type)
+    if not link_type or not verify_type:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unsupported OTP type for dev bypass: {otp_type}",
+        )
+    try:
+        link = auth.generate_link(email, link_type=link_type)
+    except SupabaseAuthError as exc:
+        raise_as_http(exc)
+
+    email_otp = link.get("email_otp")
+    if not email_otp:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Dev OTP mint failed (missing email_otp). Check SUPABASE_SERVICE_ROLE_KEY.",
+        )
+    return auth.verify_otp(email, str(email_otp), otp_type=verify_type)
 
 
 def _upsert_user(db: Session, user_id: str, email: str | None) -> User:
@@ -91,7 +147,10 @@ def verify_otp(body: VerifyOtpRequest, db: DbSession) -> AuthSessionResponse:
     """Confirm signup (or other email OTP) with the 6-digit code from email."""
     auth = SupabaseAuthService()
     try:
-        payload = auth.verify_otp(str(body.email), body.token, otp_type=body.type)
+        if _matches_dev_otp(body.token):
+            payload = _verify_with_dev_otp(auth, str(body.email), body.type)
+        else:
+            payload = auth.verify_otp(str(body.email), body.token, otp_type=body.type)
     except SupabaseAuthError as exc:
         raise_as_http(exc)
     return _session_from_supabase(db, payload)
@@ -100,6 +159,13 @@ def verify_otp(body: VerifyOtpRequest, db: DbSession) -> AuthSessionResponse:
 @router.post("/resend", response_model=MessageResponse)
 def resend_otp(body: ResendOtpRequest) -> MessageResponse:
     """Resend the email confirmation OTP. Message is always generic."""
+    if _dev_otp_configured():
+        return MessageResponse(
+            message=(
+                "Dev OTP enabled — email not sent. "
+                f"Enter code {_dev_otp_configured()}."
+            )
+        )
     auth = SupabaseAuthService()
     try:
         auth.resend_otp(str(body.email), otp_type=body.type)
@@ -153,6 +219,13 @@ def logout(
 
 @router.post("/forgot-password", response_model=MessageResponse)
 def forgot_password(body: ForgotPasswordRequest) -> MessageResponse:
+    dev_otp = _dev_otp_configured()
+    if dev_otp:
+        # Skip Supabase mailer (broken/incomplete SMTP, rate limits, etc.)
+        return MessageResponse(
+            message=f"Dev OTP enabled — email not sent. Enter code {dev_otp}."
+        )
+
     auth = SupabaseAuthService()
     try:
         auth.forgot_password(str(body.email), redirect_to=body.redirect_to)
@@ -160,7 +233,7 @@ def forgot_password(body: ForgotPasswordRequest) -> MessageResponse:
         raise_as_http(exc)
     # Always generic — avoid email enumeration
     return MessageResponse(
-        message="If an account exists for that email, a reset link has been sent."
+        message="If an account exists for that email, a reset code has been sent."
     )
 
 

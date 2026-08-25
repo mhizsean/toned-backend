@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     # Required for hard account delete (Admin API). Never ship this to the mobile app.
     supabase_service_role_key: str = ""
 
+    # Local/dev only: fixed 6-digit OTP for forgot-password + email verify without SMTP.
+    # Requires SUPABASE_SERVICE_ROLE_KEY. Leave empty in production / Railway.
+    auth_dev_otp: str = ""
+
     cors_origins: list[str] = ["http://localhost:8081", "exp://localhost:8081"]
 
     # Optional object storage (Cloudflare R2 / Supabase Storage)

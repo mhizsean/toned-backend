@@ -81,14 +81,31 @@ def test_refresh_returns_new_session(auth_client, db_session):
 
 
 def test_forgot_password_generic_message(auth_client):
-    with patch("app.routers.auth.SupabaseAuthService") as cls:
+    with (
+        patch("app.routers.auth._dev_otp_configured", return_value=None),
+        patch("app.routers.auth.SupabaseAuthService") as cls,
+    ):
         cls.return_value.forgot_password.return_value = None
         response = auth_client.post(
             "/api/v1/auth/forgot-password",
             json={"email": "a@b.com"},
         )
     assert response.status_code == 200
-    assert "reset link" in response.json()["message"].lower()
+    assert "reset code" in response.json()["message"].lower()
+
+
+def test_forgot_password_dev_otp_skips_email(auth_client):
+    with (
+        patch("app.routers.auth._dev_otp_configured", return_value="000000"),
+        patch("app.routers.auth.SupabaseAuthService") as cls,
+    ):
+        response = auth_client.post(
+            "/api/v1/auth/forgot-password",
+            json={"email": "a@b.com"},
+        )
+    assert response.status_code == 200
+    assert "000000" in response.json()["message"]
+    cls.return_value.forgot_password.assert_not_called()
 
 
 def test_verify_otp_returns_session(auth_client, db_session):
@@ -117,6 +134,41 @@ def test_verify_otp_returns_session(auth_client, db_session):
     )
 
 
+def test_verify_otp_dev_code_mints_via_generate_link(auth_client, db_session):
+    fake_session = {
+        "access_token": "access-dev",
+        "refresh_token": "refresh-dev",
+        "expires_in": 3600,
+        "token_type": "bearer",
+        "user": {"id": "uid-dev", "email": "dev@toned.app"},
+    }
+    with (
+        patch("app.routers.auth._matches_dev_otp", return_value=True),
+        patch("app.routers.auth.SupabaseAuthService") as cls,
+    ):
+        cls.return_value.generate_link.return_value = {"email_otp": "482913"}
+        cls.return_value.verify_otp.return_value = fake_session
+        response = auth_client.post(
+            "/api/v1/auth/verify",
+            json={
+                "email": "dev@toned.app",
+                "token": "000000",
+                "type": "recovery",
+            },
+        )
+    assert response.status_code == 200
+    assert response.json()["access_token"] == "access-dev"
+    cls.return_value.generate_link.assert_called_once_with(
+        "dev@toned.app",
+        link_type="recovery",
+    )
+    cls.return_value.verify_otp.assert_called_once_with(
+        "dev@toned.app",
+        "482913",
+        otp_type="recovery",
+    )
+
+
 def test_verify_otp_invalid_code(auth_client):
     with patch("app.routers.auth.SupabaseAuthService") as cls:
         cls.return_value.verify_otp.side_effect = SupabaseAuthError(
@@ -142,7 +194,10 @@ def test_verify_otp_rejects_non_digit_token(auth_client):
 
 
 def test_resend_otp_generic_message(auth_client):
-    with patch("app.routers.auth.SupabaseAuthService") as cls:
+    with (
+        patch("app.routers.auth._dev_otp_configured", return_value=None),
+        patch("app.routers.auth.SupabaseAuthService") as cls,
+    ):
         cls.return_value.resend_otp.return_value = None
         response = auth_client.post(
             "/api/v1/auth/resend",
