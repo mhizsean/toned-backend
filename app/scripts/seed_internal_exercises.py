@@ -108,3 +108,10 @@ if __name__ == "__main__":
     print(f"  created: {created}")
     print(f"  updated: {updated}")
     print(f"  total in file: {created + updated}")
+
+    from app.scripts.seed_curated_exercises import seed as seed_curated
+
+    curated_created, coached = seed_curated()
+    print("Merged curated exercises from data/exercises_seed.json")
+    print(f"  created: {curated_created}")
+    print(f"  coaching overlaid: {coached}")

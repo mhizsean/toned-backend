@@ -326,6 +326,10 @@ python -m app.scripts.download_exercises_dataset
 # Seed catalogue from data/exercises_dataset.json
 python -m app.scripts.seed_internal_exercises
 
+# Also merges Toned curated moves missing from the third-party dataset
+# (e.g. barbell hip thrust). Standalone:
+python -m app.scripts.seed_curated_exercises
+
 # Seed system session templates
 python -m app.scripts.seed_session_templates
 ```
