@@ -15,6 +15,7 @@ from app.models import (  # noqa: F401
     exercise,
     library,
     preferences,
+    profile,
     schedule,
     session_template,
     sync,

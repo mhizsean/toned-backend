@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from app.models.exercise import Exercise
     from app.models.library import UserLibrary
     from app.models.preferences import UserPreferences
+    from app.models.profile import UserProfile
     from app.models.schedule import UserSchedule
     from app.models.session_template import SessionTemplate
     from app.models.workout_log import WorkoutLog
@@ -44,6 +45,11 @@ class User(Base):
         uselist=False,
     )
     preferences: Mapped["UserPreferences | None"] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
+    profile: Mapped["UserProfile | None"] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
         uselist=False,

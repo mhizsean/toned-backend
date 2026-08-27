@@ -34,7 +34,7 @@ class SupabaseAuthService:
         if not self.settings.supabase_service_role_key:
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="Account deletion is not configured (missing service role key)",
+                detail="Supabase service role key is not configured",
             )
 
     def _headers(

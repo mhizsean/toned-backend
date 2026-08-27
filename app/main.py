@@ -9,6 +9,7 @@ from app.routers import (
     exercises,
     library,
     preferences,
+    profile,
     schedule,
     sync,
     templates,
@@ -37,6 +38,7 @@ def create_app() -> FastAPI:
     app.include_router(auth.router, prefix=prefix)
     app.include_router(exercises.router, prefix=prefix)
     app.include_router(library.router, prefix=prefix)
+    app.include_router(profile.router, prefix=prefix)
     app.include_router(preferences.router, prefix=prefix)
     app.include_router(schedule.router, prefix=prefix)
     app.include_router(templates.router, prefix=prefix)
