@@ -103,6 +103,7 @@ class SessionTemplateService:
             sort_order=1000,
             exercises=[ex.model_dump(mode="json") for ex in body.exercises],
             user_id=user_id,
+            origin_id=body.origin_id,
         )
         db.add(row)
         db.commit()
@@ -120,10 +121,29 @@ class SessionTemplateService:
         if source is None:
             raise LookupError("Template not found")
 
-        # Idempotent: if user already has a copy of this system id, return it
-        existing_id = f"saved-{user_id[:8]}-{template_id}"[:100]
+        origin_id = (
+            source.origin_id
+            if source.source == "user" and source.origin_id
+            else source.id
+        )
+        existing_by_origin = db.scalar(
+            select(SessionTemplate).where(
+                SessionTemplate.user_id == user_id,
+                SessionTemplate.source == "user",
+                SessionTemplate.origin_id == origin_id,
+            )
+        )
+        if existing_by_origin:
+            return existing_by_origin
+
+        # Backward-compatible id used by older copies
+        existing_id = f"saved-{user_id[:8]}-{origin_id}"[:100]
         existing = db.get(SessionTemplate, existing_id)
         if existing and existing.user_id == user_id:
+            if not existing.origin_id:
+                existing.origin_id = origin_id
+                db.commit()
+                db.refresh(existing)
             return existing
 
         copy_id = SessionTemplateService._unique_id(db, existing_id)
@@ -139,6 +159,7 @@ class SessionTemplateService:
             sort_order=source.sort_order,
             exercises=list(source.exercises or []),
             user_id=user_id,
+            origin_id=origin_id,
         )
         db.add(row)
         db.commit()
@@ -153,7 +174,13 @@ class SessionTemplateService:
         body: SessionTemplateUpdate,
     ) -> SessionTemplate:
         row = db.get(SessionTemplate, template_id)
-        if row is None or row.user_id != user_id or row.source != "user":
+        if row is None:
+            raise LookupError("Template not found")
+        if row.source == "system":
+            row = SessionTemplateService.save_template_copy(
+                db, user_id, template_id
+            )
+        elif row.user_id != user_id or row.source != "user":
             raise LookupError("Template not found")
 
         data = body.model_dump(exclude_unset=True)

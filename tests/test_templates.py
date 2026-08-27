@@ -1,10 +1,11 @@
 from app.models.session_template import SessionTemplate
+from app.scripts.seed_session_templates import seed_into
 from tests.conftest import auth_headers
 
 
 def _seed_one(db_session, **overrides):
     row = SessionTemplate(
-        id=overrides.get("id", "glutes-legs-full-warmup"),
+        id=overrides.get("id", "glutes-legs-warmup"),
         title=overrides.get("title", "Glutes & Legs – Full Warmup"),
         emoji="🍑",
         description="Test template",
@@ -18,6 +19,7 @@ def _seed_one(db_session, **overrides):
             [{"id": "3013", "name": "low glute bridge on floor", "sets": 2, "reps": 12}],
         ),
         user_id=overrides.get("user_id"),
+        origin_id=overrides.get("origin_id"),
     )
     db_session.add(row)
     db_session.commit()
@@ -58,9 +60,26 @@ def test_filter_by_category(client, db_session):
     assert body["items"][0]["category"] == "cardio"
 
 
+def test_filter_by_strength_category(client, db_session):
+    _seed_one(db_session)
+    _seed_one(
+        db_session,
+        id="glute-strength",
+        title="Glute Strength",
+        category="glutes-legs",
+        sort_order=110,
+    )
+
+    response = client.get("/api/v1/templates?category=glutes-legs")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["total"] == 1
+    assert body["items"][0]["id"] == "glute-strength"
+
+
 def test_get_template(client, db_session):
     _seed_one(db_session)
-    response = client.get("/api/v1/templates/glutes-legs-full-warmup")
+    response = client.get("/api/v1/templates/glutes-legs-warmup")
     assert response.status_code == 200
     assert response.json()["title"].startswith("Glutes")
 
@@ -78,7 +97,7 @@ def test_create_template_from_day_edit(client):
             "title": "My Monday Block",
             "emoji": "🔥",
             "focus": "Upper Body",
-            "category": "pre-workout",
+            "category": "upper-body",
             "duration_min": 12,
             "exercises": [
                 {"id": "0662", "name": "push-up", "sets": 3, "reps": 10},
@@ -90,13 +109,14 @@ def test_create_template_from_day_edit(client):
     body = response.json()
     assert body["source"] == "user"
     assert body["user_id"] == "user-1"
+    assert body["origin_id"] is None
     assert len(body["exercises"]) == 2
 
 
 def test_save_system_template_to_library(client, db_session):
     _seed_one(db_session)
     response = client.post(
-        "/api/v1/templates/glutes-legs-full-warmup/save",
+        "/api/v1/templates/glutes-legs-warmup/save",
         headers=auth_headers(),
     )
     assert response.status_code == 201
@@ -104,6 +124,29 @@ def test_save_system_template_to_library(client, db_session):
     assert body["source"] == "user"
     assert body["title"].startswith("Glutes")
     assert body["id"].startswith("saved-")
+    assert body["origin_id"] == "glutes-legs-warmup"
+
+    again = client.post(
+        "/api/v1/templates/glutes-legs-warmup/save",
+        headers=auth_headers(),
+    )
+    assert again.status_code == 201
+    assert again.json()["id"] == body["id"]
+
+
+def test_patch_system_template_creates_user_copy(client, db_session):
+    _seed_one(db_session)
+    response = client.patch(
+        "/api/v1/templates/glutes-legs-warmup",
+        headers=auth_headers(),
+        json={"title": "My Warmup"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["source"] == "user"
+    assert body["origin_id"] == "glutes-legs-warmup"
+    assert body["title"] == "My Warmup"
+    assert client.get("/api/v1/templates/glutes-legs-warmup").json()["title"] != "My Warmup"
 
 
 def test_add_template_to_plan_merge(client, db_session):
@@ -126,7 +169,7 @@ def test_add_template_to_plan_merge(client, db_session):
     )
 
     response = client.post(
-        "/api/v1/templates/glutes-legs-full-warmup/add-to-plan",
+        "/api/v1/templates/glutes-legs-warmup/add-to-plan",
         headers=auth_headers(),
         json={"day": "Mon", "mode": "merge"},
     )
@@ -142,7 +185,7 @@ def test_add_template_to_plan_merge(client, db_session):
 def test_add_template_to_plan_replace_new_day(client, db_session):
     _seed_one(db_session)
     response = client.post(
-        "/api/v1/templates/glutes-legs-full-warmup/add-to-plan",
+        "/api/v1/templates/glutes-legs-warmup/add-to-plan",
         headers=auth_headers(),
         json={"day": "Fri", "mode": "replace", "day_type": "home"},
     )
@@ -159,7 +202,7 @@ def test_delete_user_template(client, db_session):
         json={
             "title": "Temp",
             "focus": "Core & Posture",
-            "category": "post-workout",
+            "category": "core-posture",
             "duration_min": 5,
             "exercises": [{"id": "0276", "name": "dead bug", "sets": 2, "reps": 8}],
         },
@@ -170,3 +213,20 @@ def test_delete_user_template(client, db_session):
     )
     assert response.status_code == 204
     assert client.get(f"/api/v1/templates/{created['id']}").status_code == 404
+
+
+def test_seed_replaces_stale_system_templates(db_session):
+    _seed_one(
+        db_session,
+        id="glutes-legs-full-warmup",
+        title="Old Warmup",
+    )
+    created, updated, deleted = seed_into(db_session)
+
+    assert created >= 1
+    assert deleted >= 1
+    assert db_session.get(SessionTemplate, "glutes-legs-full-warmup") is None
+    current = db_session.get(SessionTemplate, "glutes-legs-warmup")
+    assert current is not None
+    assert current.title.startswith("Glutes")
+    assert current.category == "pre-workout"

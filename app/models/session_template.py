@@ -29,6 +29,11 @@ class SessionTemplate(Base):
         nullable=True,
         index=True,
     )
+    origin_id: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True,
+        index=True,
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),

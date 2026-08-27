@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Query, status
 
 from app.core.deps import CurrentUser, DbSession, OptionalUser
 from app.schemas.session_template import (
+    TEMPLATE_CATEGORY_PATTERN,
     AddTemplateToPlanRequest,
     AddTemplateToPlanResponse,
     SessionTemplateCreate,
@@ -20,7 +21,7 @@ def list_templates(
     user: OptionalUser,
     category: str | None = Query(
         default=None,
-        pattern="^(pre-workout|cardio|post-workout)$",
+        pattern=TEMPLATE_CATEGORY_PATTERN,
     ),
     source: str | None = Query(
         default=None,

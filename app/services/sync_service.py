@@ -142,6 +142,8 @@ class SyncService:
                     existing.exercises = [
                         ex.model_dump(mode="json") for ex in data.exercises
                     ]
+                    if data.origin_id is not None:
+                        existing.origin_id = data.origin_id
                     saved.append(existing)
                     continue
             saved.append(
@@ -541,6 +543,7 @@ class SyncService:
             category=row.category,
             duration_min=row.duration_min,
             exercises=row.exercises,
+            origin_id=row.origin_id,
         )
 
     @staticmethod
