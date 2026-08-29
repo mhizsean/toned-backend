@@ -195,6 +195,45 @@ def test_add_template_to_plan_replace_new_day(client, db_session):
     assert len(day["exercises"]) == 1
 
 
+def test_create_cardio_template_with_seconds_and_decimal_speed(client):
+    response = client.post(
+        "/api/v1/templates",
+        headers=auth_headers(),
+        json={
+            "title": "Intervals",
+            "focus": "Cardio",
+            "category": "cardio",
+            "duration_min": 2,
+            "exercises": [
+                {
+                    "name": "Treadmill",
+                    "sets": 1,
+                    "reps": 90,
+                    "phase": "Work",
+                    "duration_sec": 90,
+                    "level": 3.5,
+                    "effort_label": "Speed",
+                },
+                {
+                    "name": "Treadmill",
+                    "sets": 1,
+                    "reps": 30,
+                    "phase": "Rest",
+                    "duration_sec": 30,
+                    "level": 3.5,
+                    "effort_label": "Speed",
+                },
+            ],
+        },
+    )
+    assert response.status_code == 201
+    blocks = response.json()["exercises"]
+    assert blocks[0]["duration_sec"] == 90
+    assert blocks[0]["level"] == 3.5
+    assert blocks[1]["duration_sec"] == 30
+    assert blocks[1]["phase"] == "Rest"
+
+
 def test_delete_user_template(client, db_session):
     created = client.post(
         "/api/v1/templates",
