@@ -102,6 +102,28 @@ def seed(*, update_existing: bool = True) -> tuple[int, int]:
     return created, updated
 
 
+def prune_unpublished(db, allowlist: set[str]) -> int:
+    """Remove catalogue dataset rows that are no longer in the public allowlist."""
+    if not allowlist:
+        return 0
+    rows = list(
+        db.scalars(
+            select(Exercise).where(
+                Exercise.is_custom.is_(False),
+                Exercise.user_id.is_(None),
+                Exercise.source == SOURCE,
+            )
+        )
+    )
+    deleted = 0
+    for row in rows:
+        if row.id in allowlist:
+            continue
+        db.delete(row)
+        deleted += 1
+    return deleted
+
+
 if __name__ == "__main__":
     created, updated = seed()
     print(f"Seeded from {SEED_PATH}")

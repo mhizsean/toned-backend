@@ -28,6 +28,10 @@ class Settings(BaseSettings):
 
     cors_origins: list[str] = ["http://localhost:8081", "exp://localhost:8081"]
 
+    # Extra emails (comma-separated) that see the full uncurated catalogue.
+    # seanseun.ss@gmail.com always has access.
+    catalogue_full_access_emails: str = ""
+
     # Optional object storage (Cloudflare R2 / Supabase Storage)
     storage_endpoint: str = ""
     storage_bucket: str = ""

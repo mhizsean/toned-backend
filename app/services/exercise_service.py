@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from app.constants.focus import FOCUS_RULES
 from app.models.exercise import Exercise
 from app.schemas.exercise import ExerciseCreate, ExerciseUpdate
+from app.catalogue.access import has_full_catalogue_access
+from app.catalogue.curation import load_allowlist_ids
 
 
 def slugify(name: str) -> str:
@@ -47,6 +49,7 @@ class ExerciseService:
         db: Session,
         *,
         user_id: str | None = None,
+        viewer_email: str | None = None,
         category: str | None = None,
         body_part: str | None = None,
         focuses: list[str] | None = None,
@@ -61,6 +64,16 @@ class ExerciseService:
             )
         else:
             query = select(Exercise).where(Exercise.user_id.is_(None))
+        allowlist = load_allowlist_ids()
+        if allowlist and not has_full_catalogue_access(viewer_email):
+            query = query.where(
+                or_(
+                    Exercise.is_custom.is_(True),
+                    Exercise.source == "toned-seed",
+                    Exercise.id.in_(tuple(allowlist)),
+                    func.length(Exercise.id) != 4,
+                )
+            )
         if category:
             query = query.where(Exercise.category == category)
         if body_part:

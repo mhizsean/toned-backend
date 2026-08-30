@@ -47,7 +47,7 @@ Local Postgres works too (`localhost:5432`). Tableau is not used for this flow.
 
 ### Exercise catalogue
 
-Pinned snapshot of [hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset) (commit in `data/exercises_dataset.sha`) → downloaded to `data/exercises_dataset.json` (~17MB, gitignored; 1,324 rows). `media_id` is stored for a future Gym Visual license; image/GIF files are not imported.
+Pinned snapshot of [hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset) (commit in `data/exercises_dataset.sha`) → downloaded to `data/exercises_dataset.json` (~17MB, gitignored; 1,324 rows). Everyone sees a curated public subset (`data/exercises_catalogue_allowlist.json` plus Toned staples). Signed-in allowlisted emails see the full dataset. `media_id` is stored for a future Gym Visual license; image/GIF files are not imported.
 
 Quick check after seeding:
 

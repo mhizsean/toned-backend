@@ -59,6 +59,7 @@ def list_exercises(
     items, total = ExerciseService.list_exercises(
         db,
         user_id=user.id if user else None,
+        viewer_email=user.email if user else None,
         category=category,
         body_part=body_part,
         focuses=focuses,

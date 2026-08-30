@@ -36,6 +36,10 @@ def get_current_user(
         db.add(user)
         db.commit()
         db.refresh(user)
+    elif payload.email and user.email != payload.email:
+        user.email = payload.email
+        db.commit()
+        db.refresh(user)
     return user
 
 
@@ -54,6 +58,10 @@ def get_optional_user(
     if user is None:
         user = User(id=payload.sub, email=payload.email)
         db.add(user)
+        db.commit()
+        db.refresh(user)
+    elif payload.email and user.email != payload.email:
+        user.email = payload.email
         db.commit()
         db.refresh(user)
     return user
