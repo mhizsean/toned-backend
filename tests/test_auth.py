@@ -38,13 +38,57 @@ def test_signup_creates_session_and_user(auth_client, db_session):
         cls.return_value.sign_up.return_value = fake
         response = auth_client.post(
             "/api/v1/auth/signup",
-            json={"email": "new@toned.app", "password": "secret12"},
+            json={
+                "email": "new@toned.app",
+                "password": "secret12",
+                "username": "newlifter",
+            },
         )
     assert response.status_code == 201
     body = response.json()
     assert body["access_token"] == "access-1"
     assert body["user"]["id"] == "uid-signup"
-    assert db_session.get(User, "uid-signup") is not None
+    assert body["user"]["username"] == "newlifter"
+    user = db_session.get(User, "uid-signup")
+    assert user is not None
+    assert user.username == "newlifter"
+
+
+def test_signup_rejects_taken_username(auth_client, db_session):
+    db_session.add(User(id="taken-user", email="a@b.com", username="newlifter"))
+    db_session.commit()
+    with patch("app.routers.auth.SupabaseAuthService") as cls:
+        response = auth_client.post(
+            "/api/v1/auth/signup",
+            json={
+                "email": "new@toned.app",
+                "password": "secret12",
+                "username": "NewLifter",
+            },
+        )
+    assert response.status_code == 409
+    assert "taken" in response.json()["detail"].lower()
+    cls.return_value.sign_up.assert_not_called()
+
+
+def test_username_available_endpoint(auth_client, db_session):
+    db_session.add(User(id="taken-user", email="a@b.com", username="lifted"))
+    db_session.commit()
+    taken = auth_client.get(
+        "/api/v1/auth/username-available",
+        params={"username": "lifted"},
+    )
+    free = auth_client.get(
+        "/api/v1/auth/username-available",
+        params={"username": "open_handle"},
+    )
+    invalid = auth_client.get(
+        "/api/v1/auth/username-available",
+        params={"username": "ab"},
+    )
+    assert taken.json() == {"available": False, "reason": "That username is taken"}
+    assert free.json() == {"available": True, "reason": None}
+    assert invalid.json()["available"] is False
 
 
 def test_signin_invalid_credentials(auth_client):

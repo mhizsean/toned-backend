@@ -3,7 +3,9 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from app.utils.username import USERNAME_HINT, is_valid_username, normalize_username
 
 HeightUnit = Literal["cm", "ft"]
 WeightUnit = Literal["kg", "lbs"]
@@ -20,6 +22,7 @@ class AvatarListResponse(BaseModel):
 
 class ProfileUpdate(BaseModel):
     name: str | None = Field(default=None, max_length=120)
+    username: str | None = Field(default=None, min_length=3, max_length=21)
     age: str | None = Field(default=None, max_length=8)
     gender: str | None = Field(default=None, max_length=32)
     goals: list[str] | None = None
@@ -37,11 +40,22 @@ class ProfileUpdate(BaseModel):
     favourite_exercises: list[str] | None = None
     avatar_id: str | None = Field(default=None, max_length=80)
 
+    @field_validator("username")
+    @classmethod
+    def normalize_optional_username(cls, value: str | None) -> str | None:
+        if value is None or not value.strip():
+            return None
+        username = normalize_username(value)
+        if not is_valid_username(username):
+            raise ValueError(USERNAME_HINT)
+        return username
+
 
 class ProfileResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     name: str = ""
+    username: str | None = None
     age: str = ""
     gender: str | None = None
     goals: list[str] = Field(default_factory=list)

@@ -19,6 +19,7 @@ from app.schemas.auth import (
     ResetPasswordRequest,
     SignInRequest,
     SignUpRequest,
+    UsernameAvailableResponse,
     VerifyOtpRequest,
 )
 from app.schemas.user import AuthMeResponse, UserRead
@@ -27,6 +28,12 @@ from app.services.supabase_auth import (
     SupabaseAuthError,
     SupabaseAuthService,
     raise_as_http,
+)
+from app.utils.username import (
+    USERNAME_HINT,
+    is_valid_username,
+    normalize_username,
+    username_taken,
 )
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -87,31 +94,57 @@ def _verify_with_dev_otp(
     return auth.verify_otp(email, str(email_otp), otp_type=verify_type)
 
 
-def _upsert_user(db: Session, user_id: str, email: str | None) -> User:
+def _upsert_user(
+    db: Session,
+    user_id: str,
+    email: str | None,
+    username: str | None = None,
+) -> User:
     user = db.get(User, user_id)
     if user is None:
-        user = User(id=user_id, email=email)
+        if username and username_taken(db, username):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="That username is taken",
+            )
+        user = User(id=user_id, email=email, username=username)
         db.add(user)
-    elif email and user.email != email:
-        user.email = email
+    else:
+        if email and user.email != email:
+            user.email = email
+        if username and user.username != username:
+            if username_taken(db, username, exclude_user_id=user_id):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="That username is taken",
+                )
+            user.username = username
     db.commit()
     db.refresh(user)
     return user
 
 
-def _session_from_supabase(db: Session, payload: dict[str, Any]) -> AuthSessionResponse:
+def _session_from_supabase(
+    db: Session,
+    payload: dict[str, Any],
+    username: str | None = None,
+) -> AuthSessionResponse:
     raw_user = payload.get("user") or {}
     user_id = raw_user.get("id")
     email = raw_user.get("email")
     access_token = payload.get("access_token")
 
     local_user = None
-    if user_id and access_token:
-        local_user = _upsert_user(db, user_id, email)
+    if user_id:
+        local_user = _upsert_user(db, user_id, email, username)
 
     auth_user = None
     if user_id:
-        auth_user = AuthUser(id=user_id, email=email or (local_user.email if local_user else None))
+        auth_user = AuthUser(
+            id=user_id,
+            email=email or (local_user.email if local_user else None),
+            username=local_user.username if local_user else username,
+        )
 
     message = None
     if not access_token and user_id:
@@ -132,14 +165,35 @@ def get_me(user: CurrentUser) -> AuthMeResponse:
     return AuthMeResponse(user=UserRead.model_validate(user))
 
 
+@router.get("/username-available", response_model=UsernameAvailableResponse)
+def get_username_available(
+    username: str,
+    db: DbSession,
+) -> UsernameAvailableResponse:
+    normalized = normalize_username(username)
+    if not is_valid_username(normalized):
+        return UsernameAvailableResponse(available=False, reason=USERNAME_HINT)
+    if username_taken(db, normalized):
+        return UsernameAvailableResponse(
+            available=False,
+            reason="That username is taken",
+        )
+    return UsernameAvailableResponse(available=True)
+
+
 @router.post("/signup", response_model=AuthSessionResponse, status_code=status.HTTP_201_CREATED)
 def sign_up(body: SignUpRequest, db: DbSession) -> AuthSessionResponse:
+    if username_taken(db, body.username):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="That username is taken",
+        )
     auth = SupabaseAuthService()
     try:
         payload = auth.sign_up(str(body.email), body.password)
     except SupabaseAuthError as exc:
         raise_as_http(exc)
-    return _session_from_supabase(db, payload)
+    return _session_from_supabase(db, payload, username=body.username)
 
 
 @router.post("/verify", response_model=AuthSessionResponse)
@@ -153,7 +207,7 @@ def verify_otp(body: VerifyOtpRequest, db: DbSession) -> AuthSessionResponse:
             payload = auth.verify_otp(str(body.email), body.token, otp_type=body.type)
     except SupabaseAuthError as exc:
         raise_as_http(exc)
-    return _session_from_supabase(db, payload)
+    return _session_from_supabase(db, payload, username=body.username)
 
 
 @router.post("/resend", response_model=MessageResponse)

@@ -1,4 +1,5 @@
 from app.models.profile import UserProfile
+from app.models.user import User
 from app.services.avatar_service import list_avatar_ids
 
 
@@ -70,6 +71,27 @@ def test_patch_profile_saves_fields(client, db_session, test_user):
     assert row is not None
     assert row.name == "Sam"
     assert row.avatar_id == "toned-avatar-03"
+
+
+def test_patch_profile_sets_unique_username(client, db_session, test_user):
+    response = client.patch(
+        "/api/v1/profile",
+        json={"username": "Sam_Lift"},
+    )
+    assert response.status_code == 200
+    assert response.json()["username"] == "sam_lift"
+    db_session.refresh(test_user)
+    assert test_user.username == "sam_lift"
+
+
+def test_patch_profile_rejects_taken_username(client, db_session, test_user):
+    db_session.add(User(id="other", email="o@example.com", username="taken_name"))
+    db_session.commit()
+    response = client.patch(
+        "/api/v1/profile",
+        json={"username": "taken_name"},
+    )
+    assert response.status_code == 409
 
 
 def test_patch_profile_rejects_unknown_avatar(client):

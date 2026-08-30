@@ -8,6 +8,7 @@ class UserRead(BaseModel):
 
     id: str
     email: str | None
+    username: str | None = None
     created_at: datetime
 
 
