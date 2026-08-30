@@ -12,5 +12,7 @@ COPY alembic.ini .
 # Static profile portraits live in app/static/profile_avatars (22 files).
 COPY app ./app
 COPY migrations ./migrations
+# Public catalogue allowlist + seed JSON. The 17MB dataset is dockerignored.
+COPY data ./data
 
 CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
