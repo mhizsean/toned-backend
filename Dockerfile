@@ -9,6 +9,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY alembic.ini .
+# Static profile portraits live in app/static/profile_avatars (22 files).
 COPY app ./app
 COPY migrations ./migrations
 
