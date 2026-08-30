@@ -10,7 +10,8 @@ def test_list_avatars_from_folder(client):
     ids = [item["id"] for item in body["avatars"]]
     assert ids == list_avatar_ids()
     assert "toned-avatar-01" in ids
-    assert len(ids) >= 10
+    assert "toned-avatar-22" in ids
+    assert len(ids) >= 22
     assert body["avatars"][0]["url"] == f"/profile/avatars/{ids[0]}"
 
 
