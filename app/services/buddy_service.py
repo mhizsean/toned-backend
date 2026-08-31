@@ -100,7 +100,7 @@ class BuddyService:
         if _is_email_query(q):
             rows = BuddyService._search_by_email(db, viewer_id, q)
         else:
-            rows = BuddyService._search_by_username(db, viewer_id, q)
+            rows = BuddyService._search_people(db, viewer_id, q)
 
         return BuddySearchResponse(users=rows)
 
@@ -1037,25 +1037,52 @@ class BuddyService:
         return [_card_for(db, user)]
 
     @staticmethod
-    def _search_by_username(
+    def _like_prefix(value: str) -> str:
+        escaped = (
+            value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        )
+        return f"{escaped}%"
+
+    @staticmethod
+    def _search_people(
         db: Session,
         viewer_id: str,
         raw: str,
     ) -> list[BuddyPersonPublic]:
-        prefix = normalize_username(raw)
-        if not prefix:
+        needle = normalize_username(raw)
+        if not needle:
             return []
 
-        excluded = BuddyService._excluded_ids(db, viewer_id)
-        users = (
+        excluded = list(BuddyService._excluded_ids(db, viewer_id))
+        pattern = BuddyService._like_prefix(needle)
+        by_id: dict[str, User] = {}
+
+        username_hits = (
             db.query(User)
             .filter(
                 User.id.notin_(excluded),
                 User.username.isnot(None),
-                User.username.ilike(f"{prefix}%"),
+                User.username.ilike(pattern, escape="\\"),
             )
             .order_by(User.username)
             .limit(SEARCH_LIMIT)
             .all()
         )
-        return [_card_for(db, user) for user in users]
+        for user in username_hits:
+            by_id[user.id] = user
+
+        name_hits = (
+            db.query(User)
+            .join(UserProfile, UserProfile.user_id == User.id)
+            .filter(
+                User.id.notin_(excluded),
+                UserProfile.name.ilike(pattern, escape="\\"),
+            )
+            .order_by(UserProfile.name)
+            .limit(SEARCH_LIMIT)
+            .all()
+        )
+        for user in name_hits:
+            by_id.setdefault(user.id, user)
+
+        return [_card_for(db, user) for user in list(by_id.values())[:SEARCH_LIMIT]]

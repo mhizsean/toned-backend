@@ -141,3 +141,38 @@ def test_search_unknown_returns_empty(client):
     response = client.get("/api/v1/buddies/search?q=nobody")
     assert response.status_code == 200
     assert response.json()["users"] == []
+
+
+def test_search_by_profile_name(client, db_session):
+    _add_user(
+        db_session,
+        "spirit-1",
+        email="spirit@example.com",
+        username=None,
+        name="Spirit",
+        goals=["general-fitness"],
+        experience="advanced",
+        frequency="5-6x",
+    )
+
+    response = client.get("/api/v1/buddies/search?q=spi")
+    assert response.status_code == 200
+    users = response.json()["users"]
+    assert len(users) == 1
+    assert users[0]["id"] == "spirit-1"
+    assert users[0]["name"] == "Spirit"
+    assert users[0]["username"] is None
+    assert "email" not in users[0]
+
+
+def test_search_by_name_excludes_self(client, db_session, test_user):
+    profile = db_session.get(UserProfile, test_user.id)
+    if profile is None:
+        db_session.add(UserProfile(user_id=test_user.id, name="Sean"))
+    else:
+        profile.name = "Sean"
+    db_session.commit()
+
+    response = client.get("/api/v1/buddies/search?q=Sean")
+    assert response.status_code == 200
+    assert response.json()["users"] == []

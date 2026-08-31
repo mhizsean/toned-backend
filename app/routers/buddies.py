@@ -13,5 +13,5 @@ def search_buddies(
     user: CurrentUser,
     q: str = Query(default="", max_length=80),
 ) -> BuddySearchResponse:
-    """Find users by username prefix or exact email. Never returns email."""
+    """Find users by name, username prefix, or exact email. Never returns email."""
     return BuddyService.search(db, user.id, q)
