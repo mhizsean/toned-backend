@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.routers import (
     auth,
+    buddies,
     exercises,
     library,
     preferences,
@@ -36,6 +37,7 @@ def create_app() -> FastAPI:
 
     prefix = settings.api_v1_prefix
     app.include_router(auth.router, prefix=prefix)
+    app.include_router(buddies.router, prefix=prefix)
     app.include_router(exercises.router, prefix=prefix)
     app.include_router(library.router, prefix=prefix)
     app.include_router(profile.router, prefix=prefix)
