@@ -11,6 +11,15 @@ from app.schemas.preferences import (
     PreferencesUpdate,
 )
 
+NOTIFY_FIELDS = (
+    "notify_buddy_completed",
+    "notify_buddy_started",
+    "notify_buddy_nudge",
+    "notify_buddy_eod",
+    "notify_buddy_reacted",
+    "notifications_enabled",
+)
+
 
 def _to_response(row: UserPreferences | None) -> PreferencesResponse:
     if row is None:
@@ -19,6 +28,12 @@ def _to_response(row: UserPreferences | None) -> PreferencesResponse:
     return PreferencesResponse(
         weight_unit=row.weight_unit,  # type: ignore[arg-type]
         buddy_nudge_limit=limit,  # type: ignore[arg-type]
+        notify_buddy_completed=bool(row.notify_buddy_completed),
+        notify_buddy_started=bool(row.notify_buddy_started),
+        notify_buddy_nudge=bool(row.notify_buddy_nudge),
+        notify_buddy_eod=bool(row.notify_buddy_eod),
+        notify_buddy_reacted=bool(row.notify_buddy_reacted),
+        notifications_enabled=bool(row.notifications_enabled),
         signup_nudge_last_shown_at=row.signup_nudge_last_shown_at,
         signup_nudge_dismissed_at=row.signup_nudge_dismissed_at,
         updated_at=row.updated_at,
@@ -64,6 +79,10 @@ class PreferencesService:
         row.weight_unit = body.weight_unit
         if body.buddy_nudge_limit is not None:
             row.buddy_nudge_limit = body.buddy_nudge_limit
+        for field in NOTIFY_FIELDS:
+            value = getattr(body, field)
+            if value is not None:
+                setattr(row, field, value)
         row.signup_nudge_last_shown_at = body.signup_nudge_last_shown_at
         row.signup_nudge_dismissed_at = body.signup_nudge_dismissed_at
         row.updated_at = datetime.now(timezone.utc)

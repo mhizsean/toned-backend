@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from app.models.buddy import (
     BuddyBlock,
     BuddyCheer,
+    BuddyEodNudge,
     BuddyLink,
     BuddyNudge,
     BuddyPresence,
@@ -26,6 +27,8 @@ from app.schemas.buddy import (
     BuddyActivityResponse,
     BuddyBlockRequest,
     BuddyCheerResponse,
+    BuddyEodNudgeRequest,
+    BuddyEodNudgeResponse,
     BuddyHomeRecord,
     BuddyHomeResponse,
     BuddyInviteRequest,
@@ -38,7 +41,7 @@ from app.schemas.buddy import (
     BuddyStateResponse,
     BUDDY_REACTIONS,
 )
-from app.services.buddy_activity import build_activity_items
+from app.services.buddy_activity import REACTION_EMOJI, build_activity_items
 from app.services.buddy_push import BuddyPushService
 from app.services.workout_stats import (
     current_streak,
@@ -346,11 +349,13 @@ class BuddyService:
         viewer_id: str,
         body: BuddyPresenceRequest,
     ) -> BuddyHomeResponse:
-        if BuddyService._accepted_link(db, viewer_id) is None:
+        link = BuddyService._accepted_link(db, viewer_id)
+        if link is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="You don't have a buddy",
             )
+        buddy_id = BuddyService._other_id(link, viewer_id)
         existing = db.get(BuddyPresence, viewer_id)
         if body.status == "finished":
             if existing is not None:
@@ -360,6 +365,7 @@ class BuddyService:
 
         label = (body.session_label or "").strip() or None
         now = _now()
+        is_new = existing is None
         if existing is None:
             db.add(
                 BuddyPresence(
@@ -374,6 +380,13 @@ class BuddyService:
             existing.session_label = label
             existing.updated_at = now
         db.commit()
+        if is_new:
+            BuddyPushService.notify_event(
+                db,
+                recipient_id=buddy_id,
+                actor_id=viewer_id,
+                event="buddy-started",
+            )
         return BuddyService.get_home(db, viewer_id)
 
     @staticmethod
@@ -419,6 +432,84 @@ class BuddyService:
             left=limit - used,
             limit=limit,
         )
+
+    @staticmethod
+    def workout_day_counts(
+        db: Session,
+        user_id: str,
+        keys: set[str],
+    ) -> dict[str, int]:
+        counts = {key: 0 for key in keys if key}
+        if not counts:
+            return {}
+        for log in BuddyService._logs_for(db, user_id):
+            key = day_key(log.date)
+            if key in counts:
+                counts[key] += 1
+        return counts
+
+    @staticmethod
+    def on_workouts_saved(
+        db: Session,
+        user_id: str,
+        *,
+        day_keys: set[str],
+        counts_before: dict[str, int],
+    ) -> None:
+        link = BuddyService._accepted_link(db, user_id)
+        if link is None:
+            return
+        today_key = _now().date().isoformat()
+        if today_key not in day_keys:
+            return
+        if counts_before.get(today_key, 0) > 0:
+            return
+        BuddyPushService.notify_event(
+            db,
+            recipient_id=BuddyService._other_id(link, user_id),
+            actor_id=user_id,
+            event="buddy-completed",
+        )
+
+    @staticmethod
+    def report_eod_nudge(
+        db: Session,
+        viewer_id: str,
+        body: BuddyEodNudgeRequest,
+        now: datetime | None = None,
+    ) -> BuddyEodNudgeResponse:
+        now = now or _now()
+        key = day_key((body.day_key or now.date().isoformat()).strip())
+        if not key:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid day_key",
+            )
+        if BuddyService._accepted_link(db, viewer_id) is None:
+            return BuddyEodNudgeResponse(logged=False, day_key=key)
+        trained = key in set(
+            unique_day_keys(BuddyService._logs_for(db, viewer_id))
+        )
+        if trained:
+            return BuddyEodNudgeResponse(logged=False, day_key=key)
+        existing = (
+            db.query(BuddyEodNudge)
+            .filter(
+                BuddyEodNudge.user_id == viewer_id,
+                BuddyEodNudge.day_key == key,
+            )
+            .first()
+        )
+        if existing is None:
+            db.add(
+                BuddyEodNudge(
+                    id=str(uuid.uuid4()),
+                    user_id=viewer_id,
+                    day_key=key,
+                )
+            )
+            db.commit()
+        return BuddyEodNudgeResponse(logged=True, day_key=key)
 
     @staticmethod
     def get_activity(
@@ -486,6 +577,7 @@ class BuddyService:
         existing = db.get(
             BuddyRecordReaction, (resolved, viewer_id, body.reaction)
         )
+        added = existing is None
         if existing is None:
             db.add(
                 BuddyRecordReaction(
@@ -497,6 +589,19 @@ class BuddyService:
         else:
             db.delete(existing)
         db.commit()
+        if added:
+            owner_id = resolved.split(":", 1)[0]
+            if owner_id != viewer_id:
+                BuddyPushService.notify_event(
+                    db,
+                    recipient_id=owner_id,
+                    actor_id=viewer_id,
+                    event="buddy-reacted",
+                    extra={
+                        "emoji": REACTION_EMOJI.get(body.reaction, ""),
+                        "exercise": resolved.split(":", 1)[1],
+                    },
+                )
         reactions = BuddyService._reactions_for_records(db, [resolved]).get(
             resolved, []
         )
@@ -616,6 +721,20 @@ class BuddyService:
             row.activity_id
             for row in db.query(BuddyCheer).filter(BuddyCheer.user_id == viewer_id).all()
         }
+        eod_nudges = (
+            db.query(BuddyEodNudge)
+            .filter(
+                BuddyEodNudge.user_id.in_((viewer_id, buddy.id)),
+                BuddyEodNudge.day_key >= monday_key,
+                BuddyEodNudge.day_key <= sunday_key,
+            )
+            .all()
+        )
+        reactions = (
+            db.query(BuddyRecordReaction)
+            .filter(BuddyRecordReaction.user_id.in_((viewer_id, buddy.id)))
+            .all()
+        )
         profile = db.get(UserProfile, buddy.id)
         return build_activity_items(
             viewer_id=viewer_id,
@@ -625,6 +744,8 @@ class BuddyService:
             your_logs=your_logs,
             buddy_logs=buddy_logs,
             nudges=list(nudges),
+            eod_nudges=list(eod_nudges),
+            reactions=list(reactions),
             presence=BuddyService._live_presence(db, buddy.id, now),
             session_label_for=lambda user_id, day: BuddyService._session_label_for(
                 db, user_id, day

@@ -7,6 +7,7 @@ def test_preferences_defaults(client):
     body = response.json()
     assert body["weight_unit"] == "kg"
     assert body["buddy_nudge_limit"] == 3
+    assert body["notifications_enabled"] is True
     assert body["signup_nudge_last_shown_at"] is None
     assert body["signup_nudge_dismissed_at"] is None
 

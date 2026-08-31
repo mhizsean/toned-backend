@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.models.buddy import (
     BuddyBlock,
     BuddyCheer,
+    BuddyEodNudge,
     BuddyLink,
     BuddyNudge,
     BuddyPresence,
@@ -47,6 +48,9 @@ class AccountService:
                 (BuddyNudge.from_user_id == user_id)
                 | (BuddyNudge.to_user_id == user_id)
             )
+        ).rowcount
+        eod_nudges = db.execute(
+            delete(BuddyEodNudge).where(BuddyEodNudge.user_id == user_id)
         ).rowcount
         cheers = db.execute(
             delete(BuddyCheer).where(BuddyCheer.user_id == user_id)
@@ -96,6 +100,7 @@ class AccountService:
             "buddy_blocks_deleted": int(blocks or 0),
             "buddy_presence_deleted": int(presence or 0),
             "buddy_nudges_deleted": int(nudges or 0),
+            "buddy_eod_nudges_deleted": int(eod_nudges or 0),
             "buddy_cheers_deleted": int(cheers or 0),
             "buddy_record_reactions_deleted": int(reactions or 0),
             "buddy_push_tokens_deleted": int(tokens or 0),

@@ -8,6 +8,8 @@ from app.schemas.buddy import (
     BuddyActivityResponse,
     BuddyBlockRequest,
     BuddyCheerResponse,
+    BuddyEodNudgeRequest,
+    BuddyEodNudgeResponse,
     BuddyHomeResponse,
     BuddyInviteRequest,
     BuddyNudgeResponse,
@@ -45,6 +47,15 @@ def set_buddy_presence(
 @router.post("/nudge", response_model=BuddyNudgeResponse)
 def nudge_buddy(db: DbSession, user: CurrentUser) -> BuddyNudgeResponse:
     return BuddyService.nudge(db, user.id)
+
+
+@router.post("/eod-nudge", response_model=BuddyEodNudgeResponse)
+def report_eod_nudge(
+    body: BuddyEodNudgeRequest,
+    db: DbSession,
+    user: CurrentUser,
+) -> BuddyEodNudgeResponse:
+    return BuddyService.report_eod_nudge(db, user.id, body)
 
 
 @router.get("/activity", response_model=BuddyActivityResponse)

@@ -5,6 +5,7 @@ from sqlalchemy import func, select
 
 from app.core.deps import CurrentUser, DbSession
 from app.models.workout_log import WorkoutLog
+from app.services.buddy_service import BuddyService
 from app.schemas.workout_log import (
     WorkoutLogCreate,
     WorkoutLogListResponse,
@@ -58,6 +59,8 @@ def create_workout(
     user: CurrentUser,
 ) -> WorkoutLogRead:
     workout_id = data.id or str(uuid.uuid4())
+    key = (data.date or "")[:10]
+    before = BuddyService.workout_day_counts(db, user.id, {key})
     log = WorkoutLog(
         id=workout_id,
         user_id=user.id,
@@ -68,6 +71,9 @@ def create_workout(
     db.add(log)
     db.commit()
     db.refresh(log)
+    BuddyService.on_workouts_saved(
+        db, user.id, day_keys={key}, counts_before=before
+    )
     return _serialize_log(log)
 
 

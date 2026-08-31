@@ -24,6 +24,7 @@ from app.schemas.sync import (
     SyncPushResponse,
 )
 from app.schemas.workout_log import WorkoutLogCreate, WorkoutLogRead
+from app.services.buddy_service import BuddyService
 from app.services.exercise_service import ExerciseService, slugify
 from app.services.library_service import LibraryService
 from app.services.preferences_service import PreferencesService
@@ -39,6 +40,8 @@ class SyncService:
         workouts: list[WorkoutLogCreate],
     ) -> list[WorkoutLog]:
         saved: list[WorkoutLog] = []
+        keys = {(item.date or "")[:10] for item in workouts}
+        before = BuddyService.workout_day_counts(db, user_id, keys)
         for item in workouts:
             workout_id = item.id or str(uuid.uuid4())
             existing = db.get(WorkoutLog, workout_id)
@@ -67,6 +70,9 @@ class SyncService:
         db.commit()
         for row in saved:
             db.refresh(row)
+        BuddyService.on_workouts_saved(
+            db, user_id, day_keys=keys, counts_before=before
+        )
         return saved
 
     @staticmethod
@@ -414,6 +420,12 @@ class SyncService:
         cloud_as = PreferencesReplaceRequest(
             weight_unit=cloud.weight_unit,
             buddy_nudge_limit=cloud.buddy_nudge_limit,
+            notify_buddy_completed=cloud.notify_buddy_completed,
+            notify_buddy_started=cloud.notify_buddy_started,
+            notify_buddy_nudge=cloud.notify_buddy_nudge,
+            notify_buddy_eod=cloud.notify_buddy_eod,
+            notify_buddy_reacted=cloud.notify_buddy_reacted,
+            notifications_enabled=cloud.notifications_enabled,
             signup_nudge_last_shown_at=cloud.signup_nudge_last_shown_at,
             signup_nudge_dismissed_at=cloud.signup_nudge_dismissed_at,
         )
@@ -446,6 +458,36 @@ class SyncService:
         return PreferencesReplaceRequest(
             weight_unit=local.weight_unit,
             buddy_nudge_limit=local.buddy_nudge_limit or cloud.buddy_nudge_limit,
+            notify_buddy_completed=(
+                local.notify_buddy_completed
+                if local.notify_buddy_completed is not None
+                else cloud.notify_buddy_completed
+            ),
+            notify_buddy_started=(
+                local.notify_buddy_started
+                if local.notify_buddy_started is not None
+                else cloud.notify_buddy_started
+            ),
+            notify_buddy_nudge=(
+                local.notify_buddy_nudge
+                if local.notify_buddy_nudge is not None
+                else cloud.notify_buddy_nudge
+            ),
+            notify_buddy_eod=(
+                local.notify_buddy_eod
+                if local.notify_buddy_eod is not None
+                else cloud.notify_buddy_eod
+            ),
+            notify_buddy_reacted=(
+                local.notify_buddy_reacted
+                if local.notify_buddy_reacted is not None
+                else cloud.notify_buddy_reacted
+            ),
+            notifications_enabled=(
+                local.notifications_enabled
+                if local.notifications_enabled is not None
+                else cloud.notifications_enabled
+            ),
             signup_nudge_last_shown_at=last_shown,
             signup_nudge_dismissed_at=dismissed,
         ), notes

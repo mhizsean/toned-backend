@@ -100,7 +100,9 @@ class BuddyNudgeResponse(BaseModel):
     limit: int = 3
 
 
-BuddyActivityKind = Literal["completed", "nudge", "started", "pr", "both"]
+BuddyActivityKind = Literal[
+    "completed", "nudge", "started", "pr", "both", "eod", "reacted"
+]
 BuddyActivitySection = Literal["today", "week"]
 
 
@@ -135,3 +137,12 @@ class BuddyRecordReactionsResponse(BaseModel):
 
 class BuddyPushTokenRequest(BaseModel):
     token: str = Field(min_length=8, max_length=200)
+
+
+class BuddyEodNudgeRequest(BaseModel):
+    day_key: str | None = None
+
+
+class BuddyEodNudgeResponse(BaseModel):
+    logged: bool
+    day_key: str

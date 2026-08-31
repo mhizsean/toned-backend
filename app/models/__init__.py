@@ -3,6 +3,7 @@
 from app.models.buddy import (
     BuddyBlock,
     BuddyCheer,
+    BuddyEodNudge,
     BuddyLink,
     BuddyNudge,
     BuddyPresence,
@@ -22,6 +23,7 @@ from app.models.workout_log import WorkoutLog
 __all__ = [
     "BuddyBlock",
     "BuddyCheer",
+    "BuddyEodNudge",
     "BuddyLink",
     "BuddyNudge",
     "BuddyPresence",

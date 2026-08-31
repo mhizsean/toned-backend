@@ -4,7 +4,7 @@ from collections import defaultdict
 from datetime import date, datetime, time, timezone
 from typing import Any
 
-from app.models.buddy import BuddyNudge, BuddyPresence
+from app.models.buddy import BuddyEodNudge, BuddyNudge, BuddyPresence, BuddyRecordReaction
 from app.models.workout_log import WorkoutLog
 from app.schemas.buddy import BuddyActivityItem
 from app.services.workout_stats import (
@@ -14,6 +14,15 @@ from app.services.workout_stats import (
 )
 
 WEEKDAYS = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+
+REACTION_EMOJI = {
+    "clap": "👏",
+    "fire": "🔥",
+    "flex": "💪",
+    "heart": "❤️",
+    "hands": "🙌",
+}
 
 
 def first_name(name: str | None, fallback: str = "them") -> str:
@@ -102,6 +111,8 @@ def build_activity_items(
     your_logs: list[WorkoutLog],
     buddy_logs: list[WorkoutLog],
     nudges: list[BuddyNudge],
+    eod_nudges: list[BuddyEodNudge],
+    reactions: list[BuddyRecordReaction],
     presence: BuddyPresence | None,
     session_label_for,
     prs: list[dict[str, Any]],
@@ -208,6 +219,70 @@ def build_activity_items(
                     section=section,
                     time_label=time_label,
                     kind="nudge",
+                    title=title,
+                ),
+            )
+        )
+
+    for eod in eod_nudges:
+        try:
+            day = date.fromisoformat(eod.day_key)
+        except ValueError:
+            continue
+        if not in_week(day, monday, sunday):
+            continue
+        when = as_utc(eod.created_at) or midday(day)
+        section, time_label = section_and_label(when, today)
+        if day != today:
+            section, time_label = "week", WEEKDAYS[day.weekday()]
+        yours = eod.user_id == viewer_id
+        title = (
+            "Evening reminder to train"
+            if yours
+            else f"{buddy_first} got an evening reminder"
+        )
+        built.append(
+            (
+                when,
+                BuddyActivityItem(
+                    id=f"eod:{eod.id}",
+                    section=section,
+                    time_label=time_label,
+                    kind="eod",
+                    title=title,
+                ),
+            )
+        )
+
+    for row in reactions:
+        when = as_utc(row.created_at) or datetime.now(timezone.utc)
+        if not in_week(when.date(), monday, sunday):
+            continue
+        section, time_label = section_and_label(when, today)
+        owner_id, _, exercise = row.record_id.partition(":")
+        exercise = exercise or "a record"
+        emoji = REACTION_EMOJI.get(row.reaction, "")
+        yours = row.user_id == viewer_id
+        if yours:
+            title = (
+                f"You reacted {emoji} to {exercise}".strip()
+                if owner_id == viewer_id
+                else f"You reacted {emoji} to {buddy_first}'s {exercise}".strip()
+            )
+        else:
+            title = (
+                f"{buddy_first} reacted {emoji} to your {exercise}".strip()
+                if owner_id == viewer_id
+                else f"{buddy_first} reacted {emoji} to {exercise}".strip()
+            )
+        built.append(
+            (
+                when,
+                BuddyActivityItem(
+                    id=f"reacted:{row.user_id}:{row.record_id}:{row.reaction}",
+                    section=section,
+                    time_label=time_label,
+                    kind="reacted",
                     title=title,
                 ),
             )
