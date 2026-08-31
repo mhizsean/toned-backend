@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -48,3 +49,35 @@ class BuddyStateResponse(BaseModel):
     person: BuddyPersonPublic | None = None
     invite_id: str | None = None
     declined_notice: bool = False
+
+
+BuddyTrainingStatus = Literal["not_started", "in_progress", "completed"]
+BuddyRecordOwner = Literal["you", "buddy"]
+BuddyPresenceStatus = Literal["started", "finished"]
+
+
+class BuddyHomeRecord(BaseModel):
+    id: str
+    owner: BuddyRecordOwner
+    exercise: str
+    primary: str
+    achieved_on: str
+    ago: str
+    reactions: list[str] = Field(default_factory=list)
+
+
+class BuddyHomeResponse(BaseModel):
+    person: BuddyPersonPublic
+    training_status: BuddyTrainingStatus
+    session_label: str = ""
+    updated_at: datetime | None = None
+    streak_days: int = 0
+    your_week_sessions: int = 0
+    buddy_week_sessions: int = 0
+    your_records: list[BuddyHomeRecord] = Field(default_factory=list)
+    buddy_records: list[BuddyHomeRecord] = Field(default_factory=list)
+
+
+class BuddyPresenceRequest(BaseModel):
+    status: BuddyPresenceStatus
+    session_label: str | None = None

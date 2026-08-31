@@ -3,7 +3,9 @@ from fastapi import APIRouter
 from app.core.deps import CurrentUser, DbSession
 from app.schemas.buddy import (
     BuddyBlockRequest,
+    BuddyHomeResponse,
     BuddyInviteRequest,
+    BuddyPresenceRequest,
     BuddyStateResponse,
 )
 from app.services.buddy_service import BuddyService
@@ -14,6 +16,20 @@ router = APIRouter(prefix="/buddy", tags=["buddy"])
 @router.get("", response_model=BuddyStateResponse)
 def get_buddy(db: DbSession, user: CurrentUser) -> BuddyStateResponse:
     return BuddyService.get_state(db, user.id)
+
+
+@router.get("/home", response_model=BuddyHomeResponse)
+def get_buddy_home(db: DbSession, user: CurrentUser) -> BuddyHomeResponse:
+    return BuddyService.get_home(db, user.id)
+
+
+@router.post("/presence", response_model=BuddyHomeResponse)
+def set_buddy_presence(
+    body: BuddyPresenceRequest,
+    db: DbSession,
+    user: CurrentUser,
+) -> BuddyHomeResponse:
+    return BuddyService.set_presence(db, user.id, body)
 
 
 @router.post("/invites", response_model=BuddyStateResponse)

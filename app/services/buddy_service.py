@@ -2,27 +2,41 @@ from __future__ import annotations
 
 import re
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import HTTPException, status
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
-from app.models.buddy import BuddyBlock, BuddyLink
+from app.models.buddy import BuddyBlock, BuddyLink, BuddyPresence
+from app.models.exercise import Exercise
 from app.models.profile import UserProfile
+from app.models.schedule import UserSchedule
 from app.models.user import User
+from app.models.workout_log import WorkoutLog
 from app.schemas.buddy import (
     BuddyBlockRequest,
+    BuddyHomeRecord,
+    BuddyHomeResponse,
     BuddyInviteRequest,
     BuddyPersonPublic,
+    BuddyPresenceRequest,
     BuddySearchResponse,
     BuddyStateResponse,
+)
+from app.services.workout_stats import (
+    current_streak,
+    day_key,
+    personal_records,
+    unique_day_keys,
+    week_session_count,
 )
 from app.utils.username import normalize_username
 
 EMAIL_PATTERN = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 SEARCH_LIMIT = 20
 OPEN_STATUSES = ("pending", "accepted")
+PRESENCE_TTL = timedelta(hours=3)
 
 
 def _is_email_query(raw: str) -> bool:
@@ -208,6 +222,188 @@ class BuddyService:
             db.add(BuddyBlock(blocker_id=viewer_id, blocked_id=target_id))
         db.commit()
         return BuddyService.get_state(db, viewer_id)
+
+    @staticmethod
+    def get_home(
+        db: Session,
+        viewer_id: str,
+        now: datetime | None = None,
+    ) -> BuddyHomeResponse:
+        now = now or _now()
+        today = now.date()
+        link = BuddyService._accepted_link(db, viewer_id)
+        if link is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="You don't have a buddy",
+            )
+        buddy = BuddyService._other_user(db, link, viewer_id)
+        your_logs = BuddyService._logs_for(db, viewer_id)
+        buddy_logs = BuddyService._logs_for(db, buddy.id)
+        your_days = unique_day_keys(your_logs)
+        buddy_days = unique_day_keys(buddy_logs)
+        today_key = today.isoformat()
+        presence = BuddyService._live_presence(db, buddy.id, now)
+        completed_today = today_key in set(buddy_days)
+
+        if presence is not None:
+            training_status = "in_progress"
+            session_label = (presence.session_label or "").strip() or (
+                BuddyService._session_label_for(db, buddy.id, today)
+            )
+            updated_at = presence.updated_at or presence.started_at
+        elif completed_today:
+            training_status = "completed"
+            session_label = BuddyService._session_label_for(db, buddy.id, today)
+            updated_at = BuddyService._latest_log_at(buddy_logs, today_key)
+        else:
+            training_status = "not_started"
+            session_label = ""
+            updated_at = None
+
+        labels = BuddyService._rep_labels(db, your_logs + buddy_logs)
+        return BuddyHomeResponse(
+            person=_card_for(db, buddy),
+            training_status=training_status,
+            session_label=session_label,
+            updated_at=updated_at,
+            streak_days=current_streak(buddy_days, today),
+            your_week_sessions=week_session_count(your_days, today),
+            buddy_week_sessions=week_session_count(buddy_days, today),
+            your_records=[
+                BuddyHomeRecord.model_validate(row)
+                for row in personal_records(
+                    your_logs, owner="you", today=today, rep_labels=labels
+                )
+            ],
+            buddy_records=[
+                BuddyHomeRecord.model_validate(row)
+                for row in personal_records(
+                    buddy_logs, owner="buddy", today=today, rep_labels=labels
+                )
+            ],
+        )
+
+    @staticmethod
+    def set_presence(
+        db: Session,
+        viewer_id: str,
+        body: BuddyPresenceRequest,
+    ) -> BuddyHomeResponse:
+        if BuddyService._accepted_link(db, viewer_id) is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="You don't have a buddy",
+            )
+        existing = db.get(BuddyPresence, viewer_id)
+        if body.status == "finished":
+            if existing is not None:
+                db.delete(existing)
+                db.commit()
+            return BuddyService.get_home(db, viewer_id)
+
+        label = (body.session_label or "").strip() or None
+        now = _now()
+        if existing is None:
+            db.add(
+                BuddyPresence(
+                    user_id=viewer_id,
+                    started_at=now,
+                    session_label=label,
+                    updated_at=now,
+                )
+            )
+        else:
+            existing.started_at = now
+            existing.session_label = label
+            existing.updated_at = now
+        db.commit()
+        return BuddyService.get_home(db, viewer_id)
+
+    @staticmethod
+    def _accepted_link(db: Session, user_id: str) -> BuddyLink | None:
+        return (
+            db.query(BuddyLink)
+            .filter(
+                BuddyLink.status == "accepted",
+                or_(
+                    BuddyLink.requester_id == user_id,
+                    BuddyLink.addressee_id == user_id,
+                ),
+            )
+            .first()
+        )
+
+    @staticmethod
+    def _logs_for(db: Session, user_id: str) -> list[WorkoutLog]:
+        return list(
+            db.query(WorkoutLog)
+            .filter(WorkoutLog.user_id == user_id)
+            .order_by(WorkoutLog.date.desc(), WorkoutLog.updated_at.desc())
+            .all()
+        )
+
+    @staticmethod
+    def _rep_labels(db: Session, logs: list[WorkoutLog]) -> dict[str, str]:
+        names: set[str] = set()
+        for log in logs:
+            for exercise in log.exercises or []:
+                if isinstance(exercise, dict):
+                    name = str(exercise.get("name") or "").strip()
+                    if name:
+                        names.add(name)
+        if not names:
+            return {}
+        rows = (
+            db.query(Exercise.name, Exercise.rep_label)
+            .filter(Exercise.name.in_(names))
+            .all()
+        )
+        return {name: label for name, label in rows if label}
+
+    @staticmethod
+    def _session_label_for(db: Session, user_id: str, today) -> str:
+        schedule_row = db.get(UserSchedule, user_id)
+        if schedule_row is None or not schedule_row.schedule:
+            return ""
+        weekday = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")[today.weekday()]
+        day = schedule_row.schedule.get(weekday) or {}
+        if not isinstance(day, dict):
+            return ""
+        focuses = day.get("focuses") or []
+        if not focuses:
+            return ""
+        return str(focuses[0]).strip()
+
+    @staticmethod
+    def _latest_log_at(logs: list[WorkoutLog], today_key: str) -> datetime | None:
+        latest: datetime | None = None
+        for log in logs:
+            if day_key(log.date) != today_key:
+                continue
+            stamp = log.updated_at or log.created_at
+            if latest is None or (stamp is not None and stamp > latest):
+                latest = stamp
+        return latest
+
+    @staticmethod
+    def _live_presence(
+        db: Session,
+        user_id: str,
+        now: datetime,
+    ) -> BuddyPresence | None:
+        row = db.get(BuddyPresence, user_id)
+        if row is None:
+            return None
+        started = row.started_at
+        if started is None:
+            return None
+        if started.tzinfo is None:
+            started = started.replace(tzinfo=timezone.utc)
+        compare = now if now.tzinfo else now.replace(tzinfo=timezone.utc)
+        if compare - started > PRESENCE_TTL:
+            return None
+        return row
 
     @staticmethod
     def _excluded_ids(db: Session, viewer_id: str) -> set[str]:
