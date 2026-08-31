@@ -8,14 +8,16 @@ from fastapi import HTTPException, status
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
-from app.models.buddy import BuddyBlock, BuddyLink, BuddyNudge, BuddyPresence
+from app.models.buddy import BuddyBlock, BuddyCheer, BuddyLink, BuddyNudge, BuddyPresence
 from app.models.exercise import Exercise
 from app.models.profile import UserProfile
 from app.models.schedule import UserSchedule
 from app.models.user import User
 from app.models.workout_log import WorkoutLog
 from app.schemas.buddy import (
+    BuddyActivityResponse,
     BuddyBlockRequest,
+    BuddyCheerResponse,
     BuddyHomeRecord,
     BuddyHomeResponse,
     BuddyInviteRequest,
@@ -25,11 +27,13 @@ from app.schemas.buddy import (
     BuddySearchResponse,
     BuddyStateResponse,
 )
+from app.services.buddy_activity import build_activity_items
 from app.services.workout_stats import (
     current_streak,
     day_key,
     personal_records,
     unique_day_keys,
+    week_bounds,
     week_session_count,
 )
 from app.utils.username import normalize_username
@@ -361,6 +365,94 @@ class BuddyService:
             used=used,
             left=DAILY_NUDGE_LIMIT - used,
             limit=DAILY_NUDGE_LIMIT,
+        )
+
+    @staticmethod
+    def get_activity(
+        db: Session,
+        viewer_id: str,
+        now: datetime | None = None,
+    ) -> BuddyActivityResponse:
+        now = now or _now()
+        link = BuddyService._accepted_link(db, viewer_id)
+        if link is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="You don't have a buddy",
+            )
+        buddy = BuddyService._other_user(db, link, viewer_id)
+        items = BuddyService._activity_items(db, viewer_id, buddy, now)
+        return BuddyActivityResponse(items=items)
+
+    @staticmethod
+    def cheer(
+        db: Session,
+        viewer_id: str,
+        activity_id: str,
+    ) -> BuddyCheerResponse:
+        activity_id = (activity_id or "").strip()
+        items = BuddyService.get_activity(db, viewer_id).items
+        match = next((item for item in items if item.id == activity_id), None)
+        if match is None or not match.can_cheer:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Activity not found",
+            )
+        existing = db.get(BuddyCheer, (activity_id, viewer_id))
+        if existing is None:
+            db.add(BuddyCheer(activity_id=activity_id, user_id=viewer_id))
+            db.commit()
+        return BuddyCheerResponse(id=activity_id, cheered=True)
+
+    @staticmethod
+    def _activity_items(db: Session, viewer_id: str, buddy: User, now: datetime):
+        today = now.date()
+        monday, sunday = week_bounds(today)
+        your_logs = BuddyService._logs_for(db, viewer_id)
+        buddy_logs = BuddyService._logs_for(db, buddy.id)
+        labels = BuddyService._rep_labels(db, buddy_logs)
+        prs = personal_records(
+            buddy_logs,
+            owner="buddy",
+            today=today,
+            rep_labels=labels,
+            limit=20,
+        )
+        monday_key = monday.isoformat()
+        sunday_key = sunday.isoformat()
+        nudges = (
+            db.query(BuddyNudge)
+            .filter(
+                or_(
+                    (BuddyNudge.from_user_id == viewer_id)
+                    & (BuddyNudge.to_user_id == buddy.id),
+                    (BuddyNudge.from_user_id == buddy.id)
+                    & (BuddyNudge.to_user_id == viewer_id),
+                ),
+                BuddyNudge.day_key >= monday_key,
+                BuddyNudge.day_key <= sunday_key,
+            )
+            .all()
+        )
+        cheered_ids = {
+            row.activity_id
+            for row in db.query(BuddyCheer).filter(BuddyCheer.user_id == viewer_id).all()
+        }
+        profile = db.get(UserProfile, buddy.id)
+        return build_activity_items(
+            viewer_id=viewer_id,
+            buddy_id=buddy.id,
+            buddy_name=(profile.name if profile else "") or "",
+            today=today,
+            your_logs=your_logs,
+            buddy_logs=buddy_logs,
+            nudges=list(nudges),
+            presence=BuddyService._live_presence(db, buddy.id, now),
+            session_label_for=lambda user_id, day: BuddyService._session_label_for(
+                db, user_id, day
+            ),
+            prs=prs,
+            cheered_ids=cheered_ids,
         )
 
     @staticmethod

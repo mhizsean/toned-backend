@@ -90,3 +90,27 @@ class BuddyNudgeResponse(BaseModel):
     used: int
     left: int
     limit: int = 3
+
+
+BuddyActivityKind = Literal["completed", "nudge", "started", "pr", "both"]
+BuddyActivitySection = Literal["today", "week"]
+
+
+class BuddyActivityItem(BaseModel):
+    id: str
+    section: BuddyActivitySection
+    time_label: str
+    kind: BuddyActivityKind
+    title: str
+    detail: str | None = None
+    can_cheer: bool = False
+    cheered: bool = False
+
+
+class BuddyActivityResponse(BaseModel):
+    items: list[BuddyActivityItem] = Field(default_factory=list)
+
+
+class BuddyCheerResponse(BaseModel):
+    id: str
+    cheered: bool = True

@@ -130,3 +130,20 @@ class BuddyNudge(Base):
         DateTime(timezone=True),
         server_default=func.now(),
     )
+
+
+class BuddyCheer(Base):
+    """Viewer 👏 on a feed item (stable activity id)."""
+
+    __tablename__ = "buddy_cheers"
+
+    activity_id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(
+        String,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+    )

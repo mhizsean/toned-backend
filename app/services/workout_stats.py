@@ -43,9 +43,13 @@ def current_streak(day_keys: list[str], today: date) -> int:
     return streak
 
 
-def week_session_count(day_keys: list[str], today: date) -> int:
+def week_bounds(today: date) -> tuple[date, date]:
     monday = today - timedelta(days=today.weekday())
-    sunday = monday + timedelta(days=6)
+    return monday, monday + timedelta(days=6)
+
+
+def week_session_count(day_keys: list[str], today: date) -> int:
+    monday, sunday = week_bounds(today)
     count = 0
     for key in day_keys:
         try:

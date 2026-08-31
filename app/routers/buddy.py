@@ -2,7 +2,9 @@ from fastapi import APIRouter
 
 from app.core.deps import CurrentUser, DbSession
 from app.schemas.buddy import (
+    BuddyActivityResponse,
     BuddyBlockRequest,
+    BuddyCheerResponse,
     BuddyHomeResponse,
     BuddyInviteRequest,
     BuddyNudgeResponse,
@@ -36,6 +38,20 @@ def set_buddy_presence(
 @router.post("/nudge", response_model=BuddyNudgeResponse)
 def nudge_buddy(db: DbSession, user: CurrentUser) -> BuddyNudgeResponse:
     return BuddyService.nudge(db, user.id)
+
+
+@router.get("/activity", response_model=BuddyActivityResponse)
+def get_buddy_activity(db: DbSession, user: CurrentUser) -> BuddyActivityResponse:
+    return BuddyService.get_activity(db, user.id)
+
+
+@router.post("/activity/{activity_id}/cheer", response_model=BuddyCheerResponse)
+def cheer_activity(
+    activity_id: str,
+    db: DbSession,
+    user: CurrentUser,
+) -> BuddyCheerResponse:
+    return BuddyService.cheer(db, user.id, activity_id)
 
 
 @router.post("/invites", response_model=BuddyStateResponse)
