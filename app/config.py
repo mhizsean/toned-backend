@@ -32,6 +32,9 @@ class Settings(BaseSettings):
     # seanseun.ss@gmail.com always has access.
     catalogue_full_access_emails: str = ""
 
+    # Optional Expo access token for push receipts (buddy invites, nudges, cheers).
+    expo_access_token: str = ""
+
     # Optional object storage (Cloudflare R2 / Supabase Storage)
     storage_endpoint: str = ""
     storage_bucket: str = ""

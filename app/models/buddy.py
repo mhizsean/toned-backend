@@ -171,3 +171,22 @@ class BuddyRecordReaction(Base):
         DateTime(timezone=True),
         server_default=func.now(),
     )
+
+
+class BuddyPushToken(Base):
+    """Expo push token for a device, so buddy events can notify the other phone."""
+
+    __tablename__ = "buddy_push_tokens"
+
+    token: Mapped[str] = mapped_column(String(200), primary_key=True)
+    user_id: Mapped[str] = mapped_column(
+        String,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+    )

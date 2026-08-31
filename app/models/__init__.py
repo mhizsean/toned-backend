@@ -6,6 +6,7 @@ from app.models.buddy import (
     BuddyLink,
     BuddyNudge,
     BuddyPresence,
+    BuddyPushToken,
     BuddyRecordReaction,
 )
 from app.models.exercise import Exercise
@@ -24,6 +25,7 @@ __all__ = [
     "BuddyLink",
     "BuddyNudge",
     "BuddyPresence",
+    "BuddyPushToken",
     "BuddyRecordReaction",
     "Exercise",
     "UserLibrary",

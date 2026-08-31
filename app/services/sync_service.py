@@ -413,6 +413,7 @@ class SyncService:
         notes: list[str] = []
         cloud_as = PreferencesReplaceRequest(
             weight_unit=cloud.weight_unit,
+            buddy_nudge_limit=cloud.buddy_nudge_limit,
             signup_nudge_last_shown_at=cloud.signup_nudge_last_shown_at,
             signup_nudge_dismissed_at=cloud.signup_nudge_dismissed_at,
         )
@@ -444,6 +445,7 @@ class SyncService:
         notes.append("preferences: unioned (local weight_unit, max nudge timestamps)")
         return PreferencesReplaceRequest(
             weight_unit=local.weight_unit,
+            buddy_nudge_limit=local.buddy_nudge_limit or cloud.buddy_nudge_limit,
             signup_nudge_last_shown_at=last_shown,
             signup_nudge_dismissed_at=dismissed,
         ), notes

@@ -3,6 +3,7 @@ from urllib.parse import unquote
 from fastapi import APIRouter
 
 from app.core.deps import CurrentUser, DbSession
+from app.schemas.auth import MessageResponse
 from app.schemas.buddy import (
     BuddyActivityResponse,
     BuddyBlockRequest,
@@ -11,10 +12,12 @@ from app.schemas.buddy import (
     BuddyInviteRequest,
     BuddyNudgeResponse,
     BuddyPresenceRequest,
+    BuddyPushTokenRequest,
     BuddyRecordReactionsRequest,
     BuddyRecordReactionsResponse,
     BuddyStateResponse,
 )
+from app.services.buddy_push import BuddyPushService
 from app.services.buddy_service import BuddyService
 
 router = APIRouter(prefix="/buddy", tags=["buddy"])
@@ -68,6 +71,26 @@ def toggle_record_reaction(
     return BuddyService.toggle_record_reaction(
         db, user.id, unquote(record_id), body
     )
+
+
+@router.post("/push-token", response_model=MessageResponse)
+def register_push_token(
+    body: BuddyPushTokenRequest,
+    db: DbSession,
+    user: CurrentUser,
+) -> MessageResponse:
+    BuddyPushService.register(db, user.id, body.token)
+    return MessageResponse(message="Push token saved")
+
+
+@router.delete("/push-token", response_model=MessageResponse)
+def unregister_push_token(
+    body: BuddyPushTokenRequest,
+    db: DbSession,
+    user: CurrentUser,
+) -> MessageResponse:
+    BuddyPushService.unregister(db, user.id, body.token)
+    return MessageResponse(message="Push token removed")
 
 
 @router.post("/invites", response_model=BuddyStateResponse)

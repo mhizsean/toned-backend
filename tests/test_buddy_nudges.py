@@ -33,6 +33,24 @@ def test_nudge_counts_up_to_three_then_rejects(client, db_session, test_user):
     assert home["nudge_limit"] == 3
 
 
+def test_nudge_cap_follows_preferences(client, db_session, test_user):
+    dave = _seed_dave(db_session)
+    _pair(db_session, test_user.id, dave.id)
+    patched = client.patch("/api/v1/preferences", json={"buddy_nudge_limit": 2})
+    assert patched.json()["buddy_nudge_limit"] == 2
+
+    first = client.post("/api/v1/buddy/nudge")
+    assert first.json() == {"used": 1, "left": 1, "limit": 2}
+    second = client.post("/api/v1/buddy/nudge")
+    assert second.json() == {"used": 2, "left": 0, "limit": 2}
+    blocked = client.post("/api/v1/buddy/nudge")
+    assert blocked.status_code == 429
+    home = client.get("/api/v1/buddy/home").json()
+    assert home["nudges_used"] == 2
+    assert home["nudges_left"] == 0
+    assert home["nudge_limit"] == 2
+
+
 def test_nudge_cap_is_per_sender_and_resets_next_day(
     client, db_session, test_user
 ):

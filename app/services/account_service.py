@@ -9,6 +9,7 @@ from app.models.buddy import (
     BuddyLink,
     BuddyNudge,
     BuddyPresence,
+    BuddyPushToken,
     BuddyRecordReaction,
 )
 from app.models.exercise import Exercise
@@ -56,6 +57,9 @@ class AccountService:
                 | (BuddyRecordReaction.record_id.startswith(f"{user_id}:"))
             )
         ).rowcount
+        tokens = db.execute(
+            delete(BuddyPushToken).where(BuddyPushToken.user_id == user_id)
+        ).rowcount
         workouts = db.execute(
             delete(WorkoutLog).where(WorkoutLog.user_id == user_id)
         ).rowcount
@@ -94,6 +98,7 @@ class AccountService:
             "buddy_nudges_deleted": int(nudges or 0),
             "buddy_cheers_deleted": int(cheers or 0),
             "buddy_record_reactions_deleted": int(reactions or 0),
+            "buddy_push_tokens_deleted": int(tokens or 0),
             "workouts_deleted": int(workouts or 0),
             "custom_exercises_deleted": int(customs or 0),
             "sync_cursors_deleted": int(cursors or 0),

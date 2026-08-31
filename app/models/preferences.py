@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, String, func
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -14,6 +14,12 @@ class UserPreferences(Base):
     """Cross-device product prefs (not UI theme)."""
 
     __tablename__ = "user_preferences"
+    __table_args__ = (
+        CheckConstraint(
+            "buddy_nudge_limit IN (2, 3)",
+            name="ck_user_preferences_buddy_nudge_limit",
+        ),
+    )
 
     user_id: Mapped[str] = mapped_column(
         String,
@@ -21,6 +27,12 @@ class UserPreferences(Base):
         primary_key=True,
     )
     weight_unit: Mapped[str] = mapped_column(String, nullable=False, default="kg")
+    buddy_nudge_limit: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        default=3,
+        server_default="3",
+    )
     signup_nudge_last_shown_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,

@@ -17,6 +17,7 @@ from app.models.buddy import (
     BuddyRecordReaction,
 )
 from app.models.exercise import Exercise
+from app.models.preferences import UserPreferences
 from app.models.profile import UserProfile
 from app.models.schedule import UserSchedule
 from app.models.user import User
@@ -38,6 +39,7 @@ from app.schemas.buddy import (
     BUDDY_REACTIONS,
 )
 from app.services.buddy_activity import build_activity_items
+from app.services.buddy_push import BuddyPushService
 from app.services.workout_stats import (
     current_streak,
     day_key,
@@ -159,6 +161,12 @@ class BuddyService:
         )
         db.add(link)
         db.commit()
+        BuddyPushService.notify_event(
+            db,
+            recipient_id=target.id,
+            actor_id=viewer_id,
+            event="buddy-invite",
+        )
         return BuddyService.get_state(db, viewer_id)
 
     @staticmethod
@@ -166,7 +174,14 @@ class BuddyService:
         link = BuddyService._pending_as_addressee(db, viewer_id, invite_id)
         link.status = "accepted"
         link.updated_at = _now()
+        requester_id = link.requester_id
         db.commit()
+        BuddyPushService.notify_event(
+            db,
+            recipient_id=requester_id,
+            actor_id=viewer_id,
+            event="buddy-accept",
+        )
         return BuddyService.get_state(db, viewer_id)
 
     @staticmethod
@@ -175,7 +190,14 @@ class BuddyService:
         link.status = "declined"
         link.declined_seen_at = None
         link.updated_at = _now()
+        requester_id = link.requester_id
         db.commit()
+        BuddyPushService.notify_event(
+            db,
+            recipient_id=requester_id,
+            actor_id=viewer_id,
+            event="buddy-decline",
+        )
         return BuddyService.get_state(db, viewer_id)
 
     @staticmethod
@@ -281,7 +303,7 @@ class BuddyService:
             updated_at = None
 
         labels = BuddyService._rep_labels(db, your_logs + buddy_logs)
-        used, left = BuddyService._nudge_counts(db, viewer_id, today.isoformat())
+        used, left, limit = BuddyService._nudge_counts(db, viewer_id, today.isoformat())
         your_records = personal_records(
             your_logs,
             owner="you",
@@ -315,7 +337,7 @@ class BuddyService:
             ],
             nudges_used=used,
             nudges_left=left,
-            nudge_limit=DAILY_NUDGE_LIMIT,
+            nudge_limit=limit,
         )
 
     @staticmethod
@@ -368,27 +390,34 @@ class BuddyService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="You don't have a buddy",
             )
-        used, left = BuddyService._nudge_counts(db, viewer_id, today_key)
+        used, left, limit = BuddyService._nudge_counts(db, viewer_id, today_key)
         if left <= 0:
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                 detail="Daily nudge limit reached",
             )
+        buddy_id = BuddyService._other_id(link, viewer_id)
         db.add(
             BuddyNudge(
                 id=str(uuid.uuid4()),
                 from_user_id=viewer_id,
-                to_user_id=BuddyService._other_id(link, viewer_id),
+                to_user_id=buddy_id,
                 day_key=today_key,
                 created_at=now,
             )
         )
         db.commit()
         used += 1
+        BuddyPushService.notify_event(
+            db,
+            recipient_id=buddy_id,
+            actor_id=viewer_id,
+            event="buddy-nudge",
+        )
         return BuddyNudgeResponse(
             used=used,
-            left=DAILY_NUDGE_LIMIT - used,
-            limit=DAILY_NUDGE_LIMIT,
+            left=limit - used,
+            limit=limit,
         )
 
     @staticmethod
@@ -426,6 +455,15 @@ class BuddyService:
         if existing is None:
             db.add(BuddyCheer(activity_id=activity_id, user_id=viewer_id))
             db.commit()
+            link = BuddyService._accepted_link(db, viewer_id)
+            if link is not None:
+                buddy = BuddyService._other_user(db, link, viewer_id)
+                BuddyPushService.notify_event(
+                    db,
+                    recipient_id=buddy.id,
+                    actor_id=viewer_id,
+                    event="buddy-cheer",
+                )
         return BuddyCheerResponse(id=activity_id, cheered=True)
 
     @staticmethod
@@ -596,11 +634,19 @@ class BuddyService:
         )
 
     @staticmethod
+    def _nudge_limit(db: Session, user_id: str) -> int:
+        row = db.get(UserPreferences, user_id)
+        if row is not None and row.buddy_nudge_limit in (2, 3):
+            return int(row.buddy_nudge_limit)
+        return DAILY_NUDGE_LIMIT
+
+    @staticmethod
     def _nudge_counts(
         db: Session,
         viewer_id: str,
         today_key: str,
-    ) -> tuple[int, int]:
+    ) -> tuple[int, int, int]:
+        limit = BuddyService._nudge_limit(db, viewer_id)
         used = (
             db.query(func.count(BuddyNudge.id))
             .filter(
@@ -611,7 +657,7 @@ class BuddyService:
             or 0
         )
         used = int(used)
-        return used, max(0, DAILY_NUDGE_LIMIT - used)
+        return used, max(0, limit - used), limit
 
     @staticmethod
     def _accepted_link(db: Session, user_id: str) -> BuddyLink | None:

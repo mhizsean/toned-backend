@@ -131,3 +131,7 @@ class BuddyRecordReactionsRequest(BaseModel):
 class BuddyRecordReactionsResponse(BaseModel):
     id: str
     reactions: list[BuddyReaction] = Field(default_factory=list)
+
+
+class BuddyPushTokenRequest(BaseModel):
+    token: str = Field(min_length=8, max_length=200)
