@@ -8,7 +8,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
-from app.models.buddy import BuddyBlock, BuddyLink, BuddyPresence
+from app.models.buddy import BuddyBlock, BuddyLink, BuddyNudge, BuddyPresence
 from app.models.exercise import Exercise
 from app.models.profile import UserProfile
 from app.models.schedule import UserSchedule
@@ -19,6 +19,7 @@ from app.schemas.buddy import (
     BuddyHomeRecord,
     BuddyHomeResponse,
     BuddyInviteRequest,
+    BuddyNudgeResponse,
     BuddyPersonPublic,
     BuddyPresenceRequest,
     BuddySearchResponse,
@@ -37,6 +38,7 @@ EMAIL_PATTERN = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 SEARCH_LIMIT = 20
 OPEN_STATUSES = ("pending", "accepted")
 PRESENCE_TTL = timedelta(hours=3)
+DAILY_NUDGE_LIMIT = 3
 
 
 def _is_email_query(raw: str) -> bool:
@@ -262,6 +264,7 @@ class BuddyService:
             updated_at = None
 
         labels = BuddyService._rep_labels(db, your_logs + buddy_logs)
+        used, left = BuddyService._nudge_counts(db, viewer_id, today.isoformat())
         return BuddyHomeResponse(
             person=_card_for(db, buddy),
             training_status=training_status,
@@ -282,6 +285,9 @@ class BuddyService:
                     buddy_logs, owner="buddy", today=today, rep_labels=labels
                 )
             ],
+            nudges_used=used,
+            nudges_left=left,
+            nudge_limit=DAILY_NUDGE_LIMIT,
         )
 
     @staticmethod
@@ -319,6 +325,61 @@ class BuddyService:
             existing.updated_at = now
         db.commit()
         return BuddyService.get_home(db, viewer_id)
+
+    @staticmethod
+    def nudge(
+        db: Session,
+        viewer_id: str,
+        now: datetime | None = None,
+    ) -> BuddyNudgeResponse:
+        now = now or _now()
+        today_key = now.date().isoformat()
+        link = BuddyService._accepted_link(db, viewer_id)
+        if link is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="You don't have a buddy",
+            )
+        used, left = BuddyService._nudge_counts(db, viewer_id, today_key)
+        if left <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="Daily nudge limit reached",
+            )
+        db.add(
+            BuddyNudge(
+                id=str(uuid.uuid4()),
+                from_user_id=viewer_id,
+                to_user_id=BuddyService._other_id(link, viewer_id),
+                day_key=today_key,
+                created_at=now,
+            )
+        )
+        db.commit()
+        used += 1
+        return BuddyNudgeResponse(
+            used=used,
+            left=DAILY_NUDGE_LIMIT - used,
+            limit=DAILY_NUDGE_LIMIT,
+        )
+
+    @staticmethod
+    def _nudge_counts(
+        db: Session,
+        viewer_id: str,
+        today_key: str,
+    ) -> tuple[int, int]:
+        used = (
+            db.query(func.count(BuddyNudge.id))
+            .filter(
+                BuddyNudge.from_user_id == viewer_id,
+                BuddyNudge.day_key == today_key,
+            )
+            .scalar()
+            or 0
+        )
+        used = int(used)
+        return used, max(0, DAILY_NUDGE_LIMIT - used)
 
     @staticmethod
     def _accepted_link(db: Session, user_id: str) -> BuddyLink | None:

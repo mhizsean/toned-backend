@@ -99,3 +99,34 @@ class BuddyPresence(Base):
         server_default=func.now(),
         onupdate=func.now(),
     )
+
+
+class BuddyNudge(Base):
+    """One row per nudge so the activity feed can show 'You nudged Dave'."""
+
+    __tablename__ = "buddy_nudges"
+    __table_args__ = (
+        CheckConstraint(
+            "from_user_id <> to_user_id",
+            name="ck_buddy_nudges_not_self",
+        ),
+    )
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    from_user_id: Mapped[str] = mapped_column(
+        String,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    to_user_id: Mapped[str] = mapped_column(
+        String,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    day_key: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+    )

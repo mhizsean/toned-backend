@@ -5,6 +5,7 @@ from app.schemas.buddy import (
     BuddyBlockRequest,
     BuddyHomeResponse,
     BuddyInviteRequest,
+    BuddyNudgeResponse,
     BuddyPresenceRequest,
     BuddyStateResponse,
 )
@@ -30,6 +31,11 @@ def set_buddy_presence(
     user: CurrentUser,
 ) -> BuddyHomeResponse:
     return BuddyService.set_presence(db, user.id, body)
+
+
+@router.post("/nudge", response_model=BuddyNudgeResponse)
+def nudge_buddy(db: DbSession, user: CurrentUser) -> BuddyNudgeResponse:
+    return BuddyService.nudge(db, user.id)
 
 
 @router.post("/invites", response_model=BuddyStateResponse)

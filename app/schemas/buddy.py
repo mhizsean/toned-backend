@@ -76,8 +76,17 @@ class BuddyHomeResponse(BaseModel):
     buddy_week_sessions: int = 0
     your_records: list[BuddyHomeRecord] = Field(default_factory=list)
     buddy_records: list[BuddyHomeRecord] = Field(default_factory=list)
+    nudges_used: int = 0
+    nudges_left: int = 3
+    nudge_limit: int = 3
 
 
 class BuddyPresenceRequest(BaseModel):
     status: BuddyPresenceStatus
     session_label: str | None = None
+
+
+class BuddyNudgeResponse(BaseModel):
+    used: int
+    left: int
+    limit: int = 3

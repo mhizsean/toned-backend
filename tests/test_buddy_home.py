@@ -78,6 +78,9 @@ def test_home_empty_pair_is_not_started(client, db_session, test_user):
     assert body["buddy_week_sessions"] == 0
     assert body["your_records"] == []
     assert body["buddy_records"] == []
+    assert body["nudges_used"] == 0
+    assert body["nudges_left"] == 3
+    assert body["nudge_limit"] == 3
 
 
 def test_home_completed_today_uses_schedule_label_and_streak(
