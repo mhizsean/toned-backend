@@ -316,8 +316,9 @@ def reset_password(
 @router.post("/reset-data", response_model=MessageResponse)
 def reset_data(db: DbSession, user: CurrentUser) -> MessageResponse:
     """
-    Wipe this user's cloud app data (workouts, custom exercises, sync state).
-    Does not delete the Supabase account. Client should also clear local storage.
+    Wipe this user's cloud app data (workouts, custom exercises, sync state,
+    buddy links and blocks). Does not delete the Supabase account.
+    Client should also clear local storage.
     """
     counts = AccountService.reset_cloud_data(db, user.id)
     return MessageResponse(

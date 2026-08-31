@@ -1,5 +1,6 @@
 from collections.abc import Generator
 from contextlib import contextmanager
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
@@ -241,23 +242,88 @@ def test_accept_is_only_for_invitee(client, db_session):
     assert missing.status_code == 404
 
 
-def test_account_reset_wipes_buddy_links(db_session, test_user):
-    from app.services.account_service import AccountService
-
+def test_reset_data_does_not_leave_ghost_buddy(client, db_session, test_user):
     dave = _seed_dave(db_session)
-    db_session.add(
-        BuddyLink(
-            id="link-1",
-            requester_id=test_user.id,
-            addressee_id=dave.id,
-            status="accepted",
-        )
+    invited = client.post(
+        "/api/v1/buddy/invites",
+        json={"username": "davefitness"},
     )
-    db_session.add(BuddyBlock(blocker_id=test_user.id, blocked_id=dave.id))
-    db_session.commit()
+    invite_id = invited.json()["invite_id"]
+    with as_user(db_session, dave) as dave_client:
+        dave_client.post(f"/api/v1/buddy/invites/{invite_id}/accept")
 
-    counts = AccountService.reset_cloud_data(db_session, test_user.id)
-    assert counts["buddy_links_deleted"] == 1
-    assert counts["buddy_blocks_deleted"] == 1
+    reset = client.post("/api/v1/auth/reset-data")
+    assert reset.status_code == 200
+    assert client.get("/api/v1/buddy").json()["status"] == "none"
+    assert db_session.get(User, test_user.id) is not None
+
+    with as_user(db_session, dave) as dave_client:
+        assert dave_client.get("/api/v1/buddy").json()["status"] == "none"
+        rita = _add_user(
+            db_session,
+            "rita-reset",
+            email="rita-reset@example.com",
+            username="ritareset",
+            name="Rita",
+        )
+        again = dave_client.post(
+            "/api/v1/buddy/invites",
+            json={"username": rita.username},
+        )
+        assert again.status_code == 200
+        assert again.json()["status"] == "outgoing"
+
+
+def test_reset_data_clears_pending_invite_for_the_other_person(
+    client, db_session
+):
+    dave = _seed_dave(db_session)
+    invited = client.post(
+        "/api/v1/buddy/invites",
+        json={"username": "davefitness"},
+    )
+    assert invited.json()["status"] == "outgoing"
+
+    assert client.post("/api/v1/auth/reset-data").status_code == 200
+
+    with as_user(db_session, dave) as dave_client:
+        assert dave_client.get("/api/v1/buddy").json()["status"] == "none"
+
+
+def test_delete_account_does_not_leave_ghost_buddy(client, db_session, test_user):
+    user_id = test_user.id
+    dave = _seed_dave(db_session)
+    invited = client.post(
+        "/api/v1/buddy/invites",
+        json={"username": "davefitness"},
+    )
+    invite_id = invited.json()["invite_id"]
+    with as_user(db_session, dave) as dave_client:
+        dave_client.post(f"/api/v1/buddy/invites/{invite_id}/accept")
+
+    with patch("app.routers.auth.SupabaseAuthService") as cls:
+        cls.return_value.delete_user.return_value = None
+        deleted = client.delete("/api/v1/auth/account")
+
+    assert deleted.status_code == 200
+    cls.return_value.delete_user.assert_called_once_with(user_id)
+    assert db_session.get(User, user_id) is None
+    assert db_session.get(User, dave.id) is not None
     assert db_session.query(BuddyLink).count() == 0
     assert db_session.query(BuddyBlock).count() == 0
+
+    with as_user(db_session, dave) as dave_client:
+        assert dave_client.get("/api/v1/buddy").json()["status"] == "none"
+        rita = _add_user(
+            db_session,
+            "rita-delete",
+            email="rita-delete@example.com",
+            username="ritadelete",
+            name="Rita",
+        )
+        again = dave_client.post(
+            "/api/v1/buddy/invites",
+            json={"username": rita.username},
+        )
+        assert again.status_code == 200
+        assert again.json()["status"] == "outgoing"

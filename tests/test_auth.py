@@ -5,10 +5,11 @@ from fastapi.testclient import TestClient
 
 from app.core.deps import get_db
 from app.main import create_app
+from app.models.buddy import BuddyBlock, BuddyLink
 from app.models.exercise import Exercise
 from app.models.sync import SyncCursor
-from app.models.workout_log import WorkoutLog
 from app.models.user import User
+from app.models.workout_log import WorkoutLog
 from app.services.supabase_auth import SupabaseAuthError
 
 
@@ -284,8 +285,10 @@ def test_logout_ok(auth_client):
 
 
 def test_reset_data_wipes_user_cloud_rows(client, db_session, test_user):
+    buddy = User(id="buddy-1", email="buddy@example.com", username="buddy")
     db_session.add_all(
         [
+            buddy,
             WorkoutLog(
                 id="w1",
                 client_id="c1",
@@ -308,6 +311,13 @@ def test_reset_data_wipes_user_cloud_rows(client, db_session, test_user):
                 user_id=test_user.id,
             ),
             SyncCursor(user_id=test_user.id),
+            BuddyLink(
+                id="link-reset",
+                requester_id=test_user.id,
+                addressee_id=buddy.id,
+                status="accepted",
+            ),
+            BuddyBlock(blocker_id=test_user.id, blocked_id=buddy.id),
         ]
     )
     db_session.commit()
@@ -317,20 +327,34 @@ def test_reset_data_wipes_user_cloud_rows(client, db_session, test_user):
     assert db_session.get(WorkoutLog, "w1") is None
     assert db_session.get(Exercise, "custom-1") is None
     assert db_session.get(SyncCursor, test_user.id) is None
-    # Account row kept
+    assert db_session.get(BuddyLink, "link-reset") is None
+    assert db_session.get(BuddyBlock, (test_user.id, buddy.id)) is None
+    # Account row kept; the other person is not deleted
     assert db_session.get(User, test_user.id) is not None
+    assert db_session.get(User, buddy.id) is not None
 
 
 def test_delete_account_hard_deletes_auth_and_neon(client, db_session, test_user):
     user_id = test_user.id
-    db_session.add(
-        WorkoutLog(
-            id="w2",
-            client_id="c2",
-            user_id=user_id,
-            date="2026-08-06",
-            exercises=[],
-        )
+    buddy = User(id="buddy-2", email="buddy2@example.com", username="buddy2")
+    db_session.add_all(
+        [
+            buddy,
+            WorkoutLog(
+                id="w2",
+                client_id="c2",
+                user_id=user_id,
+                date="2026-08-06",
+                exercises=[],
+            ),
+            BuddyLink(
+                id="link-delete",
+                requester_id=user_id,
+                addressee_id=buddy.id,
+                status="accepted",
+            ),
+            BuddyBlock(blocker_id=buddy.id, blocked_id=user_id),
+        ]
     )
     db_session.commit()
 
@@ -342,4 +366,7 @@ def test_delete_account_hard_deletes_auth_and_neon(client, db_session, test_user
     assert "permanently deleted" in response.json()["message"].lower()
     cls.return_value.delete_user.assert_called_once_with(user_id)
     assert db_session.get(WorkoutLog, "w2") is None
+    assert db_session.get(BuddyLink, "link-delete") is None
+    assert db_session.get(BuddyBlock, (buddy.id, user_id)) is None
     assert db_session.get(User, user_id) is None
+    assert db_session.get(User, buddy.id) is not None
