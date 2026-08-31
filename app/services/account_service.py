@@ -3,7 +3,14 @@ from __future__ import annotations
 from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
-from app.models.buddy import BuddyBlock, BuddyCheer, BuddyLink, BuddyNudge, BuddyPresence
+from app.models.buddy import (
+    BuddyBlock,
+    BuddyCheer,
+    BuddyLink,
+    BuddyNudge,
+    BuddyPresence,
+    BuddyRecordReaction,
+)
 from app.models.exercise import Exercise
 from app.models.library import UserLibrary
 from app.models.preferences import UserPreferences
@@ -43,6 +50,12 @@ class AccountService:
         cheers = db.execute(
             delete(BuddyCheer).where(BuddyCheer.user_id == user_id)
         ).rowcount
+        reactions = db.execute(
+            delete(BuddyRecordReaction).where(
+                (BuddyRecordReaction.user_id == user_id)
+                | (BuddyRecordReaction.record_id.startswith(f"{user_id}:"))
+            )
+        ).rowcount
         workouts = db.execute(
             delete(WorkoutLog).where(WorkoutLog.user_id == user_id)
         ).rowcount
@@ -80,6 +93,7 @@ class AccountService:
             "buddy_presence_deleted": int(presence or 0),
             "buddy_nudges_deleted": int(nudges or 0),
             "buddy_cheers_deleted": int(cheers or 0),
+            "buddy_record_reactions_deleted": int(reactions or 0),
             "workouts_deleted": int(workouts or 0),
             "custom_exercises_deleted": int(customs or 0),
             "sync_cursors_deleted": int(cursors or 0),

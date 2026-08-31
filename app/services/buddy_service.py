@@ -8,7 +8,14 @@ from fastapi import HTTPException, status
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
-from app.models.buddy import BuddyBlock, BuddyCheer, BuddyLink, BuddyNudge, BuddyPresence
+from app.models.buddy import (
+    BuddyBlock,
+    BuddyCheer,
+    BuddyLink,
+    BuddyNudge,
+    BuddyPresence,
+    BuddyRecordReaction,
+)
 from app.models.exercise import Exercise
 from app.models.profile import UserProfile
 from app.models.schedule import UserSchedule
@@ -24,8 +31,11 @@ from app.schemas.buddy import (
     BuddyNudgeResponse,
     BuddyPersonPublic,
     BuddyPresenceRequest,
+    BuddyRecordReactionsRequest,
+    BuddyRecordReactionsResponse,
     BuddySearchResponse,
     BuddyStateResponse,
+    BUDDY_REACTIONS,
 )
 from app.services.buddy_activity import build_activity_items
 from app.services.workout_stats import (
@@ -192,6 +202,8 @@ class BuddyService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="You don't have a buddy to remove",
             )
+        other_id = BuddyService._other_id(link, viewer_id)
+        BuddyService._wipe_record_reactions(db, [viewer_id, other_id])
         db.delete(link)
         db.commit()
         return BuddyService.get_state(db, viewer_id)
@@ -223,6 +235,7 @@ class BuddyService:
             )
 
         BuddyService._delete_links_between(db, viewer_id, target_id)
+        BuddyService._wipe_record_reactions(db, [viewer_id, target_id])
         existing = db.get(BuddyBlock, (viewer_id, target_id))
         if existing is None:
             db.add(BuddyBlock(blocker_id=viewer_id, blocked_id=target_id))
@@ -269,6 +282,25 @@ class BuddyService:
 
         labels = BuddyService._rep_labels(db, your_logs + buddy_logs)
         used, left = BuddyService._nudge_counts(db, viewer_id, today.isoformat())
+        your_records = personal_records(
+            your_logs,
+            owner="you",
+            today=today,
+            rep_labels=labels,
+            record_user_id=viewer_id,
+        )
+        buddy_records = personal_records(
+            buddy_logs,
+            owner="buddy",
+            today=today,
+            rep_labels=labels,
+            record_user_id=buddy.id,
+        )
+        reactions = BuddyService._reactions_for_records(
+            db, [row["id"] for row in your_records + buddy_records]
+        )
+        for row in your_records + buddy_records:
+            row["reactions"] = reactions.get(row["id"], [])
         return BuddyHomeResponse(
             person=_card_for(db, buddy),
             training_status=training_status,
@@ -277,17 +309,9 @@ class BuddyService:
             streak_days=current_streak(buddy_days, today),
             your_week_sessions=week_session_count(your_days, today),
             buddy_week_sessions=week_session_count(buddy_days, today),
-            your_records=[
-                BuddyHomeRecord.model_validate(row)
-                for row in personal_records(
-                    your_logs, owner="you", today=today, rep_labels=labels
-                )
-            ],
+            your_records=[BuddyHomeRecord.model_validate(row) for row in your_records],
             buddy_records=[
-                BuddyHomeRecord.model_validate(row)
-                for row in personal_records(
-                    buddy_logs, owner="buddy", today=today, rep_labels=labels
-                )
+                BuddyHomeRecord.model_validate(row) for row in buddy_records
             ],
             nudges_used=used,
             nudges_left=left,
@@ -403,6 +427,122 @@ class BuddyService:
             db.add(BuddyCheer(activity_id=activity_id, user_id=viewer_id))
             db.commit()
         return BuddyCheerResponse(id=activity_id, cheered=True)
+
+    @staticmethod
+    def toggle_record_reaction(
+        db: Session,
+        viewer_id: str,
+        record_id: str,
+        body: BuddyRecordReactionsRequest,
+    ) -> BuddyRecordReactionsResponse:
+        link = BuddyService._accepted_link(db, viewer_id)
+        if link is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="You don't have a buddy",
+            )
+        buddy_id = BuddyService._other_id(link, viewer_id)
+        resolved = BuddyService._resolve_record_id(
+            db, record_id, viewer_id, buddy_id
+        )
+        existing = db.get(
+            BuddyRecordReaction, (resolved, viewer_id, body.reaction)
+        )
+        if existing is None:
+            db.add(
+                BuddyRecordReaction(
+                    record_id=resolved,
+                    user_id=viewer_id,
+                    reaction=body.reaction,
+                )
+            )
+        else:
+            db.delete(existing)
+        db.commit()
+        reactions = BuddyService._reactions_for_records(db, [resolved]).get(
+            resolved, []
+        )
+        return BuddyRecordReactionsResponse(id=resolved, reactions=reactions)
+
+    @staticmethod
+    def _resolve_record_id(
+        db: Session,
+        raw: str,
+        viewer_id: str,
+        buddy_id: str,
+    ) -> str:
+        value = (raw or "").strip()
+        if ":" not in value:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Record not found",
+            )
+        prefix, exercise = value.split(":", 1)
+        exercise = exercise.strip()
+        if prefix == "you":
+            prefix = viewer_id
+        elif prefix == "buddy":
+            prefix = buddy_id
+        if not exercise or prefix not in {viewer_id, buddy_id}:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Record not found",
+            )
+        names = {
+            row["exercise"]
+            for row in personal_records(
+                BuddyService._logs_for(db, prefix),
+                owner="buddy" if prefix == buddy_id else "you",
+                today=_now().date(),
+                limit=500,
+                record_user_id=prefix,
+            )
+        }
+        if exercise not in names:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Record not found",
+            )
+        return f"{prefix}:{exercise}"
+
+    @staticmethod
+    def _reactions_for_records(
+        db: Session, record_ids: list[str]
+    ) -> dict[str, list[str]]:
+        if not record_ids:
+            return {}
+        rows = (
+            db.query(BuddyRecordReaction)
+            .filter(BuddyRecordReaction.record_id.in_(record_ids))
+            .all()
+        )
+        grouped: dict[str, set[str]] = {}
+        for row in rows:
+            grouped.setdefault(row.record_id, set()).add(row.reaction)
+        return {
+            record_id: [item for item in BUDDY_REACTIONS if item in types]
+            for record_id, types in grouped.items()
+        }
+
+    @staticmethod
+    def _wipe_record_reactions(db: Session, user_ids: list[str]) -> None:
+        if not user_ids:
+            return
+        (
+            db.query(BuddyRecordReaction)
+            .filter(
+                or_(
+                    BuddyRecordReaction.user_id.in_(user_ids),
+                    or_(
+                        *[
+                            BuddyRecordReaction.record_id.startswith(f"{user_id}:")
+                            for user_id in user_ids
+                        ]
+                    ),
+                )
+            )
+            .delete(synchronize_session=False)
+        )
 
     @staticmethod
     def _activity_items(db: Session, viewer_id: str, buddy: User, now: datetime):

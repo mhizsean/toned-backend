@@ -147,3 +147,27 @@ class BuddyCheer(Base):
         DateTime(timezone=True),
         server_default=func.now(),
     )
+
+
+class BuddyRecordReaction(Base):
+    """One emoji from one person on a PR card (`{user_id}:{exercise}`)."""
+
+    __tablename__ = "buddy_record_reactions"
+    __table_args__ = (
+        CheckConstraint(
+            "reaction IN ('clap', 'fire', 'flex', 'heart', 'hands')",
+            name="ck_buddy_record_reactions_type",
+        ),
+    )
+
+    record_id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(
+        String,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    reaction: Mapped[str] = mapped_column(String(16), primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+    )

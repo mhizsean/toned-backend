@@ -54,6 +54,14 @@ class BuddyStateResponse(BaseModel):
 BuddyTrainingStatus = Literal["not_started", "in_progress", "completed"]
 BuddyRecordOwner = Literal["you", "buddy"]
 BuddyPresenceStatus = Literal["started", "finished"]
+BuddyReaction = Literal["clap", "fire", "flex", "heart", "hands"]
+BUDDY_REACTIONS: tuple[BuddyReaction, ...] = (
+    "clap",
+    "fire",
+    "flex",
+    "heart",
+    "hands",
+)
 
 
 class BuddyHomeRecord(BaseModel):
@@ -63,7 +71,7 @@ class BuddyHomeRecord(BaseModel):
     primary: str
     achieved_on: str
     ago: str
-    reactions: list[str] = Field(default_factory=list)
+    reactions: list[BuddyReaction] = Field(default_factory=list)
 
 
 class BuddyHomeResponse(BaseModel):
@@ -114,3 +122,12 @@ class BuddyActivityResponse(BaseModel):
 class BuddyCheerResponse(BaseModel):
     id: str
     cheered: bool = True
+
+
+class BuddyRecordReactionsRequest(BaseModel):
+    reaction: BuddyReaction
+
+
+class BuddyRecordReactionsResponse(BaseModel):
+    id: str
+    reactions: list[BuddyReaction] = Field(default_factory=list)

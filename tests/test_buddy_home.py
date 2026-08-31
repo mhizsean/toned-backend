@@ -205,7 +205,7 @@ def test_home_records_keep_best_set_and_empty_reactions(
     assert records["Pull-ups"]["primary"] == "15 reps"
     assert records["Plank"]["primary"] == "1m 30s"
     assert records["Back Squat"]["reactions"] == []
-    assert records["Back Squat"]["id"] == "buddy:Back Squat"
+    assert records["Back Squat"]["id"] == "dave-1:Back Squat"
 
 
 def test_presence_marks_in_progress_then_clears(client, db_session, test_user):

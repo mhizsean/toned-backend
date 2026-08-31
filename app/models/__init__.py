@@ -1,6 +1,13 @@
 """Import all ORM models so SQLAlchemy relationship strings resolve."""
 
-from app.models.buddy import BuddyBlock, BuddyCheer, BuddyLink, BuddyNudge, BuddyPresence
+from app.models.buddy import (
+    BuddyBlock,
+    BuddyCheer,
+    BuddyLink,
+    BuddyNudge,
+    BuddyPresence,
+    BuddyRecordReaction,
+)
 from app.models.exercise import Exercise
 from app.models.library import UserLibrary
 from app.models.preferences import UserPreferences
@@ -17,6 +24,7 @@ __all__ = [
     "BuddyLink",
     "BuddyNudge",
     "BuddyPresence",
+    "BuddyRecordReaction",
     "Exercise",
     "UserLibrary",
     "UserPreferences",

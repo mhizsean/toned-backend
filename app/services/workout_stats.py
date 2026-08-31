@@ -144,8 +144,10 @@ def personal_records(
     today: date,
     rep_labels: dict[str, str] | None = None,
     limit: int = RECORD_LIMIT,
+    record_user_id: str | None = None,
 ) -> list[dict[str, Any]]:
     labels = rep_labels or {}
+    record_key = record_user_id or owner
     best: dict[str, dict[str, Any]] = {}
 
     for log in logs:
@@ -188,7 +190,7 @@ def personal_records(
     for name, pr in ranked:
         records.append(
             {
-                "id": f"{owner}:{name}",
+                "id": f"{record_key}:{name}",
                 "owner": owner,
                 "exercise": name,
                 "primary": format_primary(pr["weight"], pr["reps"], pr["rep_label"]),

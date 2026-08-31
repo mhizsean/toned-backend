@@ -1,3 +1,5 @@
+from urllib.parse import unquote
+
 from fastapi import APIRouter
 
 from app.core.deps import CurrentUser, DbSession
@@ -9,6 +11,8 @@ from app.schemas.buddy import (
     BuddyInviteRequest,
     BuddyNudgeResponse,
     BuddyPresenceRequest,
+    BuddyRecordReactionsRequest,
+    BuddyRecordReactionsResponse,
     BuddyStateResponse,
 )
 from app.services.buddy_service import BuddyService
@@ -52,6 +56,18 @@ def cheer_activity(
     user: CurrentUser,
 ) -> BuddyCheerResponse:
     return BuddyService.cheer(db, user.id, activity_id)
+
+
+@router.put("/records/{record_id}/reactions", response_model=BuddyRecordReactionsResponse)
+def toggle_record_reaction(
+    record_id: str,
+    body: BuddyRecordReactionsRequest,
+    db: DbSession,
+    user: CurrentUser,
+) -> BuddyRecordReactionsResponse:
+    return BuddyService.toggle_record_reaction(
+        db, user.id, unquote(record_id), body
+    )
 
 
 @router.post("/invites", response_model=BuddyStateResponse)
