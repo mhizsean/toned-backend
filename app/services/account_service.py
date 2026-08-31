@@ -3,6 +3,7 @@ from __future__ import annotations
 from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
+from app.models.buddy import BuddyBlock, BuddyLink
 from app.models.exercise import Exercise
 from app.models.library import UserLibrary
 from app.models.preferences import UserPreferences
@@ -18,6 +19,18 @@ class AccountService:
     @staticmethod
     def reset_cloud_data(db: Session, user_id: str) -> dict[str, int]:
         """Wipe app data for a user in Neon. Keeps the auth/user row."""
+        links = db.execute(
+            delete(BuddyLink).where(
+                (BuddyLink.requester_id == user_id)
+                | (BuddyLink.addressee_id == user_id)
+            )
+        ).rowcount
+        blocks = db.execute(
+            delete(BuddyBlock).where(
+                (BuddyBlock.blocker_id == user_id)
+                | (BuddyBlock.blocked_id == user_id)
+            )
+        ).rowcount
         workouts = db.execute(
             delete(WorkoutLog).where(WorkoutLog.user_id == user_id)
         ).rowcount
@@ -50,6 +63,8 @@ class AccountService:
         ).rowcount
         db.commit()
         return {
+            "buddy_links_deleted": int(links or 0),
+            "buddy_blocks_deleted": int(blocks or 0),
             "workouts_deleted": int(workouts or 0),
             "custom_exercises_deleted": int(customs or 0),
             "sync_cursors_deleted": int(cursors or 0),

@@ -1,0 +1,66 @@
+from fastapi import APIRouter
+
+from app.core.deps import CurrentUser, DbSession
+from app.schemas.buddy import (
+    BuddyBlockRequest,
+    BuddyInviteRequest,
+    BuddyStateResponse,
+)
+from app.services.buddy_service import BuddyService
+
+router = APIRouter(prefix="/buddy", tags=["buddy"])
+
+
+@router.get("", response_model=BuddyStateResponse)
+def get_buddy(db: DbSession, user: CurrentUser) -> BuddyStateResponse:
+    return BuddyService.get_state(db, user.id)
+
+
+@router.post("/invites", response_model=BuddyStateResponse)
+def create_invite(
+    body: BuddyInviteRequest,
+    db: DbSession,
+    user: CurrentUser,
+) -> BuddyStateResponse:
+    return BuddyService.invite(db, user.id, body)
+
+
+@router.post("/invites/{invite_id}/accept", response_model=BuddyStateResponse)
+def accept_invite(
+    invite_id: str,
+    db: DbSession,
+    user: CurrentUser,
+) -> BuddyStateResponse:
+    return BuddyService.accept(db, user.id, invite_id)
+
+
+@router.post("/invites/{invite_id}/decline", response_model=BuddyStateResponse)
+def decline_invite(
+    invite_id: str,
+    db: DbSession,
+    user: CurrentUser,
+) -> BuddyStateResponse:
+    return BuddyService.decline(db, user.id, invite_id)
+
+
+@router.delete("/invites/{invite_id}", response_model=BuddyStateResponse)
+def cancel_invite(
+    invite_id: str,
+    db: DbSession,
+    user: CurrentUser,
+) -> BuddyStateResponse:
+    return BuddyService.cancel(db, user.id, invite_id)
+
+
+@router.delete("", response_model=BuddyStateResponse)
+def remove_buddy(db: DbSession, user: CurrentUser) -> BuddyStateResponse:
+    return BuddyService.remove(db, user.id)
+
+
+@router.post("/block", response_model=BuddyStateResponse)
+def block_buddy(
+    db: DbSession,
+    user: CurrentUser,
+    body: BuddyBlockRequest | None = None,
+) -> BuddyStateResponse:
+    return BuddyService.block(db, user.id, body or BuddyBlockRequest())

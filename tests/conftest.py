@@ -12,6 +12,7 @@ from app.core.deps import get_current_user, get_db, get_optional_user
 from app.db.base import Base
 from app.main import create_app
 from app.models import (  # noqa: F401
+    buddy,
     exercise,
     library,
     preferences,
