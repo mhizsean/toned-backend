@@ -6,18 +6,10 @@ from sqlalchemy.orm import Session
 
 from app.models.preferences import UserPreferences
 from app.schemas.preferences import (
+    NOTIFY_FIELDS,
     PreferencesReplaceRequest,
     PreferencesResponse,
     PreferencesUpdate,
-)
-
-NOTIFY_FIELDS = (
-    "notify_buddy_completed",
-    "notify_buddy_started",
-    "notify_buddy_nudge",
-    "notify_buddy_eod",
-    "notify_buddy_reacted",
-    "notifications_enabled",
 )
 
 
@@ -32,6 +24,12 @@ def _to_response(row: UserPreferences | None) -> PreferencesResponse:
         notify_buddy_nudge=bool(row.notify_buddy_nudge),
         notify_buddy_eod=bool(row.notify_buddy_eod),
         notify_buddy_reacted=bool(row.notify_buddy_reacted),
+        notify_end_of_day=bool(row.notify_end_of_day),
+        notify_session_inactivity=bool(row.notify_session_inactivity),
+        notify_rest_complete=bool(row.notify_rest_complete),
+        notify_morning_plan=bool(row.notify_morning_plan),
+        notify_streak_at_risk=bool(row.notify_streak_at_risk),
+        notify_weekly_plan=bool(row.notify_weekly_plan),
         notifications_enabled=bool(row.notifications_enabled),
         signup_nudge_last_shown_at=row.signup_nudge_last_shown_at,
         signup_nudge_dismissed_at=row.signup_nudge_dismissed_at,

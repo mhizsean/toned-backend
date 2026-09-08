@@ -179,6 +179,12 @@ def test_preferences_defaults_match_screenshot(client):
     assert body["notify_buddy_nudge"] is True
     assert body["notify_buddy_eod"] is True
     assert body["notify_buddy_reacted"] is False
+    assert body["notify_end_of_day"] is True
+    assert body["notify_session_inactivity"] is True
+    assert body["notify_rest_complete"] is True
+    assert body["notify_morning_plan"] is True
+    assert body["notify_streak_at_risk"] is True
+    assert body["notify_weekly_plan"] is True
     assert body["notifications_enabled"] is True
 
 

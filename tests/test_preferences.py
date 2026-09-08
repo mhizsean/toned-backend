@@ -8,6 +8,12 @@ def test_preferences_defaults(client):
     assert body["weight_unit"] == "kg"
     assert body["buddy_nudge_limit"] == 3
     assert body["notifications_enabled"] is True
+    assert body["notify_end_of_day"] is True
+    assert body["notify_session_inactivity"] is True
+    assert body["notify_rest_complete"] is True
+    assert body["notify_morning_plan"] is True
+    assert body["notify_streak_at_risk"] is True
+    assert body["notify_weekly_plan"] is True
     assert body["signup_nudge_last_shown_at"] is None
     assert body["signup_nudge_dismissed_at"] is None
 
@@ -43,6 +49,29 @@ def test_preferences_nudge_limit_is_fixed_at_three(client):
     assert still.json()["buddy_nudge_limit"] == 3
 
 
+def test_preferences_local_reminders_are_independent_of_buddy_eod(client):
+    patched = client.patch(
+        "/api/v1/preferences",
+        json={
+            "notify_end_of_day": False,
+            "notify_session_inactivity": False,
+            "notify_rest_complete": False,
+            "notify_morning_plan": False,
+            "notify_streak_at_risk": False,
+            "notify_weekly_plan": False,
+        },
+    )
+    assert patched.status_code == 200
+    body = patched.json()
+    assert body["notify_end_of_day"] is False
+    assert body["notify_session_inactivity"] is False
+    assert body["notify_rest_complete"] is False
+    assert body["notify_morning_plan"] is False
+    assert body["notify_streak_at_risk"] is False
+    assert body["notify_weekly_plan"] is False
+    assert body["notify_buddy_eod"] is True
+
+
 def test_preferences_in_sync(client):
     push = client.post(
         "/api/v1/sync/push",
@@ -62,3 +91,28 @@ def test_preferences_in_sync(client):
     assert pull.status_code == 200
     assert pull.json()["preferences"]["weight_unit"] == "lb"
     assert pull.json()["preferences"]["buddy_nudge_limit"] == 3
+
+
+def test_preferences_local_reminders_in_sync(client):
+    push = client.post(
+        "/api/v1/sync/push",
+        json={
+            "preferences": {
+                "weight_unit": "kg",
+                "notify_end_of_day": False,
+                "notify_morning_plan": False,
+                "notify_buddy_eod": True,
+            }
+        },
+        headers=auth_headers(),
+    )
+    assert push.status_code == 200
+    prefs = push.json()["preferences"]
+    assert prefs["notify_end_of_day"] is False
+    assert prefs["notify_morning_plan"] is False
+    assert prefs["notify_buddy_eod"] is True
+    assert prefs["notify_session_inactivity"] is True
+
+    pull = client.get("/api/v1/sync/pull", headers=auth_headers())
+    assert pull.json()["preferences"]["notify_end_of_day"] is False
+    assert pull.json()["preferences"]["notify_buddy_eod"] is True

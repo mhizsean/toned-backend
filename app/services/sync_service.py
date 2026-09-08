@@ -12,7 +12,11 @@ from app.models.sync import SyncCursor
 from app.models.workout_log import WorkoutLog
 from app.schemas.exercise import ExerciseCreate, ExerciseRead
 from app.schemas.library import LibraryExercise, LibraryReplaceRequest, LibraryResponse
-from app.schemas.preferences import PreferencesReplaceRequest, PreferencesResponse
+from app.schemas.preferences import (
+    NOTIFY_FIELDS,
+    PreferencesReplaceRequest,
+    PreferencesResponse,
+)
 from app.schemas.schedule import DaySchedule, ScheduleReplaceRequest, ScheduleResponse
 from app.schemas.session_template import SessionTemplateCreate, SessionTemplateRead
 from app.schemas.sync import (
@@ -420,12 +424,7 @@ class SyncService:
         notes: list[str] = []
         cloud_as = PreferencesReplaceRequest(
             weight_unit=cloud.weight_unit,
-            notify_buddy_completed=cloud.notify_buddy_completed,
-            notify_buddy_started=cloud.notify_buddy_started,
-            notify_buddy_nudge=cloud.notify_buddy_nudge,
-            notify_buddy_eod=cloud.notify_buddy_eod,
-            notify_buddy_reacted=cloud.notify_buddy_reacted,
-            notifications_enabled=cloud.notifications_enabled,
+            **{field: getattr(cloud, field) for field in NOTIFY_FIELDS},
             signup_nudge_last_shown_at=cloud.signup_nudge_last_shown_at,
             signup_nudge_dismissed_at=cloud.signup_nudge_dismissed_at,
         )
@@ -455,38 +454,17 @@ class SyncService:
             dismissed = dismissed or cloud_dismissed
 
         notes.append("preferences: unioned (local weight_unit, max nudge timestamps)")
+        merged = {
+            field: (
+                getattr(local, field)
+                if getattr(local, field) is not None
+                else getattr(cloud, field)
+            )
+            for field in NOTIFY_FIELDS
+        }
         return PreferencesReplaceRequest(
             weight_unit=local.weight_unit,
-            notify_buddy_completed=(
-                local.notify_buddy_completed
-                if local.notify_buddy_completed is not None
-                else cloud.notify_buddy_completed
-            ),
-            notify_buddy_started=(
-                local.notify_buddy_started
-                if local.notify_buddy_started is not None
-                else cloud.notify_buddy_started
-            ),
-            notify_buddy_nudge=(
-                local.notify_buddy_nudge
-                if local.notify_buddy_nudge is not None
-                else cloud.notify_buddy_nudge
-            ),
-            notify_buddy_eod=(
-                local.notify_buddy_eod
-                if local.notify_buddy_eod is not None
-                else cloud.notify_buddy_eod
-            ),
-            notify_buddy_reacted=(
-                local.notify_buddy_reacted
-                if local.notify_buddy_reacted is not None
-                else cloud.notify_buddy_reacted
-            ),
-            notifications_enabled=(
-                local.notifications_enabled
-                if local.notifications_enabled is not None
-                else cloud.notifications_enabled
-            ),
+            **merged,
             signup_nudge_last_shown_at=last_shown,
             signup_nudge_dismissed_at=dismissed,
         ), notes
