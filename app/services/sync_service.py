@@ -50,6 +50,7 @@ class SyncService:
                 "exercises": [ex.model_dump() for ex in item.exercises],
                 "client_id": item.client_id or workout_id,
                 "user_id": user_id,
+                "elapsed_ms": item.elapsed_ms,
             }
             if existing and existing.user_id == user_id:
                 for key, value in payload.items():
@@ -505,6 +506,7 @@ class SyncService:
             date=row.date,
             client_id=row.client_id,
             exercises=row.exercises,
+            elapsed_ms=row.elapsed_ms,
         )
 
     @staticmethod

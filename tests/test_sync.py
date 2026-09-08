@@ -5,6 +5,7 @@ def test_sync_push_and_pull_workouts(client):
     workout = {
         "date": "2026-07-03T10:00:00.000Z",
         "client_id": "client-session-1",
+        "elapsed_ms": 42_000,
         "exercises": [
             {
                 "name": "Squat",
@@ -28,6 +29,7 @@ def test_sync_push_and_pull_workouts(client):
     body = pull.json()
     assert len(body["workouts"]) == 1
     assert body["workouts"][0]["client_id"] == "client-session-1"
+    assert body["workouts"][0]["elapsed_ms"] == 42_000
     assert body["schedule"]["schedule"] == {}
     assert body["library"]["items"] == []
     assert body["preferences"]["weight_unit"] == "kg"

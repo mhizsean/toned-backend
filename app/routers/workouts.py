@@ -61,14 +61,28 @@ def create_workout(
     workout_id = data.id or str(uuid.uuid4())
     key = (data.date or "")[:10]
     before = BuddyService.workout_day_counts(db, user.id, {key})
-    log = WorkoutLog(
-        id=workout_id,
-        user_id=user.id,
-        client_id=data.client_id or workout_id,
-        date=data.date,
-        exercises=[ex.model_dump() for ex in data.exercises],
-    )
-    db.add(log)
+    exercises = [ex.model_dump() for ex in data.exercises]
+    client_id = data.client_id or workout_id
+    existing = db.get(WorkoutLog, workout_id)
+    if existing is not None and existing.user_id == user.id:
+        existing.date = data.date
+        existing.exercises = exercises
+        existing.client_id = client_id
+        existing.elapsed_ms = data.elapsed_ms
+        log = existing
+    else:
+        if existing is not None:
+            workout_id = str(uuid.uuid4())
+            client_id = data.client_id or workout_id
+        log = WorkoutLog(
+            id=workout_id,
+            user_id=user.id,
+            client_id=client_id,
+            date=data.date,
+            exercises=exercises,
+            elapsed_ms=data.elapsed_ms,
+        )
+        db.add(log)
     db.commit()
     db.refresh(log)
     BuddyService.on_workouts_saved(
@@ -92,6 +106,8 @@ def update_workout(
         log.date = data.date
     if data.exercises is not None:
         log.exercises = [ex.model_dump() for ex in data.exercises]
+    if data.elapsed_ms is not None:
+        log.elapsed_ms = data.elapsed_ms
 
     db.commit()
     db.refresh(log)

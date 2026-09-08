@@ -17,6 +17,7 @@ class WorkoutLogBase(BaseModel):
     date: str
     exercises: list[SessionExerciseSchema]
     client_id: str | None = None
+    elapsed_ms: int = Field(default=0, ge=0)
 
 
 class WorkoutLogCreate(WorkoutLogBase):
@@ -26,6 +27,7 @@ class WorkoutLogCreate(WorkoutLogBase):
 class WorkoutLogUpdate(BaseModel):
     date: str | None = None
     exercises: list[SessionExerciseSchema] | None = None
+    elapsed_ms: int | None = Field(default=None, ge=0)
 
 
 class WorkoutLogRead(WorkoutLogBase):
