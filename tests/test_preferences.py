@@ -34,15 +34,13 @@ def test_preferences_patch(client):
     assert dismiss.json()["weight_unit"] == "lb"
 
 
-def test_preferences_nudge_limit_must_be_two_or_three(client):
-    ok = client.patch("/api/v1/preferences", json={"buddy_nudge_limit": 2})
-    assert ok.status_code == 200
-    assert ok.json()["buddy_nudge_limit"] == 2
+def test_preferences_nudge_limit_is_fixed_at_three(client):
+    patched = client.patch("/api/v1/preferences", json={"buddy_nudge_limit": 2})
+    assert patched.status_code == 200
+    assert patched.json()["buddy_nudge_limit"] == 3
 
-    bad = client.patch("/api/v1/preferences", json={"buddy_nudge_limit": 4})
-    assert bad.status_code == 422
     still = client.get("/api/v1/preferences")
-    assert still.json()["buddy_nudge_limit"] == 2
+    assert still.json()["buddy_nudge_limit"] == 3
 
 
 def test_preferences_in_sync(client):

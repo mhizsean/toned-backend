@@ -7,7 +7,7 @@ from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
-from app.core.deps import CurrentUser, DbSession, security
+from app.core.deps import CurrentUser, DbSession, OptionalUser, security
 from app.models.user import User
 from app.schemas.auth import (
     AuthSessionResponse,
@@ -169,11 +169,13 @@ def get_me(user: CurrentUser) -> AuthMeResponse:
 def get_username_available(
     username: str,
     db: DbSession,
+    user: OptionalUser,
 ) -> UsernameAvailableResponse:
     normalized = normalize_username(username)
     if not is_valid_username(normalized):
         return UsernameAvailableResponse(available=False, reason=USERNAME_HINT)
-    if username_taken(db, normalized):
+    exclude_id = user.id if user is not None else None
+    if username_taken(db, normalized, exclude_user_id=exclude_id):
         return UsernameAvailableResponse(
             available=False,
             reason="That username is taken",

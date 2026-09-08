@@ -18,7 +18,6 @@ from app.models.buddy import (
     BuddyRecordReaction,
 )
 from app.models.exercise import Exercise
-from app.models.preferences import UserPreferences
 from app.models.profile import UserProfile
 from app.models.schedule import UserSchedule
 from app.models.user import User
@@ -755,19 +754,12 @@ class BuddyService:
         )
 
     @staticmethod
-    def _nudge_limit(db: Session, user_id: str) -> int:
-        row = db.get(UserPreferences, user_id)
-        if row is not None and row.buddy_nudge_limit in (2, 3):
-            return int(row.buddy_nudge_limit)
-        return DAILY_NUDGE_LIMIT
-
-    @staticmethod
     def _nudge_counts(
         db: Session,
         viewer_id: str,
         today_key: str,
     ) -> tuple[int, int, int]:
-        limit = BuddyService._nudge_limit(db, viewer_id)
+        limit = DAILY_NUDGE_LIMIT
         used = (
             db.query(func.count(BuddyNudge.id))
             .filter(

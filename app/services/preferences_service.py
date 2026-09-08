@@ -24,10 +24,9 @@ NOTIFY_FIELDS = (
 def _to_response(row: UserPreferences | None) -> PreferencesResponse:
     if row is None:
         return PreferencesResponse()
-    limit = row.buddy_nudge_limit if row.buddy_nudge_limit in (2, 3) else 3
     return PreferencesResponse(
         weight_unit=row.weight_unit,  # type: ignore[arg-type]
-        buddy_nudge_limit=limit,  # type: ignore[arg-type]
+        buddy_nudge_limit=3,
         notify_buddy_completed=bool(row.notify_buddy_completed),
         notify_buddy_started=bool(row.notify_buddy_started),
         notify_buddy_nudge=bool(row.notify_buddy_nudge),
@@ -64,6 +63,7 @@ class PreferencesService:
         updates = body.model_dump(exclude_unset=True)
         for key, value in updates.items():
             setattr(row, key, value)
+        row.buddy_nudge_limit = 3
         row.updated_at = datetime.now(timezone.utc)
         db.commit()
         db.refresh(row)
@@ -77,8 +77,7 @@ class PreferencesService:
     ) -> PreferencesResponse:
         row = PreferencesService._ensure_row(db, user_id)
         row.weight_unit = body.weight_unit
-        if body.buddy_nudge_limit is not None:
-            row.buddy_nudge_limit = body.buddy_nudge_limit
+        row.buddy_nudge_limit = 3
         for field in NOTIFY_FIELDS:
             value = getattr(body, field)
             if value is not None:

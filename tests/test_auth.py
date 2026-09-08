@@ -92,6 +92,21 @@ def test_username_available_endpoint(auth_client, db_session):
     assert invalid.json()["available"] is False
 
 
+def test_username_available_allows_own_handle(client, db_session, test_user):
+    test_user.username = "seanseun"
+    db_session.commit()
+    mine = client.get(
+        "/api/v1/auth/username-available",
+        params={"username": "seanseun"},
+    )
+    other = client.get(
+        "/api/v1/auth/username-available",
+        params={"username": "open_handle"},
+    )
+    assert mine.json() == {"available": True, "reason": None}
+    assert other.json() == {"available": True, "reason": None}
+
+
 def test_signin_invalid_credentials(auth_client):
     with patch("app.routers.auth.SupabaseAuthService") as cls:
         cls.return_value.sign_in.side_effect = SupabaseAuthError(

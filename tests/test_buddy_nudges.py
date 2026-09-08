@@ -1,4 +1,5 @@
 from app.models.buddy import BuddyNudge
+from app.models.preferences import UserPreferences
 from app.services.account_service import AccountService
 from tests.test_buddy_home import _pair
 from tests.test_buddy_invites import _seed_dave, as_user
@@ -33,22 +34,30 @@ def test_nudge_counts_up_to_three_then_rejects(client, db_session, test_user):
     assert home["nudge_limit"] == 3
 
 
-def test_nudge_cap_follows_preferences(client, db_session, test_user):
+def test_nudge_cap_ignores_stored_preference(client, db_session, test_user):
     dave = _seed_dave(db_session)
     _pair(db_session, test_user.id, dave.id)
-    patched = client.patch("/api/v1/preferences", json={"buddy_nudge_limit": 2})
-    assert patched.json()["buddy_nudge_limit"] == 2
+    db_session.add(
+        UserPreferences(
+            user_id=test_user.id,
+            weight_unit="kg",
+            buddy_nudge_limit=2,
+        )
+    )
+    db_session.commit()
 
     first = client.post("/api/v1/buddy/nudge")
-    assert first.json() == {"used": 1, "left": 1, "limit": 2}
+    assert first.json() == {"used": 1, "left": 2, "limit": 3}
     second = client.post("/api/v1/buddy/nudge")
-    assert second.json() == {"used": 2, "left": 0, "limit": 2}
+    assert second.json() == {"used": 2, "left": 1, "limit": 3}
+    third = client.post("/api/v1/buddy/nudge")
+    assert third.json() == {"used": 3, "left": 0, "limit": 3}
     blocked = client.post("/api/v1/buddy/nudge")
     assert blocked.status_code == 429
     home = client.get("/api/v1/buddy/home").json()
-    assert home["nudges_used"] == 2
+    assert home["nudges_used"] == 3
     assert home["nudges_left"] == 0
-    assert home["nudge_limit"] == 2
+    assert home["nudge_limit"] == 3
 
 
 def test_nudge_cap_is_per_sender_and_resets_next_day(

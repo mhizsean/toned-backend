@@ -6,12 +6,10 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict
 
 WeightUnit = Literal["kg", "lb"]
-BuddyNudgeLimit = Literal[2, 3]
 
 
 class PreferencesUpdate(BaseModel):
     weight_unit: WeightUnit | None = None
-    buddy_nudge_limit: BuddyNudgeLimit | None = None
     notify_buddy_completed: bool | None = None
     notify_buddy_started: bool | None = None
     notify_buddy_nudge: bool | None = None
@@ -26,7 +24,7 @@ class PreferencesResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     weight_unit: WeightUnit = "kg"
-    buddy_nudge_limit: BuddyNudgeLimit = 3
+    buddy_nudge_limit: Literal[3] = 3
     notify_buddy_completed: bool = True
     notify_buddy_started: bool = False
     notify_buddy_nudge: bool = True
@@ -42,7 +40,6 @@ class PreferencesReplaceRequest(BaseModel):
     """Full snapshot for sync push."""
 
     weight_unit: WeightUnit = "kg"
-    buddy_nudge_limit: BuddyNudgeLimit | None = None
     notify_buddy_completed: bool | None = None
     notify_buddy_started: bool | None = None
     notify_buddy_nudge: bool | None = None
