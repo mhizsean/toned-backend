@@ -22,13 +22,13 @@ def test_preferences_patch(client):
     response = client.patch(
         "/api/v1/preferences",
         json={
-            "weight_unit": "lb",
+            "weight_unit": "lbs",
             "signup_nudge_last_shown_at": "2026-08-10T12:00:00Z",
         },
     )
     assert response.status_code == 200
     body = response.json()
-    assert body["weight_unit"] == "lb"
+    assert body["weight_unit"] == "lbs"
     assert body["signup_nudge_last_shown_at"] is not None
 
     dismiss = client.patch(
@@ -37,7 +37,7 @@ def test_preferences_patch(client):
     )
     assert dismiss.status_code == 200
     assert dismiss.json()["signup_nudge_dismissed_at"] is not None
-    assert dismiss.json()["weight_unit"] == "lb"
+    assert dismiss.json()["weight_unit"] == "lbs"
 
 
 def test_preferences_nudge_limit_is_fixed_at_three(client):
@@ -47,6 +47,12 @@ def test_preferences_nudge_limit_is_fixed_at_three(client):
 
     still = client.get("/api/v1/preferences")
     assert still.json()["buddy_nudge_limit"] == 3
+
+
+def test_preferences_accepts_legacy_lb_spelling(client):
+    patched = client.patch("/api/v1/preferences", json={"weight_unit": "lb"})
+    assert patched.status_code == 200
+    assert patched.json()["weight_unit"] == "lbs"
 
 
 def test_preferences_local_reminders_are_independent_of_buddy_eod(client):
@@ -77,19 +83,19 @@ def test_preferences_in_sync(client):
         "/api/v1/sync/push",
         json={
             "preferences": {
-                "weight_unit": "lb",
+                "weight_unit": "lbs",
                 "signup_nudge_dismissed_at": "2026-08-01T00:00:00Z",
             }
         },
         headers=auth_headers(),
     )
     assert push.status_code == 200
-    assert push.json()["preferences"]["weight_unit"] == "lb"
+    assert push.json()["preferences"]["weight_unit"] == "lbs"
     assert push.json()["preferences"]["buddy_nudge_limit"] == 3
 
     pull = client.get("/api/v1/sync/pull", headers=auth_headers())
     assert pull.status_code == 200
-    assert pull.json()["preferences"]["weight_unit"] == "lb"
+    assert pull.json()["preferences"]["weight_unit"] == "lbs"
     assert pull.json()["preferences"]["buddy_nudge_limit"] == 3
 
 

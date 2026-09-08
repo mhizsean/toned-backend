@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict
-
-WeightUnit = Literal["kg", "lb"]
+from pydantic import BaseModel, BeforeValidator, ConfigDict
 
 NOTIFY_FIELDS = (
     "notify_buddy_completed",
@@ -23,8 +21,18 @@ NOTIFY_FIELDS = (
 )
 
 
+def _coerce_weight_unit(value: object) -> object:
+    if value == "lb":
+        return "lbs"
+    return value
+
+
+WeightUnit = Literal["kg", "lbs"]
+CoercedWeightUnit = Annotated[WeightUnit, BeforeValidator(_coerce_weight_unit)]
+
+
 class PreferencesUpdate(BaseModel):
-    weight_unit: WeightUnit | None = None
+    weight_unit: CoercedWeightUnit | None = None
     notify_buddy_completed: bool | None = None
     notify_buddy_started: bool | None = None
     notify_buddy_nudge: bool | None = None
@@ -44,7 +52,7 @@ class PreferencesUpdate(BaseModel):
 class PreferencesResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    weight_unit: WeightUnit = "kg"
+    weight_unit: CoercedWeightUnit = "kg"
     buddy_nudge_limit: Literal[3] = 3
     notify_buddy_completed: bool = True
     notify_buddy_started: bool = False
@@ -66,7 +74,7 @@ class PreferencesResponse(BaseModel):
 class PreferencesReplaceRequest(BaseModel):
     """Full snapshot for sync push."""
 
-    weight_unit: WeightUnit = "kg"
+    weight_unit: CoercedWeightUnit = "kg"
     notify_buddy_completed: bool | None = None
     notify_buddy_started: bool | None = None
     notify_buddy_nudge: bool | None = None

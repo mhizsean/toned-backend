@@ -168,7 +168,7 @@ def test_sync_merge_prefer_local_unions_and_resolves_conflicts(client):
                     {"id": None, "name": "My Curl"},
                 ],
                 "preferences": {
-                    "weight_unit": "lb",
+                    "weight_unit": "lbs",
                     "signup_nudge_last_shown_at": "2026-08-01T00:00:00Z",
                 },
             },
@@ -188,7 +188,7 @@ def test_sync_merge_prefer_local_unions_and_resolves_conflicts(client):
     names = {item["name"] for item in body["library"]["items"]}
     assert names == {"push-up", "My Curl"}
 
-    assert body["preferences"]["weight_unit"] == "lb"
+    assert body["preferences"]["weight_unit"] == "lbs"
 
     by_client = {w["client_id"]: w for w in body["workouts"]}
     assert set(by_client) == {"shared-session", "cloud-only", "local-only"}
@@ -264,7 +264,7 @@ def test_sync_merge_prefer_cloud_keeps_cloud_on_conflict(client):
                         "exercises": [],
                     }
                 },
-                "preferences": {"weight_unit": "lb"},
+                "preferences": {"weight_unit": "lbs"},
             },
         },
         headers=auth_headers(),
