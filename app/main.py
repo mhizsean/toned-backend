@@ -13,6 +13,7 @@ from app.routers import (
     preferences,
     profile,
     schedule,
+    support,
     sync,
     templates,
     workouts,
@@ -45,6 +46,7 @@ def create_app() -> FastAPI:
     app.include_router(profile.router, prefix=prefix)
     app.include_router(preferences.router, prefix=prefix)
     app.include_router(schedule.router, prefix=prefix)
+    app.include_router(support.router, prefix=prefix)
     app.include_router(templates.router, prefix=prefix)
     app.include_router(workouts.router, prefix=prefix)
     app.include_router(sync.router, prefix=prefix)

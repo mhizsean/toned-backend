@@ -13,6 +13,7 @@ from app.models import (  # noqa: F401
     preferences,
     schedule,
     session_template,
+    support,
     sync,
     user,
     workout_log,

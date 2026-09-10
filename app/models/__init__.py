@@ -16,6 +16,7 @@ from app.models.preferences import UserPreferences
 from app.models.profile import UserProfile
 from app.models.schedule import UserSchedule
 from app.models.session_template import SessionTemplate
+from app.models.support import SupportMessage
 from app.models.sync import SyncCursor
 from app.models.user import User
 from app.models.workout_log import WorkoutLog
@@ -35,6 +36,7 @@ __all__ = [
     "UserProfile",
     "UserSchedule",
     "SessionTemplate",
+    "SupportMessage",
     "SyncCursor",
     "User",
     "WorkoutLog",
