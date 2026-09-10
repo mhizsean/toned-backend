@@ -19,6 +19,7 @@ class SupportService:
             id=str(uuid.uuid4()),
             user_id=user_id,
             username=body.username.strip(),
+            email=str(body.email).strip().lower(),
             category=body.category,
             message=body.message.strip(),
         )

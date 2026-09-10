@@ -7,6 +7,7 @@ def test_submit_support_saves_message(client, db_session, test_user):
         "/api/v1/support",
         json={
             "username": "seanseun",
+            "email": "Sean@Example.com",
             "category": "bug",
             "message": "The rest timer froze after the third set.",
         },
@@ -19,6 +20,7 @@ def test_submit_support_saves_message(client, db_session, test_user):
     assert row is not None
     assert row.user_id == test_user.id
     assert row.username == "seanseun"
+    assert row.email == "sean@example.com"
     assert row.category == "bug"
     assert "rest timer" in row.message
 
@@ -29,6 +31,7 @@ def test_submit_support_as_guest(client, db_session):
         "/api/v1/support",
         json={
             "username": "guestlift",
+            "email": "guest@example.com",
             "category": "feedback",
             "message": "Love the weekly plan, keep going.",
         },
@@ -37,6 +40,7 @@ def test_submit_support_as_guest(client, db_session):
     row = db_session.get(SupportMessage, response.json()["id"])
     assert row is not None
     assert row.user_id is None
+    assert row.email == "guest@example.com"
     assert row.category == "feedback"
 
 
@@ -45,8 +49,22 @@ def test_submit_support_rejects_short_message(client):
         "/api/v1/support",
         json={
             "username": "seanseun",
+            "email": "sean@example.com",
             "category": "question",
             "message": "Hi",
+        },
+    )
+    assert response.status_code == 422
+
+
+def test_submit_support_rejects_invalid_email(client):
+    response = client.post(
+        "/api/v1/support",
+        json={
+            "username": "seanseun",
+            "email": "not-an-email",
+            "category": "question",
+            "message": "How do I change my plan?",
         },
     )
     assert response.status_code == 422
@@ -57,6 +75,7 @@ def test_submit_support_rejects_invalid_category(client):
         "/api/v1/support",
         json={
             "username": "seanseun",
+            "email": "sean@example.com",
             "category": "billing",
             "message": "How do I change my plan?",
         },
